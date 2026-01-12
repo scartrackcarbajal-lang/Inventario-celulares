@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-// --- COMPONENTE TARJETA (Vertical 450px + Borde Neón + Estilo Catálogo) ---
+// --- COMPONENTE TARJETA (Versión Compacta: Altura 320px + Borde Neón + Estilo Catálogo) ---
 function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
   const [fotoActiva, setFotoActiva] = useState(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto')
 
@@ -16,7 +16,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
   return (
     <div style={{
       backgroundColor: theme.card,
-      borderRadius: '30px', 
+      borderRadius: '25px', // Bordes ligeramente menos redondeados para el tamaño menor
       overflow: 'hidden',
       // EFECTO NEÓN: Borde y Sombra brillante
       border: `2px solid ${theme.cyan}`,
@@ -29,13 +29,13 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`; }}
     >
       
-      {/* 1. SECCIÓN DE IMAGEN (Altura 450px para formato vertical) */}
-      <div style={{ height: '450px', position: 'relative', overflow: 'hidden', backgroundColor: '#050a14' }}>
+      {/* 1. SECCIÓN DE IMAGEN (Altura REDUCIDA A 320px para ser más compacta) */}
+      <div style={{ height: '320px', position: 'relative', overflow: 'hidden', backgroundColor: '#050a14' }}>
           
           {/* Fondo Ambiental */}
           <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundImage: `url(${fotoActiva})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(50px) brightness(0.4)', transform: 'scale(1.5)', zIndex: 1 }}></div>
 
-          {/* Imagen Nítida Centrada */}
+          {/* Imagen Nítida Centrada (Se ajustará al nuevo tamaño más pequeño) */}
           <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, padding: '20px' }}>
               <img src={fotoActiva} style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.5))' }} alt="Celular" />
           </div>
@@ -51,7 +51,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
       )}
 
       {/* 3. DATOS TÉCNICOS (Estilo Catálogo) */}
-      <div style={{ padding: '25px', background: theme.card, position: 'relative', zIndex: 4 }}>
+      <div style={{ padding: '20px 25px', background: theme.card, position: 'relative', zIndex: 4 }}>
         
         {/* Cabecera: Título y Estado */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
@@ -76,7 +76,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
         {cel.imei && (<div style={{ fontSize: '0.75rem', color: '#666', fontFamily: 'monospace', marginBottom: '10px' }}>IMEI: {cel.imei}</div>)}
 
         {/* Footer: Precio y Botones */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <div>
              <span style={{ display: 'block', fontSize: '0.7rem', color: '#888', marginBottom: '2px' }}>PRECIO</span>
              <div style={{ color: 'white', fontSize: '1.8rem', fontWeight: '900' }}>S/ {cel.precio_venta}</div>
@@ -90,7 +90,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
       </div>
     </div>
   )
-}
+}git add .
 
 // --- LOGICA PRINCIPAL ---
 export default function Inventario() {
