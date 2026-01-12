@@ -123,6 +123,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button onClick={() => onEdit(cel)} style={{ padding: '10px 20px', background: theme.cyan, color: '#000', border: 'none', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem', boxShadow: '0 5px 15px rgba(0,210,255,0.2)' }}>EDITAR</button>
+            <button onClick={() => onSell(cel.id)} style={{ padding: '10px 16px', background: '#2d1a1a', color: '#ff6b6b', border: '1px solid #ff6b6b44', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>VENDER</button>
             <button onClick={() => onDelete(cel.id)} style={{ width: '42px', height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#2d1a1a', color: '#ff6b6b', border: '1px solid #ff6b6b44', borderRadius: '50%', cursor: 'pointer' }}>🗑️</button>
           </div>
         </div>
@@ -184,7 +185,7 @@ const logout = async () => {
     marca: '', modelo: '', color: '', almacenamiento: '', imei: '', 
     precio_venta: '', precio_costo: '', salud_bateria: '', descripcion: '', 
     estado: 'Nuevo Sellado', imagen_url: [],
-    publicado: true   // o false si quieres que por defecto no se publique
+    publicado: true, stock: 1 
   }
   const [form, setForm] = useState(estadoInicial)
 
@@ -232,6 +233,16 @@ const logout = async () => {
       if (error) avisar('Error: ' + error.message, 'red'); else { avisar("🚀 Registrado"); }
     }
     setForm(estadoInicial); cargarEquipos();
+  }
+
+  const vender = async (id) => {
+    const { error } = await supabase
+      .from('Celulares')
+      .update({ stock: 0, publicado: false })
+      .eq('id', id)
+
+    if (error) avisar('Error: ' + error.message, 'red')
+    else { avisar('✅ Marcado como vendido'); cargarEquipos() }
   }
 
   const equiposFiltrados = equipos.filter(cel => {
@@ -337,6 +348,19 @@ if (!autorizado) {
             <option value="Open Box">Open Box</option>
           </select>
         </div>
+        
+        {/* --- stock --- */}
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>STOCK</label>
+          <input
+            type="number"
+            min="0"
+            placeholder="Ej. 1"
+            value={form.stock ?? 0}
+            style={inputStyle}
+            onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
+          />
+        </div>
 
         {/* ✅ PUBLICAR */}
         <div>
@@ -439,6 +463,7 @@ if (!autorizado) {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }}
               onDelete={async (id) => { if(confirm('¿Eliminar definitivamente?')) { await supabase.from('Celulares').delete().eq('id', id); cargarEquipos(); } }}
+              onSell={(id) => vender(id)}
             />
           ))}
           {equiposFiltrados.length === 0 && <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#888', fontSize: '1.5rem' }}>No se encontraron resultados 🕵️‍♂️</p>}

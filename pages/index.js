@@ -35,6 +35,7 @@ export default function CatalogoPublico() {
         stock
       `)
       .eq('publicado', true)
+      .gt('stock', 0)
       .order('created_at', { ascending: false })
 
     if (error) {
