@@ -141,16 +141,40 @@ export default function Inventario() {
   const [notificacion, setNotificacion] = useState({ mensaje: '', visible: false, color: '#00d2ff' })
   const [modalImagen, setModalImagen] = useState(null) // Estado para el Zoom
 
-  // Seguridad
-  const [autorizado, setAutorizado] = useState(false)
-  const [passwordInput, setPasswordInput] = useState('')
-  const CLAVE_SECRETA = "carsal11"
+  // --- AUTH (Supabase email/password) ---
+const [autorizado, setAutorizado] = useState(false)
+const [email, setEmail] = useState('')
+const [password, setPassword] = useState('')
+const [cargandoLogin, setCargandoLogin] = useState(false)
 
-  const verificarClave = () => {
-    if (passwordInput === CLAVE_SECRETA) { setAutorizado(true); localStorage.setItem('farrus_auth', 'true'); } 
-    else { avisar("⚠️ Clave incorrecta", "#ff4b2b") }
+useEffect(() => {
+  supabase.auth.getSession().then(({ data }) => {
+    setAutorizado(!!data.session)
+  })
+
+  const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+    setAutorizado(!!session)
+  })
+
+  return () => {
+    sub.subscription.unsubscribe()
   }
-  useEffect(() => { if (localStorage.getItem('farrus_auth') === 'true') setAutorizado(true) }, [])
+}, [])
+
+const login = async () => {
+  setCargandoLogin(true)
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  setCargandoLogin(false)
+
+  if (error) avisar("⚠️ " + error.message, "#ff4b2b")
+  else avisar("✅ Sesión iniciada")
+}
+
+const logout = async () => {
+  await supabase.auth.signOut()
+  setAutorizado(false)
+  avisar("🔒 Sesión cerrada")
+}
 
   // Estilos
   const theme = { navy: '#0b1426', card: '#162447', orange: '#f39c12', cyan: '#00d2ff', white: '#ffffff', gradient: 'linear-gradient(135deg, #050a14 0%, #162447 100%)' }
@@ -218,26 +242,54 @@ export default function Inventario() {
     )
   })
 
-  // --- LOGIN ---
-  if (!autorizado) {
-    return (
-      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: theme.gradient, display: 'grid', placeItems: 'center', zIndex: 9999, fontFamily: 'sans-serif' }}>
-        <div style={{ backgroundColor: theme.card, padding: '50px 40px', borderRadius: '35px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', width: '90%', maxWidth: '400px' }}>
-          <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px', fontWeight: '900', color: 'white' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
-          <p style={{ color: theme.cyan, marginBottom: '35px', letterSpacing: '2px', fontSize: '0.9rem' }}>PANEL DE GESTIÓN</p>
-          <input 
-            type="password" placeholder="Escribe la clave..." value={passwordInput}
-            onChange={(e) => setPasswordInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && verificarClave()}
-            style={{ width: '100%', padding: '20px', borderRadius: '15px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '25px', textAlign: 'center', fontSize: '1.2rem', outline: 'none', boxSizing: 'border-box' }}
-          />
-          <button onClick={verificarClave} style={{ width: '100%', padding: '20px', background: theme.orange, color: 'white', border: 'none', borderRadius: '15px', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)' }}>
-            ACCEDER AHORA 🔑
-          </button>
-        </div>
+// --- LOGIN ---
+if (!autorizado) {
+  return (
+    <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: theme.gradient, display: 'grid', placeItems: 'center', zIndex: 9999, fontFamily: 'sans-serif' }}>
+      <div style={{ backgroundColor: theme.card, padding: '50px 40px', borderRadius: '35px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', width: '90%', maxWidth: '420px' }}>
+        <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px', fontWeight: '900', color: 'white' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
+        <p style={{ color: theme.cyan, marginBottom: '25px', letterSpacing: '2px', fontSize: '0.9rem' }}>PANEL DE GESTIÓN</p>
+
+        <input
+          type="email"
+          placeholder="Correo (admin)"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{ width: '100%', padding: '18px', borderRadius: '15px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '12px', textAlign: 'center', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
+        />
+
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && login()}
+          style={{ width: '100%', padding: '18px', borderRadius: '15px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '18px', textAlign: 'center', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
+        />
+
+        <button
+          onClick={login}
+          disabled={cargandoLogin || !email || !password}
+          style={{
+            width: '100%',
+            padding: '18px',
+            background: theme.orange,
+            color: 'white',
+            border: 'none',
+            borderRadius: '15px',
+            fontWeight: 'bold',
+            fontSize: '1.05rem',
+            cursor: 'pointer',
+            opacity: (cargandoLogin || !email || !password) ? 0.7 : 1,
+            boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)',
+          }}
+        >
+          {cargandoLogin ? 'CONECTANDO...' : 'ACCEDER'}
+        </button>
       </div>
-    )
-  }
+    </div>
+  )
+}
 
   return (
     <div style={{ minHeight: '100vh', background: theme.gradient, padding: '50px 20px', color: 'white', fontFamily: 'sans-serif' }}>
@@ -263,7 +315,7 @@ export default function Inventario() {
       <div style={{ maxWidth: '1400px', margin: 'auto' }}>
         <header style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0 }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
-          <button onClick={() => { setAutorizado(false); localStorage.removeItem('farrus_auth'); }} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${theme.cyan}`, color: theme.cyan, padding: '10px 25px', borderRadius: '25px', cursor: 'pointer', marginTop: '15px', fontWeight: 'bold' }}>Cerrar Sesión 🔒</button>
+          <button onClick={logout} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${theme.cyan}`, color: theme.cyan, padding: '10px 25px', borderRadius: '25px', cursor: 'pointer', marginTop: '15px', fontWeight: 'bold' }}>Cerrar Sesión 🔒</button>
         </header>
 
         {/* --- FORMULARIO --- */}
