@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-// --- COMPONENTE TARJETA (Vertical 360px + Espaciado Mejorado "Aireado") ---
+// --- COMPONENTE TARJETA (Footer con separación mejorada entre Precio y Botones) ---
 function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
   const [fotoActiva, setFotoActiva] = useState(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto')
 
@@ -43,7 +43,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
             style={{ 
               position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
               display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              zIndex: 2, padding: '15px', cursor: 'zoom-in' // Más padding aquí también
+              zIndex: 2, padding: '15px', cursor: 'zoom-in'
             }}>
               <img src={fotoActiva} style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))', transition: 'transform 0.2s' }} alt="Celular" />
           </div>
@@ -69,7 +69,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
         </div>
       )}
 
-      {/* 3. DATOS TÉCNICOS (Más espaciado = Menos apretado) */}
+      {/* 3. DATOS TÉCNICOS */}
       <div style={{ padding: '20px 25px', background: theme.card, position: 'relative', zIndex: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         
         {/* Título */}
@@ -93,7 +93,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
           {cel.imei && (<div style={{ fontSize: '0.75rem', color: '#666', fontFamily: 'monospace' }}>IMEI: {cel.imei}</div>)}
         </div>
 
-        {/* DESCRIPCIÓN (Con más aire) */}
+        {/* DESCRIPCIÓN */}
         {cel.descripcion && (
             <div style={{ 
               marginBottom: '20px', padding: '12px', backgroundColor: 'rgba(0,0,0,0.25)', 
@@ -107,11 +107,19 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
         {/* Espaciador flexible */}
         <div style={{ flexGrow: 1 }}></div>
 
-        {/* Footer: Precio y Botones */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        {/* Footer: Precio y Botones (CON GAP DE SEPARACIÓN AGREGADO) */}
+        <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            marginTop: '10px', 
+            paddingTop: '15px', 
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            gap: '20px' // <--- ESTO SEPARA EL PRECIO DE LOS BOTONES
+        }}>
           <div>
              <span style={{ display: 'block', fontSize: '0.7rem', color: '#888', marginBottom: '4px', letterSpacing: '1px' }}>PRECIO</span>
-             <div style={{ color: 'white', fontSize: '1.7rem', fontWeight: '900' }}>S/ {cel.precio_venta}</div>
+             <div style={{ color: 'white', fontSize: '1.7rem', fontWeight: '900', whiteSpace: 'nowrap' }}>S/ {cel.precio_venta}</div>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button onClick={() => onEdit(cel)} style={{ padding: '10px 20px', background: theme.cyan, color: '#000', border: 'none', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem', boxShadow: '0 5px 15px rgba(0,210,255,0.2)' }}>EDITAR</button>
