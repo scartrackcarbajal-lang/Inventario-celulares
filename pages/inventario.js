@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-// --- COMPONENTE TARJETA (Footer con separación mejorada entre Precio y Botones) ---
-function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
-  const [fotoActiva, setFotoActiva] = useState(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto')
+// --- COMPONENTE TARJETA (con VENDIDO + borde rojo + eliminar visible) ---
+function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
+  const [fotoActiva, setFotoActiva] = useState(
+    cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto'
+  )
 
   // Colores para la etiqueta de estado
   const colorEstado = {
@@ -13,121 +15,276 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
     'Open Box': '#f39c12'       // Naranja
   }
 
+  // --- VENDIDO (estado calculado por stock) ---
+  const vendido = Number(cel.stock) <= 0
+
+  // Sombras/borde según vendido
+  const sombraNormal = `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`
+  const sombraHover = `0 0 30px ${theme.cyan}66, inset 0 0 20px ${theme.cyan}33`
+
+  const sombraNormalVendido = '0 0 20px rgba(255,107,107,0.35), inset 0 0 12px rgba(255,107,107,0.18)'
+  const sombraHoverVendido  = '0 0 35px rgba(255,107,107,0.45), inset 0 0 18px rgba(255,107,107,0.22)'
+
   return (
-    <div style={{
-      backgroundColor: theme.card,
-      borderRadius: '20px',
-      overflow: 'hidden',
-      border: `2px solid ${theme.cyan}`,
-      boxShadow: `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`,
-      transition: 'transform 0.3s, box-shadow 0.3s',
-      position: 'relative',
-      maxWidth: '360px', // Ancho fijo ideal
-      margin: '0 auto',
-      display: 'flex',       
-      flexDirection: 'column' 
-    }}
-    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = `0 0 30px ${theme.cyan}66, inset 0 0 20px ${theme.cyan}33`; }}
-    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`; }}
+    <div
+      style={{
+        backgroundColor: theme.card,
+        borderRadius: '20px',
+        overflow: 'hidden',
+        border: vendido ? '2px solid rgba(255,107,107,0.85)' : `2px solid ${theme.cyan}`,
+        boxShadow: vendido ? sombraNormalVendido : sombraNormal,
+        transition: 'transform 0.3s, box-shadow 0.3s',
+        position: 'relative',
+        maxWidth: '360px',
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-5px)'
+        e.currentTarget.style.boxShadow = vendido ? sombraHoverVendido : sombraHover
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = vendido ? sombraNormalVendido : sombraNormal
+      }}
     >
-      
       {/* 1. SECCIÓN DE IMAGEN */}
       <div style={{ height: '220px', position: 'relative', overflow: 'hidden', backgroundColor: '#050a14', flexShrink: 0 }}>
-          
-          {/* Fondo Ambiental */}
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundImage: `url(${fotoActiva})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(50px) brightness(0.4)', transform: 'scale(1.5)', zIndex: 1 }}></div>
+        {/* Fondo Ambiental */}
+        <div
+          style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            backgroundImage: `url(${fotoActiva})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(50px) brightness(0.4)',
+            transform: 'scale(1.5)',
+            zIndex: 1
+          }}
+        />
 
-          {/* Imagen Nítida (Clic para Zoom) */}
-          <div 
-            onClick={() => onOpenModal(fotoActiva)}
-            style={{ 
-              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              zIndex: 2, padding: '15px', cursor: 'zoom-in'
-            }}>
-              <img src={fotoActiva} style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))', transition: 'transform 0.2s' }} alt="Celular" />
-          </div>
+        {/* Imagen Nítida (Clic para Zoom) */}
+        <div
+          onClick={() => onOpenModal(fotoActiva)}
+          style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 2, padding: '15px', cursor: 'zoom-in'
+          }}
+        >
+          <img
+            src={fotoActiva}
+            style={{
+              width: 'auto',
+              height: 'auto',
+              maxWidth: '100%',
+              maxHeight: '100%',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))',
+              transition: 'transform 0.2s'
+            }}
+            alt="Celular"
+          />
+        </div>
 
-          {/* ETIQUETA DE ESTADO (Arriba a la derecha) */}
-          <div style={{ 
-            position: 'absolute', top: '12px', right: '12px', 
-            backgroundColor: colorEstado[cel.estado] || '#888', 
-            color: 'white', padding: '5px 12px', borderRadius: '8px', 
-            fontWeight: 'bold', fontSize: '0.75rem', zIndex: 3, 
-            boxShadow: '0 4px 15px rgba(0,0,0,0.6)', textTransform: 'uppercase', letterSpacing: '0.5px'
-          }}>
-            {cel.estado}
+        {/* ETIQUETA DE ESTADO (Arriba a la derecha) */}
+        <div
+          style={{
+            position: 'absolute', top: '12px', right: '12px',
+            backgroundColor: colorEstado[cel.estado] || '#888',
+            color: 'white',
+            padding: '5px 12px',
+            borderRadius: '8px',
+            fontWeight: 'bold',
+            fontSize: '0.75rem',
+            zIndex: 3,
+            boxShadow: '0 4px 15px rgba(0,0,0,0.6)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}
+        >
+          {cel.estado}
+        </div>
+
+        {/* --- VENDIDO: sello grande --- */}
+        {vendido && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0, left: 0,
+              width: '100%', height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 5,
+              background: 'linear-gradient(135deg, rgba(0,0,0,0.60), rgba(0,0,0,0.25))',
+              backdropFilter: 'blur(2px)'
+            }}
+          >
+            <div
+              style={{
+                padding: '12px 22px',
+                borderRadius: '18px',
+                background: 'rgba(231, 76, 60, 0.18)',
+                border: '2px solid rgba(231, 76, 60, 0.80)',
+                color: '#fff',
+                fontWeight: '900',
+                fontSize: '1.5rem',
+                letterSpacing: '5px',
+                textTransform: 'uppercase',
+                boxShadow: '0 12px 30px rgba(0,0,0,0.55)'
+              }}
+            >
+              VENDIDO
+            </div>
           </div>
+        )}
       </div>
 
       {/* 2. MINI GALERÍA */}
       {cel.imagen_url && cel.imagen_url.length > 0 && (
-        <div style={{ display: 'flex', gap: '8px', padding: '10px 20px', backgroundColor: '#0b1426', overflowX: 'auto', borderBottom: `1px solid ${theme.cyan}11`, zIndex: 4, position: 'relative', flexShrink: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '8px',
+            padding: '10px 20px',
+            backgroundColor: '#0b1426',
+            overflowX: 'auto',
+            borderBottom: `1px solid ${theme.cyan}11`,
+            zIndex: 4,
+            position: 'relative',
+            flexShrink: 0
+          }}
+        >
           {cel.imagen_url.map((url, index) => (
-            <img key={index} src={url} onClick={() => setFotoActiva(url)} style={{ width: '42px', height: '42px', objectFit: 'cover', borderRadius: '8px', border: fotoActiva === url ? `2px solid ${theme.orange}` : `1px solid transparent`, cursor: 'pointer', opacity: fotoActiva === url ? 1 : 0.5, transition: 'all 0.2s' }} />
+            <img
+              key={index}
+              src={url}
+              onClick={() => setFotoActiva(url)}
+              style={{
+                width: '42px',
+                height: '42px',
+                objectFit: 'cover',
+                borderRadius: '8px',
+                border: fotoActiva === url ? `2px solid ${theme.orange}` : `1px solid transparent`,
+                cursor: 'pointer',
+                opacity: fotoActiva === url ? 1 : 0.5,
+                transition: 'all 0.2s'
+              }}
+            />
           ))}
         </div>
       )}
 
       {/* 3. DATOS TÉCNICOS */}
-      <div style={{ padding: '20px 25px', background: theme.card, position: 'relative', zIndex: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-        
+      <div
+        style={{
+          padding: '20px 25px',
+          background: theme.card,
+          position: 'relative',
+          zIndex: 4,
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
         {/* Título */}
         <div style={{ marginBottom: '12px' }}>
-            <h3 style={{ margin: 0, fontSize: '1.4rem', color: 'white', fontWeight: '800', letterSpacing: '0.5px', lineHeight: '1.2' }}>{cel.marca} {cel.modelo}</h3>
+          <h3 style={{ margin: 0, fontSize: '1.4rem', color: 'white', fontWeight: '800', letterSpacing: '0.5px', lineHeight: '1.2' }}>
+            {cel.marca} {cel.modelo}
+          </h3>
         </div>
 
-        {/* Specs: Almacenamiento | Batería */}
+        {/* Specs */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: theme.cyan, fontSize: '0.9rem', fontWeight: '600', marginBottom: '15px' }}>
-            <span>💾 {cel.almacenamiento}</span>
-            {cel.salud_bateria && (<><span style={{ opacity: 0.3 }}>|</span><span>🔋 {cel.salud_bateria}%</span></>)}
+          <span>💾 {cel.almacenamiento}</span>
+          {cel.salud_bateria && (<><span style={{ opacity: 0.3 }}>|</span><span>🔋 {cel.salud_bateria}%</span></>)}
         </div>
 
         {/* Color e IMEI */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '15px' }}>
           {cel.color && (
-              <div style={{ display: 'inline-block', padding: '5px 12px', borderRadius: '8px', border: `1px solid ${theme.cyan}44`, backgroundColor: 'rgba(0, 210, 255, 0.05)', color: '#fff', fontSize: '0.85rem' }}>
-                  🎨 <span style={{ fontWeight: 'bold', color: theme.cyan }}>{cel.color}</span>
-              </div>
+            <div style={{ display: 'inline-block', padding: '5px 12px', borderRadius: '8px', border: `1px solid ${theme.cyan}44`, backgroundColor: 'rgba(0, 210, 255, 0.05)', color: '#fff', fontSize: '0.85rem' }}>
+              🎨 <span style={{ fontWeight: 'bold', color: theme.cyan }}>{cel.color}</span>
+            </div>
           )}
           {cel.imei && (<div style={{ fontSize: '0.75rem', color: '#666', fontFamily: 'monospace' }}>IMEI: {cel.imei}</div>)}
         </div>
 
-        {/* DESCRIPCIÓN */}
+        {/* Descripción */}
         {cel.descripcion && (
-            <div style={{ 
-              marginBottom: '20px', padding: '12px', backgroundColor: 'rgba(0,0,0,0.25)', 
-              borderRadius: '12px', fontSize: '0.85rem', color: '#ccc', lineHeight: '1.5',
-              borderLeft: `3px solid ${theme.orange}` 
-            }}>
-                {cel.descripcion}
-            </div>
+          <div style={{ marginBottom: '20px', padding: '12px', backgroundColor: 'rgba(0,0,0,0.25)', borderRadius: '12px', fontSize: '0.85rem', color: '#ccc', lineHeight: '1.5', borderLeft: `3px solid ${theme.orange}` }}>
+            {cel.descripcion}
+          </div>
         )}
 
-        {/* Espaciador flexible */}
-        <div style={{ flexGrow: 1 }}></div>
+        <div style={{ flexGrow: 1 }} />
 
-        {/* Footer: Precio y Botones (CON GAP DE SEPARACIÓN AGREGADO) */}
-        <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            marginTop: '10px', 
-            paddingTop: '15px', 
-            borderTop: '1px solid rgba(255,255,255,0.08)',
-            gap: '20px' // <--- ESTO SEPARA EL PRECIO DE LOS BOTONES
-        }}>
+        {/* Footer: Precio y Botones */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.08)', gap: '20px' }}>
           <div>
-             <span style={{ display: 'block', fontSize: '0.7rem', color: '#888', marginBottom: '4px', letterSpacing: '1px' }}>PRECIO</span>
-             <div style={{ color: 'white', fontSize: '1.7rem', fontWeight: '900', whiteSpace: 'nowrap' }}>S/ {cel.precio_venta}</div>
+            <span style={{ display: 'block', fontSize: '0.7rem', color: '#888', marginBottom: '4px', letterSpacing: '1px' }}>PRECIO</span>
+            <div style={{ color: 'white', fontSize: '1.7rem', fontWeight: '900', whiteSpace: 'nowrap' }}>S/ {cel.precio_venta}</div>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={() => onEdit(cel)} style={{ padding: '10px 20px', background: theme.cyan, color: '#000', border: 'none', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem', boxShadow: '0 5px 15px rgba(0,210,255,0.2)' }}>EDITAR</button>
-            <button onClick={() => onSell(cel.id)} style={{ padding: '10px 16px', background: '#2d1a1a', color: '#ff6b6b', border: '1px solid #ff6b6b44', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.85rem' }}>VENDER</button>
-            <button onClick={() => onDelete(cel.id)} style={{ width: '42px', height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#2d1a1a', color: '#ff6b6b', border: '1px solid #ff6b6b44', borderRadius: '50%', cursor: 'pointer' }}>🗑️</button>
+
+          {/* --- BOTONES (EDITAR / VENDIDO / ELIMINAR) --- */}
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => onEdit(cel)}
+              style={{
+                padding: '10px 20px',
+                background: theme.cyan,
+                color: '#000',
+                border: 'none',
+                borderRadius: '50px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+                boxShadow: '0 5px 15px rgba(0,210,255,0.2)'
+              }}
+            >
+              EDITAR
+            </button>
+
+            <button
+              onClick={() => { if (!vendido) onSell(cel.id) }}
+              disabled={vendido}
+              style={{
+                padding: '10px 16px',
+                background: vendido ? 'rgba(255,255,255,0.08)' : 'rgba(231, 76, 60, 0.18)',
+                color: vendido ? '#ddd' : '#ff6b6b',
+                border: vendido ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,107,107,0.55)',
+                borderRadius: '50px',
+                fontWeight: 'bold',
+                cursor: vendido ? 'not-allowed' : 'pointer',
+                fontSize: '0.85rem',
+                letterSpacing: '1px'
+              }}
+              title={vendido ? 'Este equipo ya está vendido' : 'Marcar como vendido'}
+            >
+              VENDIDO
+            </button>
+
+            <button
+              onClick={() => onDelete(cel.id)}
+              style={{
+                padding: '10px 14px',
+                background: '#2d1a1a',
+                color: '#ff6b6b',
+                border: '1px solid rgba(255,107,107,0.55)',
+                borderRadius: '50px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '0.85rem',
+                boxShadow: '0 6px 18px rgba(255,107,107,0.15)'
+              }}
+              title="Eliminar del inventario"
+            >
+              ELIMINAR 🗑️
+            </button>
           </div>
         </div>
-
       </div>
     </div>
   )
