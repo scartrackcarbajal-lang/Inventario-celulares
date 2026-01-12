@@ -338,11 +338,13 @@ const logout = async () => {
   const theme = { navy: '#0b1426', card: '#162447', orange: '#f39c12', cyan: '#00d2ff', white: '#ffffff', gradient: 'linear-gradient(135deg, #050a14 0%, #162447 100%)' }
   const inputStyle = { padding: '16px', borderRadius: '15px', border: '1px solid #25335a', background: '#0b1426', color: 'white', outline: 'none', fontSize: '1rem', width: '100%', boxSizing: 'border-box' }
   
-  const estadoInicial = { 
-    marca: '', modelo: '', color: '', almacenamiento: '', imei: '', 
-    precio_venta: '', precio_costo: '', salud_bateria: '', descripcion: '', 
+  // --- Estado inicial (incluye publicado + stock) ---
+  const estadoInicial = {
+    marca: '', modelo: '', color: '', almacenamiento: '', imei: '',
+    precio_venta: '', precio_costo: '', salud_bateria: '', descripcion: '',
     estado: 'Nuevo Sellado', imagen_url: [],
-    publicado: true, stock: 1 
+    publicado: true,
+    stock: 1
   }
   const [form, setForm] = useState(estadoInicial)
 
@@ -392,7 +394,10 @@ const logout = async () => {
     setForm(estadoInicial); cargarEquipos();
   }
 
+  // --- VENDER (marca como vendido) ---
   const vender = async (id) => {
+    if (!confirm('¿Marcar como vendido?')) return
+
     const { error } = await supabase
       .from('Celulares')
       .update({ stock: 0, publicado: false })
