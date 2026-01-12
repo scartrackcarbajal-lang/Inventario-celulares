@@ -33,7 +33,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
           <div style={{
               position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 2, padding: '20px' // Un poco de aire alrededor
+              zIndex: 2, padding: '20px' 
           }}>
               <img src={fotoActiva} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }} alt="Preview" />
           </div>
@@ -87,79 +87,6 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
         
         <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
           <button onClick={() => onEdit(cel)} style={{ flex: 1, padding: '14px', background: 'transparent', border: `2px solid ${theme.cyan}`, color: theme.cyan, borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer', transition: '0.2s' }}>EDITAR</button>
-          <button onClick={() => onDelete(cel.id)} style={{ padding: '14px 20px', background: '#2d1a1a', color: '#ff6b6b', border: 'none', borderRadius: '15px', cursor: 'pointer' }}>🗑️</button>
-        </div>
-      </div>
-    </div>
-  )
-}
-  // Colores de etiqueta según estado
-  const colorEstado = {
-    'Nuevo Sellado': '#00d2ff', // Cyan neón
-    'Semi Nuevo': '#f39c12',    // Naranja
-    'Usado': '#e74c3c',         // Rojo
-    'Open Box': '#9b59b6'       // Morado
-  }
-
-  return (
-    <div style={{ backgroundColor: theme.card, borderRadius: '30px', overflow: 'hidden', border: `1px solid ${theme.cyan}33`, boxShadow: '0 15px 35px rgba(0,0,0,0.3)', transition: 'transform 0.3s' }}>
-      
-      {/* 1. IMAGEN PRINCIPAL */}
-      <div style={{ height: '280px', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-        <img src={fotoActiva} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} alt="Preview" />
-        
-        {/* Etiqueta de Estado */}
-        <div style={{ position: 'absolute', top: '15px', right: '15px', background: colorEstado[cel.estado] || '#888', color: 'white', padding: '6px 12px', borderRadius: '10px', fontWeight: 'bold', fontSize: '0.8rem', boxShadow: '0 4px 10px rgba(0,0,0,0.5)', zIndex: 2 }}>
-          {cel.estado}
-        </div>
-
-        {/* Etiqueta de Color (Nueva) */}
-        {cel.color && (
-           <div style={{ position: 'absolute', bottom: '15px', left: '15px', background: 'rgba(0,0,0,0.7)', color: 'white', padding: '5px 10px', borderRadius: '8px', fontSize: '0.8rem', border: `1px solid ${theme.cyan}55` }}>
-             🎨 {cel.color}
-           </div>
-        )}
-      </div>
-
-      {/* 2. MINI GALERÍA */}
-      {cel.imagen_url && cel.imagen_url.length > 0 && (
-        <div style={{ display: 'flex', gap: '10px', padding: '12px', backgroundColor: 'rgba(0,0,0,0.4)', overflowX: 'auto', borderBottom: '1px solid #25335a' }}>
-          {cel.imagen_url.map((url, index) => (
-            <img 
-              key={index} src={url} onClick={() => setFotoActiva(url)}
-              style={{ width: '55px', height: '55px', objectFit: 'cover', borderRadius: '10px', border: fotoActiva === url ? `2px solid ${theme.orange}` : `1px solid ${theme.cyan}44`, cursor: 'pointer', opacity: fotoActiva === url ? 1 : 0.6 }} 
-            />
-          ))}
-        </div>
-      )}
-
-      {/* 3. DATOS TÉCNICOS */}
-      <div style={{ padding: '25px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <h3 style={{ margin: 0, fontSize: '1.5rem', color: 'white' }}>{cel.marca} {cel.modelo}</h3>
-            {cel.salud_bateria && <span style={{ fontSize: '0.85rem', color: theme.cyan, background: 'rgba(0,210,255,0.1)', padding: '5px 10px', borderRadius: '10px' }}>🔋 {cel.salud_bateria}%</span>}
-        </div>
-        
-        <p style={{ color: '#aaa', fontWeight: 'bold', margin: '5px 0', fontSize: '0.9rem' }}>💾 {cel.almacenamiento || 'No esp.'}</p>
-        
-        {/* IMEI (Solo visible para ti en inventario) */}
-        {cel.imei && (
-            <p style={{ color: '#666', fontSize: '0.8rem', fontFamily: 'monospace', margin: '5px 0' }}>IMEI: {cel.imei}</p>
-        )}
-
-        {cel.descripcion && (
-            <div style={{ padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', borderLeft: `3px solid ${theme.orange}`, fontSize: '0.85rem', color: '#ccc', margin: '15px 0', whiteSpace: 'pre-wrap' }}>
-                {cel.descripcion}
-            </div>
-        )}
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-          <div><span style={{ fontSize: '0.8rem', color: '#666' }}>Precio Venta</span><div style={{ color: theme.orange, fontSize: '1.8rem', fontWeight: '900' }}>S/ {cel.precio_venta}</div></div>
-          {cel.precio_costo && <div style={{ textAlign: 'right' }}><span style={{ fontSize: '0.8rem', color: '#666' }}>Costo</span><div style={{ color: '#555', fontSize: '1.1rem' }}>S/ {cel.precio_costo}</div></div>}
-        </div>
-        
-        <div style={{ display: 'flex', gap: '15px', marginTop: '20px' }}>
-          <button onClick={() => onEdit(cel)} style={{ flex: 1, padding: '14px', background: 'transparent', border: `2px solid ${theme.cyan}`, color: theme.cyan, borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer' }}>EDITAR</button>
           <button onClick={() => onDelete(cel.id)} style={{ padding: '14px 20px', background: '#2d1a1a', color: '#ff6b6b', border: 'none', borderRadius: '15px', cursor: 'pointer' }}>🗑️</button>
         </div>
       </div>
