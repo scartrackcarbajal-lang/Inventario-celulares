@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-// --- COMPONENTE TARJETA (Versión Super Compacta: Altura 220px + Borde Neón) ---
-function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
+// --- COMPONENTE TARJETA (Vertical, Angosta, Zoom + Estado Arriba + Descripción) ---
+function TarjetaEquipo({ cel, onEdit, onDelete, theme, onOpenModal }) {
   const [fotoActiva, setFotoActiva] = useState(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto')
 
   // Colores para la etiqueta de estado
@@ -10,73 +10,105 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
     'Nuevo Sellado': '#00d2ff', // Cyan
     'Semi Nuevo': '#f39c12',    // Naranja
     'Usado': '#e74c3c',         // Rojo
-    'Open Box': '#f39c12'       // Naranja (Igual al catálogo)
+    'Open Box': '#f39c12'       // Naranja
   }
 
   return (
     <div style={{
       backgroundColor: theme.card,
-      borderRadius: '20px', // Bordes más ajustados
+      borderRadius: '20px',
       overflow: 'hidden',
-      // EFECTO NEÓN: Borde y Sombra brillante
       border: `2px solid ${theme.cyan}`,
       boxShadow: `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`,
       transition: 'transform 0.3s, box-shadow 0.3s',
-      position: 'relative'
+      position: 'relative',
+      maxWidth: '360px', // Ancho fijo tipo celular
+      margin: '0 auto',
+      display: 'flex',       // Flex para estructura interna
+      flexDirection: 'column' // Apila elementos verticalmente
     }}
-    // Efecto interactivo al pasar el mouse
     onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = `0 0 30px ${theme.cyan}66, inset 0 0 20px ${theme.cyan}33`; }}
     onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`; }}
     >
       
-      {/* 1. SECCIÓN DE IMAGEN (Altura REDUCIDA A 220px para ser muy compacta) */}
-      <div style={{ height: '220px', position: 'relative', overflow: 'hidden', backgroundColor: '#050a14' }}>
+      {/* 1. SECCIÓN DE IMAGEN (Zoom + Estado Arriba) */}
+      <div style={{ height: '220px', position: 'relative', overflow: 'hidden', backgroundColor: '#050a14', flexShrink: 0 }}>
           
           {/* Fondo Ambiental */}
           <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundImage: `url(${fotoActiva})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'blur(50px) brightness(0.4)', transform: 'scale(1.5)', zIndex: 1 }}></div>
 
-          {/* Imagen Nítida Centrada (Padding reducido a 10px para aprovechar el espacio) */}
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, padding: '10px' }}>
-              <img src={fotoActiva} style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))' }} alt="Celular" />
+          {/* Imagen Nítida (Clic para Zoom) */}
+          <div 
+            onClick={() => onOpenModal(fotoActiva)}
+            style={{ 
+              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', 
+              display: 'flex', alignItems: 'center', justifyContent: 'center', 
+              zIndex: 2, padding: '10px', cursor: 'zoom-in'
+            }}>
+              <img src={fotoActiva} style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))', transition: 'transform 0.2s' }} alt="Celular" />
+          </div>
+
+          {/* ETIQUETA DE ESTADO (Volvió arriba a la derecha) */}
+          <div style={{ 
+            position: 'absolute', top: '10px', right: '10px', 
+            backgroundColor: colorEstado[cel.estado] || '#888', 
+            color: 'white', padding: '4px 10px', borderRadius: '8px', 
+            fontWeight: 'bold', fontSize: '0.7rem', zIndex: 3, 
+            boxShadow: '0 2px 10px rgba(0,0,0,0.5)', textTransform: 'uppercase'
+          }}>
+            {cel.estado}
           </div>
       </div>
 
-      {/* 2. MINI GALERÍA (Más pequeña) */}
+      {/* 2. MINI GALERÍA */}
       {cel.imagen_url && cel.imagen_url.length > 0 && (
-        <div style={{ display: 'flex', gap: '6px', padding: '8px 15px', backgroundColor: '#0b1426', overflowX: 'auto', borderBottom: `1px solid ${theme.cyan}11`, zIndex: 4, position: 'relative' }}>
+        <div style={{ display: 'flex', gap: '6px', padding: '8px 15px', backgroundColor: '#0b1426', overflowX: 'auto', borderBottom: `1px solid ${theme.cyan}11`, zIndex: 4, position: 'relative', flexShrink: 0 }}>
           {cel.imagen_url.map((url, index) => (
             <img key={index} src={url} onClick={() => setFotoActiva(url)} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px', border: fotoActiva === url ? `2px solid ${theme.orange}` : `1px solid transparent`, cursor: 'pointer', opacity: fotoActiva === url ? 1 : 0.5, transition: 'all 0.2s' }} />
           ))}
         </div>
       )}
 
-      {/* 3. DATOS TÉCNICOS (Estilo Catálogo Compacto) */}
-      <div style={{ padding: '15px 20px', background: theme.card, position: 'relative', zIndex: 4 }}>
+      {/* 3. DATOS TÉCNICOS (Cuerpo de la tarjeta) */}
+      <div style={{ padding: '15px 20px', background: theme.card, position: 'relative', zIndex: 4, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         
-        {/* Cabecera: Título y Estado */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+        {/* Título */}
+        <div style={{ marginBottom: '8px' }}>
             <h3 style={{ margin: 0, fontSize: '1.3rem', color: 'white', fontWeight: '800', letterSpacing: '0.5px' }}>{cel.marca} {cel.modelo}</h3>
-            <span style={{ backgroundColor: colorEstado[cel.estado] || '#888', color: 'white', padding: '4px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{cel.estado}</span>
         </div>
 
-        {/* Detalles en línea (Almacenamiento | Batería) */}
+        {/* Specs: Almacenamiento | Batería */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: theme.cyan, fontSize: '0.85rem', fontWeight: '600', marginBottom: '10px' }}>
             <span>💾 {cel.almacenamiento}</span>
             {cel.salud_bateria && (<><span style={{ opacity: 0.3 }}>|</span><span>🔋 {cel.salud_bateria}%</span></>)}
         </div>
 
-        {/* Color Destacado */}
-        {cel.color && (
-            <div style={{ marginBottom: '10px', display: 'inline-block', padding: '5px 10px', borderRadius: '8px', border: `1px solid ${theme.cyan}44`, backgroundColor: 'rgba(0, 210, 255, 0.05)', color: '#fff', fontSize: '0.85rem' }}>
-                🎨 Color: <span style={{ fontWeight: 'bold', color: theme.cyan }}>{cel.color}</span>
+        {/* Color e IMEI */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '5px', marginBottom: '10px' }}>
+          {cel.color && (
+              <div style={{ display: 'inline-block', padding: '4px 10px', borderRadius: '6px', border: `1px solid ${theme.cyan}44`, backgroundColor: 'rgba(0, 210, 255, 0.05)', color: '#fff', fontSize: '0.8rem' }}>
+                  🎨 <span style={{ fontWeight: 'bold', color: theme.cyan }}>{cel.color}</span>
+              </div>
+          )}
+          {cel.imei && (<div style={{ fontSize: '0.7rem', color: '#666', fontFamily: 'monospace' }}>IMEI: {cel.imei}</div>)}
+        </div>
+
+        {/* DESCRIPCIÓN (Se muestra si existe) */}
+        {cel.descripcion && (
+            <div style={{ 
+              marginBottom: '15px', padding: '10px', backgroundColor: 'rgba(0,0,0,0.2)', 
+              borderRadius: '10px', fontSize: '0.8rem', color: '#ccc', lineHeight: '1.4',
+              borderLeft: `2px solid ${theme.orange}` 
+            }}>
+                {cel.descripcion}
             </div>
         )}
-        
-        {/* IMEI Discreto */}
-        {cel.imei && (<div style={{ fontSize: '0.7rem', color: '#666', fontFamily: 'monospace', marginBottom: '8px' }}>IMEI: {cel.imei}</div>)}
 
-        {/* Footer: Precio y Botones (Fuentes ajustadas) */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        {/* Espaciador flexible para empujar el footer abajo si la tarjeta es alta */}
+        <div style={{ flexGrow: 1 }}></div>
+
+        {/* Footer: Precio y Botones */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <div>
              <span style={{ display: 'block', fontSize: '0.65rem', color: '#888', marginBottom: '2px' }}>PRECIO</span>
              <div style={{ color: 'white', fontSize: '1.6rem', fontWeight: '900' }}>S/ {cel.precio_venta}</div>
@@ -99,6 +131,7 @@ export default function Inventario() {
   const [subiendo, setSubiendo] = useState(false)
   const [editandoId, setEditandoId] = useState(null)
   const [notificacion, setNotificacion] = useState({ mensaje: '', visible: false, color: '#00d2ff' })
+  const [modalImagen, setModalImagen] = useState(null) // Estado para el Zoom
 
   // Seguridad
   const [autorizado, setAutorizado] = useState(false)
@@ -111,12 +144,12 @@ export default function Inventario() {
   }
   useEffect(() => { if (localStorage.getItem('farrus_auth') === 'true') setAutorizado(true) }, [])
 
-  // Estilos y Estado Inicial (Ahora con IMEI y COLOR)
+  // Estilos
   const theme = { navy: '#0b1426', card: '#162447', orange: '#f39c12', cyan: '#00d2ff', white: '#ffffff', gradient: 'linear-gradient(135deg, #050a14 0%, #162447 100%)' }
   const inputStyle = { padding: '16px', borderRadius: '15px', border: '1px solid #25335a', background: '#0b1426', color: 'white', outline: 'none', fontSize: '1rem', width: '100%', boxSizing: 'border-box' }
   
   const estadoInicial = { 
-    marca: '', modelo: '', color: '', almacenamiento: '', imei: '', // Agregados
+    marca: '', modelo: '', color: '', almacenamiento: '', imei: '', 
     precio_venta: '', precio_costo: '', salud_bateria: '', descripcion: '', 
     estado: 'Nuevo Sellado', imagen_url: [] 
   }
@@ -158,52 +191,37 @@ export default function Inventario() {
     
     if (editandoId) {
       const { error } = await supabase.from('Celulares').update(datosLimpios).eq('id', editandoId)
-      if (error) avisar('Error: ' + error.message, 'red'); else { setEditandoId(null); avisar("✅ Actualizado correctamente"); }
+      if (error) avisar('Error: ' + error.message, 'red'); else { setEditandoId(null); avisar("✅ Actualizado"); }
     } else {
       const { error } = await supabase.from('Celulares').insert([datosLimpios])
-      if (error) avisar('Error: ' + error.message, 'red'); else { avisar("🚀 Equipo registrado"); }
+      if (error) avisar('Error: ' + error.message, 'red'); else { avisar("🚀 Registrado"); }
     }
     setForm(estadoInicial); cargarEquipos();
   }
 
-  // Lógica de BUSCADOR MEJORADO (Busca por IMEI también)
   const equiposFiltrados = equipos.filter(cel => {
     const texto = busqueda.toLowerCase()
     return (
         cel.marca?.toLowerCase().includes(texto) || 
         cel.modelo?.toLowerCase().includes(texto) ||
         cel.estado?.toLowerCase().includes(texto) ||
-        cel.imei?.toLowerCase().includes(texto) || // Búsqueda por IMEI
+        cel.imei?.toLowerCase().includes(texto) || 
         cel.color?.toLowerCase().includes(texto)
     )
   })
 
-// --- LOGIN ---
+  // --- LOGIN ---
   if (!autorizado) {
     return (
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: theme.gradient, display: 'grid', placeItems: 'center', zIndex: 9999, fontFamily: 'sans-serif' }}>
         <div style={{ backgroundColor: theme.card, padding: '50px 40px', borderRadius: '35px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', width: '90%', maxWidth: '400px' }}>
           <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px', fontWeight: '900', color: 'white' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
           <p style={{ color: theme.cyan, marginBottom: '35px', letterSpacing: '2px', fontSize: '0.9rem' }}>PANEL DE GESTIÓN</p>
-<input 
-            type="password" 
-            placeholder="Escribe la clave..." 
-            value={passwordInput}
+          <input 
+            type="password" placeholder="Escribe la clave..." value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && verificarClave()}
-            style={{ 
-              width: '100%', 
-              padding: '20px', 
-              borderRadius: '15px', 
-              border: 'none', 
-              backgroundColor: '#0b1426', 
-              color: 'white', 
-              marginBottom: '25px', 
-              textAlign: 'center', 
-              fontSize: '1.2rem', 
-              outline: 'none', 
-              boxSizing: 'border-box' 
-            }}
+            style={{ width: '100%', padding: '20px', borderRadius: '15px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '25px', textAlign: 'center', fontSize: '1.2rem', outline: 'none', boxSizing: 'border-box' }}
           />
           <button onClick={verificarClave} style={{ width: '100%', padding: '20px', background: theme.orange, color: 'white', border: 'none', borderRadius: '15px', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)' }}>
             ACCEDER AHORA 🔑
@@ -217,18 +235,34 @@ export default function Inventario() {
     <div style={{ minHeight: '100vh', background: theme.gradient, padding: '50px 20px', color: 'white', fontFamily: 'sans-serif' }}>
       {notificacion.visible && <div style={{ position: 'fixed', top: '20px', right: '20px', backgroundColor: theme.card, color: theme.white, padding: '15px 30px', borderRadius: '15px', borderLeft: `6px solid ${notificacion.color}`, zIndex: 10000, boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>{notificacion.mensaje}</div>}
 
+      {/* --- MODAL ZOOM --- */}
+      {modalImagen && (
+        <div 
+          onClick={() => setModalImagen(null)}
+          style={{
+            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+            backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 99999,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out',
+            padding: '20px', boxSizing: 'border-box', backdropFilter: 'blur(5px)'
+        }}>
+          <img 
+            src={modalImagen} 
+            style={{ maxHeight: '90vh', maxWidth: '90vw', objectFit: 'contain', borderRadius: '20px', boxShadow: '0 20px 50px rgba(0,0,0,0.8)', border: `2px solid ${theme.cyan}` }} 
+          />
+        </div>
+      )}
+
       <div style={{ maxWidth: '1400px', margin: 'auto' }}>
         <header style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0 }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
           <button onClick={() => { setAutorizado(false); localStorage.removeItem('farrus_auth'); }} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${theme.cyan}`, color: theme.cyan, padding: '10px 25px', borderRadius: '25px', cursor: 'pointer', marginTop: '15px', fontWeight: 'bold' }}>Cerrar Sesión 🔒</button>
         </header>
 
-        {/* --- FORMULARIO COMPLETO --- */}
+        {/* --- FORMULARIO --- */}
         <div style={{ backgroundColor: theme.card, padding: '50px', borderRadius: '40px', marginBottom: '80px', border: '1px solid rgba(0,210,255,0.15)', boxShadow: '0 40px 90px rgba(0,0,0,0.4)' }}>
           <h2 style={{ marginBottom: '40px', borderLeft: `8px solid ${theme.orange}`, paddingLeft: '20px', fontSize: '1.8rem' }}>{editandoId ? '📝 EDITAR EQUIPO' : '📦 NUEVO INGRESO'}</h2>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '25px' }}>
-            {/* ESTADO */}
             <div>
                 <label style={{marginLeft: '10px', color: theme.cyan, fontSize: '0.8rem', fontWeight: 'bold'}}>ESTADO</label>
                 <select value={form.estado} onChange={e => setForm({...form, estado: e.target.value})} style={inputStyle}>
@@ -238,28 +272,15 @@ export default function Inventario() {
                     <option value="Open Box">Open Box</option>
                 </select>
             </div>
-
-            {/* CAMPOS DE TEXTO */}
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>MARCA</label><input placeholder="Ej. Apple" value={form.marca} style={inputStyle} onChange={e => setForm({...form, marca: e.target.value})} /></div>
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>MODELO</label><input placeholder="Ej. iPhone 15" value={form.modelo} style={inputStyle} onChange={e => setForm({...form, modelo: e.target.value})} /></div>
-            
-            {/* NUEVO: COLOR */}
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>COLOR</label><input placeholder="Ej. Azul Titanio" value={form.color} style={inputStyle} onChange={e => setForm({...form, color: e.target.value})} /></div>
-            
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>ALMACENAMIENTO</label><input placeholder="Ej. 256Gb" value={form.almacenamiento} style={inputStyle} onChange={e => setForm({...form, almacenamiento: e.target.value})} /></div>
-            
-            {/* NUEVO: IMEI */}
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>IMEI / SERIE</label><input placeholder="Escanea o escribe..." value={form.imei} style={{...inputStyle, fontFamily: 'monospace'}} onChange={e => setForm({...form, imei: e.target.value})} /></div>
-
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO VENTA</label><input type="number" placeholder="S/." value={form.precio_venta} style={{...inputStyle, borderColor: theme.orange}} onChange={e => setForm({...form, precio_venta: e.target.value})} /></div>
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO COSTO</label><input type="number" placeholder="S/." value={form.precio_costo} style={inputStyle} onChange={e => setForm({...form, precio_costo: e.target.value})} /></div>
             <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>SALUD BATERÍA (%)</label><input type="number" placeholder="Ej. 90" value={form.salud_bateria} style={inputStyle} onChange={e => setForm({...form, salud_bateria: e.target.value})} /></div>
-            
-            <div style={{ gridColumn: '1 / -1' }}>
-                <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>DESCRIPCIÓN ADICIONAL</label>
-                <textarea placeholder="Detalles, fallas, accesorios..." value={form.descripcion} style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }} onChange={e => setForm({...form, descripcion: e.target.value})} />
-            </div>
-
+            <div style={{ gridColumn: '1 / -1' }}><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>DESCRIPCIÓN</label><textarea placeholder="Detalles..." value={form.descripcion} style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }} onChange={e => setForm({...form, descripcion: e.target.value})} /></div>
             <div style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
               <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', backgroundColor: 'rgba(0,0,0,0.25)', padding: '20px', borderRadius: '20px', border: '2px dashed #25335a' }}>
                 {form.imagen_url?.map((url, i) => (
@@ -275,23 +296,14 @@ export default function Inventario() {
           <button onClick={guardar} style={{ width: '100%', padding: '25px', background: theme.orange, color: 'white', border: 'none', borderRadius: '25px', fontWeight: '900', fontSize: '1.2rem', marginTop: '40px', cursor: 'pointer', boxShadow: '0 10px 30px rgba(243, 156, 18, 0.3)' }}>{editandoId ? 'CONFIRMAR CAMBIOS' : 'GUARDAR EQUIPO'}</button>
         </div>
 
-        {/* --- BUSCADOR INTELIGENTE Y LISTADO --- */}
+        {/* --- LISTADO --- */}
         <h2 style={{ marginBottom: '20px', paddingLeft: '20px', borderLeft: `8px solid ${theme.cyan}`, fontSize: '2rem' }}>INVENTARIO ({equipos.length})</h2>
-        
-        <input 
-          type="text" 
-          placeholder="🔍 Buscar por IMEI, Marca, Modelo, Color..." 
-          value={busqueda} 
-          onChange={(e) => setBusqueda(e.target.value)} 
-          style={{ width: '100%', padding: '22px', fontSize: '1.2rem', borderRadius: '20px', border: 'none', background: '#162447', color: 'white', marginBottom: '40px', boxShadow: '0 10px 20px rgba(0,0,0,0.3)', outline: 'none' }} 
-        />
-
+        <input type="text" placeholder="🔍 Buscar por IMEI, Marca, Modelo, Color..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} style={{ width: '100%', padding: '22px', fontSize: '1.2rem', borderRadius: '20px', border: 'none', background: '#162447', color: 'white', marginBottom: '40px', boxShadow: '0 10px 20px rgba(0,0,0,0.3)', outline: 'none' }} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '40px' }}>
           {equiposFiltrados.map(cel => (
             <TarjetaEquipo 
-              key={cel.id} 
-              cel={cel} 
-              theme={theme} 
+              key={cel.id} cel={cel} theme={theme}
+              onOpenModal={setModalImagen}
               onEdit={(equipo) => { setForm(equipo); setEditandoId(equipo.id); window.scrollTo({top: 0, behavior: 'smooth'}); }}
               onDelete={async (id) => { if(confirm('¿Eliminar definitivamente?')) { await supabase.from('Celulares').delete().eq('id', id); cargarEquipos(); } }}
             />

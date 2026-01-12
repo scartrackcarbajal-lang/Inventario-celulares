@@ -1,4 +1,7 @@
 self.__BUILD_MANIFEST = {
+  "/inventario": [
+    "static/chunks/pages/inventario.js"
+  ],
   "__rewrites": {
     "afterFiles": [],
     "beforeFiles": [],
