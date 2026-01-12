@@ -433,7 +433,11 @@ if (!autorizado) {
             <TarjetaEquipo 
               key={cel.id} cel={cel} theme={theme}
               onOpenModal={setModalImagen}
-              onEdit={(equipo) => { setForm(equipo); setEditandoId(equipo.id); window.scrollTo({top: 0, behavior: 'smooth'}); }}
+              onEdit={(equipo) => {
+                setForm({ ...estadoInicial, ...equipo, publicado: !!equipo.publicado })
+                setEditandoId(equipo.id)
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
               onDelete={async (id) => { if(confirm('¿Eliminar definitivamente?')) { await supabase.from('Celulares').delete().eq('id', id); cargarEquipos(); } }}
             />
           ))}
