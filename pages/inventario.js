@@ -204,11 +204,13 @@ const logout = async () => {
     let nuevasUrls = [...(form.imagen_url || [])]
     for (const archivo of archivos) {
       const nombre = `${Date.now()}_${archivo.name}`
-      const { data, error } = await supabase.storage.from('Celulares - fotos').upload(nombre, archivo)
-      if (!error) {
-        const { data: u } = supabase.storage.from('Celulares - fotos').getPublicUrl(nombre)
-        nuevasUrls.push(u.publicUrl)
+      const { error } = await supabase.storage.from('Celulares - fotos').upload(nombre, archivo)
+      if (error) {
+        avisar("❌ Error subiendo foto: " + error.message, "#ff4b2b")
+        continue
       }
+      const { data: u } = supabase.storage.from('Celulares - fotos').getPublicUrl(nombre)
+      nuevasUrls.push(u.publicUrl)
     }
     setForm({ ...form, imagen_url: nuevasUrls }); setSubiendo(false); avisar("📸 Fotos subidas")
   }
