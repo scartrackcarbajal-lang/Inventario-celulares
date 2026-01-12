@@ -183,7 +183,8 @@ const logout = async () => {
   const estadoInicial = { 
     marca: '', modelo: '', color: '', almacenamiento: '', imei: '', 
     precio_venta: '', precio_costo: '', salud_bateria: '', descripcion: '', 
-    estado: 'Nuevo Sellado', imagen_url: [] 
+    estado: 'Nuevo Sellado', imagen_url: [],
+    publicado: true   // o false si quieres que por defecto no se publique
   }
   const [form, setForm] = useState(estadoInicial)
 
@@ -320,43 +321,109 @@ if (!autorizado) {
           <button onClick={logout} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${theme.cyan}`, color: theme.cyan, padding: '10px 25px', borderRadius: '25px', cursor: 'pointer', marginTop: '15px', fontWeight: 'bold' }}>Cerrar Sesión 🔒</button>
         </header>
 
-        {/* --- FORMULARIO --- */}
-        <div style={{ backgroundColor: theme.card, padding: '50px', borderRadius: '40px', marginBottom: '80px', border: '1px solid rgba(0,210,255,0.15)', boxShadow: '0 40px 90px rgba(0,0,0,0.4)' }}>
-          <h2 style={{ marginBottom: '40px', borderLeft: `8px solid ${theme.orange}`, paddingLeft: '20px', fontSize: '1.8rem' }}>{editandoId ? '📝 EDITAR EQUIPO' : '📦 NUEVO INGRESO'}</h2>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '25px' }}>
-            <div>
-                <label style={{marginLeft: '10px', color: theme.cyan, fontSize: '0.8rem', fontWeight: 'bold'}}>ESTADO</label>
-                <select value={form.estado} onChange={e => setForm({...form, estado: e.target.value})} style={inputStyle}>
-                    <option value="Nuevo Sellado">Nuevo Sellado</option>
-                    <option value="Semi Nuevo">Semi Nuevo</option>
-                    <option value="Usado">Usado</option>
-                    <option value="Open Box">Open Box</option>
-                </select>
-            </div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>MARCA</label><input placeholder="Ej. Apple" value={form.marca} style={inputStyle} onChange={e => setForm({...form, marca: e.target.value})} /></div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>MODELO</label><input placeholder="Ej. iPhone 15" value={form.modelo} style={inputStyle} onChange={e => setForm({...form, modelo: e.target.value})} /></div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>COLOR</label><input placeholder="Ej. Azul Titanio" value={form.color} style={inputStyle} onChange={e => setForm({...form, color: e.target.value})} /></div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>ALMACENAMIENTO</label><input placeholder="Ej. 256Gb" value={form.almacenamiento} style={inputStyle} onChange={e => setForm({...form, almacenamiento: e.target.value})} /></div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>IMEI / SERIE</label><input placeholder="Escanea o escribe..." value={form.imei} style={{...inputStyle, fontFamily: 'monospace'}} onChange={e => setForm({...form, imei: e.target.value})} /></div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO VENTA</label><input type="number" placeholder="S/." value={form.precio_venta} style={{...inputStyle, borderColor: theme.orange}} onChange={e => setForm({...form, precio_venta: e.target.value})} /></div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO COSTO</label><input type="number" placeholder="S/." value={form.precio_costo} style={inputStyle} onChange={e => setForm({...form, precio_costo: e.target.value})} /></div>
-            <div><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>SALUD BATERÍA (%)</label><input type="number" placeholder="Ej. 90" value={form.salud_bateria} style={inputStyle} onChange={e => setForm({...form, salud_bateria: e.target.value})} /></div>
-            <div style={{ gridColumn: '1 / -1' }}><label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>DESCRIPCIÓN</label><textarea placeholder="Detalles..." value={form.descripcion} style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }} onChange={e => setForm({...form, descripcion: e.target.value})} /></div>
-            <div style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
-              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', backgroundColor: 'rgba(0,0,0,0.25)', padding: '20px', borderRadius: '20px', border: '2px dashed #25335a' }}>
-                {form.imagen_url?.map((url, i) => (
-                  <div key={i} style={{ position: 'relative' }}>
-                    <img src={url} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '15px', border: `2px solid ${theme.cyan}` }} />
-                    <button onClick={() => setForm({...form, imagen_url: form.imagen_url.filter((_, idx) => idx !== i)})} style={{ position: 'absolute', top: '-10px', right: '-10px', background: '#ff4b2b', color: 'white', border: 'none', borderRadius: '50%', width: '25px', height: '25px', cursor: 'pointer' }}>✕</button>
-                  </div>
-                ))}
-                <label style={{ width: '100px', height: '100px', border: `3px dashed ${theme.cyan}`, borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '2rem', color: theme.cyan }}>{subiendo ? '⏳' : '+'}<input type="file" multiple hidden onChange={manejarFotos} /></label>
-              </div>
-            </div>
-          </div>
-          <button onClick={guardar} style={{ width: '100%', padding: '25px', background: theme.orange, color: 'white', border: 'none', borderRadius: '25px', fontWeight: '900', fontSize: '1.2rem', marginTop: '40px', cursor: 'pointer', boxShadow: '0 10px 30px rgba(243, 156, 18, 0.3)' }}>{editandoId ? 'CONFIRMAR CAMBIOS' : 'GUARDAR EQUIPO'}</button>
+       {/* --- FORMULARIO --- */}
+    <div style={{ backgroundColor: theme.card, padding: '50px', borderRadius: '40px', marginBottom: '80px', border: '1px solid rgba(0,210,255,0.15)', boxShadow: '0 40px 90px rgba(0,0,0,0.4)' }}>
+      <h2 style={{ marginBottom: '40px', borderLeft: `8px solid ${theme.orange}`, paddingLeft: '20px', fontSize: '1.8rem' }}>
+        {editandoId ? '📝 EDITAR EQUIPO' : '📦 NUEVO INGRESO'}
+      </h2>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '25px' }}>
+        <div>
+          <label style={{marginLeft: '10px', color: theme.cyan, fontSize: '0.8rem', fontWeight: 'bold'}}>ESTADO</label>
+          <select value={form.estado} onChange={e => setForm({...form, estado: e.target.value})} style={inputStyle}>
+            <option value="Nuevo Sellado">Nuevo Sellado</option>
+            <option value="Semi Nuevo">Semi Nuevo</option>
+            <option value="Usado">Usado</option>
+            <option value="Open Box">Open Box</option>
+          </select>
         </div>
+
+        {/* ✅ PUBLICAR */}
+        <div>
+          <label style={{marginLeft: '10px', color: theme.cyan, fontSize: '0.8rem', fontWeight: 'bold'}}>PUBLICAR EN CATÁLOGO</label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '16px', borderRadius: '15px', background: '#0b1426', border: '1px solid #25335a', color: 'white' }}>
+            <input
+              type="checkbox"
+              checked={!!form.publicado}
+              onChange={(e) => setForm({ ...form, publicado: e.target.checked })}
+            />
+            <span style={{ fontSize: '0.9rem' }}>
+              {form.publicado ? 'Visible' : 'Oculto'}
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>MARCA</label>
+          <input placeholder="Ej. Apple" value={form.marca} style={inputStyle} onChange={e => setForm({...form, marca: e.target.value})} />
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>MODELO</label>
+          <input placeholder="Ej. iPhone 15" value={form.modelo} style={inputStyle} onChange={e => setForm({...form, modelo: e.target.value})} />
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>COLOR</label>
+          <input placeholder="Ej. Azul Titanio" value={form.color} style={inputStyle} onChange={e => setForm({...form, color: e.target.value})} />
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>ALMACENAMIENTO</label>
+          <input placeholder="Ej. 256Gb" value={form.almacenamiento} style={inputStyle} onChange={e => setForm({...form, almacenamiento: e.target.value})} />
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>IMEI / SERIE</label>
+          <input placeholder="Escanea o escribe..." value={form.imei} style={{...inputStyle, fontFamily: 'monospace'}} onChange={e => setForm({...form, imei: e.target.value})} />
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO VENTA</label>
+          <input type="number" placeholder="S/." value={form.precio_venta} style={{...inputStyle, borderColor: theme.orange}} onChange={e => setForm({...form, precio_venta: e.target.value})} />
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO COSTO</label>
+          <input type="number" placeholder="S/." value={form.precio_costo} style={inputStyle} onChange={e => setForm({...form, precio_costo: e.target.value})} />
+        </div>
+
+        <div>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>SALUD BATERÍA (%)</label>
+          <input type="number" placeholder="Ej. 90" value={form.salud_bateria} style={inputStyle} onChange={e => setForm({...form, salud_bateria: e.target.value})} />
+        </div>
+
+        <div style={{ gridColumn: '1 / -1' }}>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>DESCRIPCIÓN</label>
+          <textarea placeholder="Detalles..." value={form.descripcion} style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }} onChange={e => setForm({...form, descripcion: e.target.value})} />
+        </div>
+
+        <div style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', backgroundColor: 'rgba(0,0,0,0.25)', padding: '20px', borderRadius: '20px', border: '2px dashed #25335a' }}>
+            {form.imagen_url?.map((url, i) => (
+              <div key={i} style={{ position: 'relative' }}>
+                <img src={url} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '15px', border: `2px solid ${theme.cyan}` }} />
+                <button
+                  onClick={() => setForm({...form, imagen_url: form.imagen_url.filter((_, idx) => idx !== i)})}
+                  style={{ position: 'absolute', top: '-10px', right: '-10px', background: '#ff4b2b', color: 'white', border: 'none', borderRadius: '50%', width: '25px', height: '25px', cursor: 'pointer' }}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+
+            <label style={{ width: '100px', height: '100px', border: `3px dashed ${theme.cyan}`, borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '2rem', color: theme.cyan }}>
+              {subiendo ? '⏳' : '+'}
+              <input type="file" multiple hidden onChange={manejarFotos} />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button onClick={guardar} style={{ width: '100%', padding: '25px', background: theme.orange, color: 'white', border: 'none', borderRadius: '25px', fontWeight: '900', fontSize: '1.2rem', marginTop: '40px', cursor: 'pointer', boxShadow: '0 10px 30px rgba(243, 156, 18, 0.3)' }}>
+        {editandoId ? 'CONFIRMAR CAMBIOS' : 'GUARDAR EQUIPO'}
+      </button>
+    </div>
 
         {/* --- LISTADO --- */}
         <h2 style={{ marginBottom: '20px', paddingLeft: '20px', borderLeft: `8px solid ${theme.cyan}`, fontSize: '2rem' }}>INVENTARIO ({equipos.length})</h2>
