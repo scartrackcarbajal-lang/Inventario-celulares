@@ -17,8 +17,32 @@ export default function CatalogoPublico() {
     buttonGradient: 'linear-gradient(to right, #00d2ff, #f39c12)'
   }
 
-  const cargarEquipos = async () => {
-    const { data } = await supabase.from('Celulares').select('*').order('created_at', { ascending: false })
+    const cargarEquipos = async () => {
+    const { data, error } = await supabase
+      .from('Celulares')
+      .select(`
+        id,
+        marca,
+        modelo,
+        estado,
+        precio_venta,
+        almacenamiento,
+        salud_bateria,
+        descripcion,
+        color,
+        imagen_url,
+        created_at,
+        stock,
+        publicado
+      `)
+      .eq('publicado', true)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error cargando catálogo', error)
+      return
+    }
+
     setEquipos(data || [])
   }
 
@@ -148,7 +172,7 @@ export default function CatalogoPublico() {
                 </span>
               </div>
               
-              <p style={{ color: theme.cyan, fontWeight: 'bold', margin: '10px 0' }}>💾 {cel.almacenamiento} | 🔋 {cel.salud_bateria}%</p>
+              <p style={{ color: theme.cyan, fontWeight: 'bold', margin: '10px 0' }}>💾 {cel.almacenamiento}{cel.salud_bateria && ` | 🔋 ${cel.salud_bateria}%`}</p>
               
               <p style={{ color: theme.muted, fontSize: '0.85rem', marginBottom: '20px', flex: 1 }}>
                 {cel.descripcion || "Calidad garantizada en LOS FARRUS HUB."}
