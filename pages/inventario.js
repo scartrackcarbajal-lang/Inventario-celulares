@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-// --- COMPONENTE TARJETA ---
+// --- COMPONENTE TARJETA (Altura corregida a 320px para equilibrio perfecto) ---
 function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
   const [fotoActiva, setFotoActiva] = useState(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto')
 
@@ -16,8 +16,8 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
   return (
     <div style={{ backgroundColor: theme.card, borderRadius: '30px', overflow: 'hidden', border: `1px solid ${theme.cyan}33`, boxShadow: '0 15px 35px rgba(0,0,0,0.3)', transition: 'transform 0.3s', position: 'relative' }}>
       
-      {/* 1. SECCIÓN DE IMAGEN (Altura aumentada a 550px para mejor presencia) */}
-      <div style={{ height: '550px', position: 'relative', overflow: 'hidden', backgroundColor: '#000' }}>
+      {/* 1. SECCIÓN DE IMAGEN (Altura REDUCIDA A 320px) */}
+      <div style={{ height: '320px', position: 'relative', overflow: 'hidden', backgroundColor: '#000' }}>
           
           {/* A. Fondo Ambiental */}
           <div style={{
@@ -29,11 +29,11 @@ function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
               zIndex: 1
           }}></div>
 
-          {/* B. Imagen Nítida Centrada (Padding reducido para mejor encuadre) */}
+          {/* B. Imagen Nítida Centrada (Padding de 15px para buen encuadre) */}
           <div style={{
               position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              zIndex: 2, padding: '10px' 
+              zIndex: 2, padding: '15px' 
           }}>
               <img src={fotoActiva} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.6))' }} alt="Preview" />
           </div>
