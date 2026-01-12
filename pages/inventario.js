@@ -165,15 +165,23 @@ export default function Inventario() {
     )
   })
 
-  // --- LOGIN ---
+// --- LOGIN ---
   if (!autorizado) {
     return (
       <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: theme.gradient, display: 'grid', placeItems: 'center', zIndex: 9999, fontFamily: 'sans-serif' }}>
-        <div style={{ backgroundColor: theme.card, padding: '60px 40px', borderRadius: '40px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 30px 80px rgba(0,0,0,0.7)', width: '90%', maxWidth: '450px' }}>
+        <div style={{ backgroundColor: theme.card, padding: '50px 40px', borderRadius: '35px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', width: '90%', maxWidth: '400px' }}>
           <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px', fontWeight: '900', color: 'white' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
-          <p style={{ color: theme.cyan, marginBottom: '40px', letterSpacing: '2px', fontSize: '0.9rem', fontWeight: 'bold' }}>PANEL DE GESTIÓN</p>
-          <input type="password" placeholder="Clave de acceso" value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && verificarClave()} style={{ width: '100%', padding: '22px', borderRadius: '18px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '25px', textAlign: 'center', fontSize: '1.3rem', outline: 'none' }} />
-          <button onClick={verificarClave} style={{ width: '100%', padding: '20px', background: theme.orange, color: 'white', border: 'none', borderRadius: '18px', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer' }}>ACCEDER 🔑</button>
+          <p style={{ color: theme.cyan, marginBottom: '35px', letterSpacing: '2px', fontSize: '0.9rem' }}>PANEL DE GESTIÓN</p>
+          <input 
+            type="password" placeholder="Escribe la clave..." value={passwordInput}
+            onChange={(e) => setPasswordInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && verificarClave()}
+            /* AQUÍ ESTÁ EL ARREGLO: boxSizing: 'border-box' */
+            style={{ width: '100%', padding: '20px', borderRadius: '15px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '25px', textAlign: 'center', fontSize: '1.2rem', outline: 'none', boxSizing: 'border-box' }}
+          />
+          <button onClick={verificarClave} style={{ width: '100%', padding: '20px', background: theme.orange, color: 'white', border: 'none', borderRadius: '15px', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)' }}>
+            ACCEDER AHORA 🔑
+          </button>
         </div>
       </div>
     )
