@@ -1,14 +1,62 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
+// Componente Tarjeta para el Stock con Galería Interactiva
+function TarjetaEquipo({ cel, onEdit, onDelete, theme }) {
+  const [fotoActiva, setFotoActiva] = useState(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto')
+
+  return (
+    <div style={{ backgroundColor: theme.card, borderRadius: '30px', overflow: 'hidden', border: `1px solid ${theme.cyan}33`, boxShadow: '0 15px 35px rgba(0,0,0,0.3)', transition: 'transform 0.3s' }}>
+      {/* Imagen Principal que cambia al hacer clic en miniaturas */}
+      <div style={{ height: '260px', backgroundColor: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img src={fotoActiva} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} alt="Principal" />
+      </div>
+
+      {/* Mini Galería Seleccionable */}
+      {cel.imagen_url && cel.imagen_url.length > 0 && (
+        <div style={{ display: 'flex', gap: '8px', padding: '12px', backgroundColor: 'rgba(0,0,0,0.4)', overflowX: 'auto', borderBottom: '1px solid #25335a' }}>
+          {cel.imagen_url.map((url, index) => (
+            <img 
+              key={index} src={url} 
+              onClick={() => setFotoActiva(url)}
+              style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '10px', border: fotoActiva === url ? `2px solid ${theme.orange}` : `1px solid ${theme.cyan}44`, cursor: 'pointer', opacity: fotoActiva === url ? 1 : 0.6 }} 
+            />
+          ))}
+        </div>
+      )}
+
+      <div style={{ padding: '25px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <h3 style={{ margin: 0, fontSize: '1.4rem' }}>{cel.marca} {cel.modelo}</h3>
+            <span style={{ fontSize: '0.8rem', color: theme.cyan, background: 'rgba(0,210,255,0.1)', padding: '4px 10px', borderRadius: '10px' }}>{cel.salud_bateria ? cel.salud_bateria + '%' : '---'} 🔋</span>
+        </div>
+        <p style={{ color: theme.cyan, fontWeight: 'bold', margin: '10px 0' }}>💾 {cel.almacenamiento || '---'}</p>
+        
+        {/* Visualización de la Descripción */}
+        {cel.descripcion && (
+            <div style={{ margin: '15px 0', padding: '12px', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', borderLeft: `3px solid ${theme.orange}`, fontSize: '0.85rem', color: '#ccc', lineHeight: '1.4' }}>
+                {cel.descripcion}
+            </div>
+        )}
+
+        <p style={{ color: theme.orange, fontSize: '1.8rem', fontWeight: '900', margin: '15px 0' }}>S/ {cel.precio_venta}</p>
+        
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={() => onEdit(cel)} style={{ flex: 1, padding: '12px', background: 'transparent', border: `2px solid ${theme.cyan}`, color: theme.cyan, borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer' }}>EDITAR</button>
+          <button onClick={() => onDelete(cel.id)} style={{ padding: '12px 15px', background: 'linear-gradient(135deg, #4a1515, #2d1a1a)', color: '#ff6b6b', border: 'none', borderRadius: '15px', cursor: 'pointer' }}>🗑️</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Inventario() {
   const [equipos, setEquipos] = useState([])
-  const [busqueda, setBusqueda] = useState('')
   const [subiendo, setSubiendo] = useState(false)
   const [editandoId, setEditandoId] = useState(null)
   const [notificacion, setNotificacion] = useState({ mensaje: '', visible: false, color: '#00d2ff' })
 
-  // --- 🔒 SISTEMA DE SEGURIDAD ---
+  // --- 🔒 SEGURIDAD ---
   const [autorizado, setAutorizado] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
   const CLAVE_SECRETA = "carsal11"
@@ -17,29 +65,22 @@ export default function Inventario() {
     if (passwordInput === CLAVE_SECRETA) {
       setAutorizado(true)
       localStorage.setItem('farrus_auth', 'true')
-    } else {
-      avisar("⚠️ Clave incorrecta", "#ff4b2b")
-    }
+    } else { avisar("⚠️ Clave incorrecta", "#ff4b2b") }
   }
 
-  useEffect(() => {
-    const auth = localStorage.getItem('farrus_auth')
-    if (auth === 'true') setAutorizado(true)
-  }, [])
-  // ------------------------------
-
-  const estadoInicial = {
-    modelo: '', marca: '', almacenamiento: '', estado: 'Sellado', imei: '', 
-    precio_venta: '', precio_costo: '', stock: '', 
-    salud_bateria: '', descripcion: '', imagen_url: [] 
-  }
-  const [form, setForm] = useState(estadoInicial)
+  useEffect(() => { if (localStorage.getItem('farrus_auth') === 'true') setAutorizado(true) }, [])
 
   const theme = { 
     navy: '#0b1426', card: '#162447', orange: '#f39c12', 
     cyan: '#00d2ff', white: '#ffffff',
-    gradient: 'linear-gradient(135deg, #0b1426 0%, #162447 100%)' // Nuevo fondo
+    gradient: 'linear-gradient(135deg, #050a14 0%, #162447 100%)'
   }
+
+  const estadoInicial = { 
+    marca: '', modelo: '', almacenamiento: '', precio_venta: '', 
+    precio_costo: '', salud_bateria: '', descripcion: '', imagen_url: [] 
+  }
+  const [form, setForm] = useState(estadoInicial)
 
   const avisar = (msg, color = theme.cyan) => {
     setNotificacion({ mensaje: msg, visible: true, color: color })
@@ -47,182 +88,119 @@ export default function Inventario() {
   }
 
   const cargarEquipos = async () => {
-    const { data, error } = await supabase.from('Celulares').select('*').order('created_at', { ascending: false })
-    if (error) avisar("Error al cargar: " + error.message, "red")
-    else setEquipos(data || [])
+    const { data } = await supabase.from('Celulares').select('*').order('created_at', { ascending: false })
+    setEquipos(data || [])
   }
 
-  useEffect(() => { 
-    if (autorizado) cargarEquipos() 
-  }, [autorizado])
+  useEffect(() => { if (autorizado) cargarEquipos() }, [autorizado])
 
   const manejarFotos = async (e) => {
     const archivos = Array.from(e.target.files)
-    if (archivos.length === 0) return
     setSubiendo(true)
     let nuevasUrls = [...(form.imagen_url || [])]
-    
     for (const archivo of archivos) {
-      const nombreArchivo = `${Date.now()}_${archivo.name}`
-      const { data, error } = await supabase.storage.from('Celulares - fotos').upload(nombreArchivo, archivo)
+      const nombre = `${Date.now()}_${archivo.name}`
+      const { data, error } = await supabase.storage.from('Celulares - fotos').upload(nombre, archivo)
       if (!error) {
-        const { data: urlData } = supabase.storage.from('Celulares - fotos').getPublicUrl(nombreArchivo)
-        nuevasUrls.push(urlData.publicUrl)
+        const { data: u } = supabase.storage.from('Celulares - fotos').getPublicUrl(nombre)
+        nuevasUrls.push(u.publicUrl)
       }
     }
-    setForm({ ...form, imagen_url: nuevasUrls })
-    avisar(`📸 ${archivos.length} foto(s) añadidas`)
-    setSubiendo(false)
-  }
-
-  const eliminarFotoGaleria = (index) => {
-    const filtradas = form.imagen_url.filter((_, i) => i !== index)
-    setForm({ ...form, imagen_url: filtradas })
+    setForm({ ...form, imagen_url: nuevasUrls }); setSubiendo(false); avisar("📸 Galería actualizada")
   }
 
   const guardar = async () => {
-    const datos = { ...form }
-    const camposNum = ['precio_venta', 'precio_costo', 'stock', 'salud_bateria']
-    camposNum.forEach(c => { if (datos[c] === '') datos[c] = null })
-
     if (editandoId) {
-      const { error } = await supabase.from('Celulares').update(datos).eq('id', editandoId)
-      if (error) avisar("Error: " + error.message, "#ff4b2b")
-      else { 
-        avisar('✅ Inventario actualizado'); 
-        setEditandoId(null); 
-        setForm(estadoInicial); 
-        cargarEquipos(); 
-      }
+      await supabase.from('Celulares').update(form).eq('id', editandoId)
+      setEditandoId(null)
     } else {
-      const { error } = await supabase.from('Celulares').insert([datos])
-      if (error) avisar("Error: " + error.message, "#ff4b2b")
-      else { 
-        avisar('🚀 Equipo registrado con éxito'); 
-        setForm(estadoInicial); 
-        cargarEquipos(); 
-      }
+      await supabase.from('Celulares').insert([form])
     }
+    setForm(estadoInicial); cargarEquipos(); avisar("🚀 Registro exitoso")
   }
 
-  const eliminarEquipo = async (id) => {
-    if(window.confirm('¿Estás seguro de eliminar este celular?')) {
-      const { error } = await supabase.from('Celulares').delete().eq('id', id)
-      if (error) avisar("Error al borrar", "red")
-      else { avisar("🗑️ Equipo eliminado", theme.orange); cargarEquipos(); }
-    }
-  }
+  const inputStyle = { padding: '16px', borderRadius: '15px', border: '1px solid #25335a', background: '#0b1426', color: 'white', outline: 'none', fontSize: '1rem' }
 
-  const inputStyle = { backgroundColor: '#0b1426', border: '1px solid #25335a', borderRadius: '12px', padding: '14px', color: '#ffffff', outline: 'none' }
-
-  // --- VISTA DE LOGIN CENTRADA Y MEJORADA ---
+  // --- LOGIN CENTRADO ---
   if (!autorizado) {
     return (
-      <div style={{ height: '100vh', background: theme.gradient, display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white', fontFamily: 'sans-serif' }}>
-        <div style={{ backgroundColor: theme.card, padding: '50px', borderRadius: '30px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 10px 40px rgba(0, 210, 255, 0.2)', maxWidth: '450px', width: '90%' }}>
-          <h1 style={{ fontSize: '2.2rem', marginBottom: '10px' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
-          <p style={{ color: theme.cyan, marginBottom: '40px', letterSpacing: '1px' }}>ACCESO A GESTIÓN</p>
+      <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: theme.gradient, display: 'grid', placeItems: 'center', zIndex: 9999, fontFamily: 'sans-serif' }}>
+        <div style={{ backgroundColor: theme.card, padding: '60px 40px', borderRadius: '40px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 25px 70px rgba(0,0,0,0.6)', width: '90%', maxWidth: '420px' }}>
+          <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px', fontWeight: '900' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
+          <p style={{ color: theme.cyan, marginBottom: '40px', letterSpacing: '3px', fontSize: '0.8rem', fontWeight: 'bold' }}>SISTEMA DE GESTIÓN</p>
           <input 
-            type="password" 
-            placeholder="Introduce tu contraseña..." 
-            value={passwordInput}
+            type="password" placeholder="Escribe la clave" value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && verificarClave()}
-            style={{ width: '100%', padding: '18px', borderRadius: '15px', border: '2px solid #25335a', backgroundColor: theme.navy, color: 'white', marginBottom: '25px', textAlign: 'center', fontSize: '1.1rem', outline: 'none', transition: 'border-color 0.3s' }}
-            onFocus={(e) => e.target.style.borderColor = theme.cyan}
-            onBlur={(e) => e.target.style.borderColor = '#25335a'}
+            style={{ width: '100%', padding: '22px', borderRadius: '18px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '25px', textAlign: 'center', fontSize: '1.3rem', outline: 'none', boxSizing: 'border-box' }}
           />
-          <button onClick={verificarClave} style={{ width: '100%', padding: '18px', background: theme.orange, color: 'white', border: 'none', borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer', fontSize: '1.1rem', transition: 'transform 0.2s', boxShadow: '0 5px 15px rgba(243, 156, 18, 0.3)' }} onMouseDown={e => e.target.style.transform = 'scale(0.98)'} onMouseUp={e => e.target.style.transform = 'scale(1)'}>
-            ENTRAR AL PANEL 🔐
-          </button>
+          <button onClick={verificarClave} style={{ width: '100%', padding: '20px', background: theme.orange, color: 'white', border: 'none', borderRadius: '18px', fontWeight: '900', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 25px rgba(243, 156, 18, 0.4)' }}>ACCEDER AL PANEL 🔑</button>
         </div>
-        {notificacion.visible && (
-          <div style={{ position: 'fixed', top: '20px', backgroundColor: theme.card, color: 'white', padding: '15px 25px', borderRadius: '12px', borderLeft: `6px solid ${notificacion.color}`, boxShadow: '0 5px 15px rgba(0,0,0,0.2)' }}>{notificacion.mensaje}</div>
-        )}
       </div>
     )
   }
 
-  // --- VISTA DEL INVENTARIO CON FONDO Y GALERÍA ---
   return (
-    <div style={{ padding: '30px 20px', width: '100%', background: theme.gradient, minHeight: '100vh', color: theme.white, fontFamily: 'sans-serif' }}>
-      {notificacion.visible && (
-        <div style={{ position: 'fixed', top: '20px', right: '20px', backgroundColor: theme.card, color: theme.white, padding: '15px 25px', borderRadius: '12px', borderLeft: `6px solid ${notificacion.color}`, zIndex: 1000, boxShadow: '0 10px 20px rgba(0,0,0,0.4)' }}>{notificacion.mensaje}</div>
-      )}
+    <div style={{ minHeight: '100vh', background: theme.gradient, padding: '50px 20px', color: 'white', fontFamily: 'sans-serif' }}>
+      <div style={{ maxWidth: '1300px', margin: 'auto' }}>
+        <header style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h1 style={{ fontSize: '4rem', fontWeight: '900', margin: 0, letterSpacing: '-2px' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
+          <button onClick={() => { setAutorizado(false); localStorage.removeItem('farrus_auth'); }} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${theme.cyan}`, color: theme.cyan, padding: '10px 25px', borderRadius: '25px', cursor: 'pointer', marginTop: '15px', fontWeight: 'bold' }}>Finalizar Sesión 🔒</button>
+        </header>
 
-      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: '900', margin: 0, textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
-        <button onClick={() => { setAutorizado(false); localStorage.removeItem('farrus_auth'); }} style={{ background: 'rgba(0,0,0,0.2)', border: `1px solid ${theme.cyan}`, color: theme.cyan, padding: '8px 20px', borderRadius: '20px', cursor: 'pointer', marginTop: '15px', fontWeight: 'bold', transition: 'background 0.3s' }} onMouseEnter={e => e.target.style.background = theme.cyan + '22'} onMouseLeave={e => e.target.style.background = 'rgba(0,0,0,0.2)'}>Cerrar Sesión 🔒</button>
-      </div>
-
-      {/* Formulario de Registro/Edición */}
-      <div style={{ backgroundColor: theme.card, padding: '35px', borderRadius: '30px', border: `1px solid rgba(0, 210, 255, 0.1)`, marginBottom: '50px', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', maxWidth: '1200px', margin: '0 auto 50px' }}>
-        <h2 style={{ fontSize: '1.5rem', marginTop: 0, borderBottom: `2px solid ${theme.orange}`, paddingBottom: '15px', display: 'inline-block' }}>{editandoId ? '📝 EDITANDO DISPOSITIVO' : '📦 REGISTRAR NUEVO INGRESO'}</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginTop: '25px' }}>
-          <input placeholder='Marca' value={form.marca} style={inputStyle} onChange={e => setForm({...form, marca: e.target.value})} />
-          <input placeholder='Modelo' value={form.modelo} style={inputStyle} onChange={e => setForm({...form, modelo: e.target.value})} />
-          <input placeholder='Almacenamiento (Gb)' value={form.almacenamiento} style={inputStyle} onChange={e => setForm({...form, almacenamiento: e.target.value})} />
-          <input placeholder='Precio Venta S/.' type='number' value={form.precio_venta} style={inputStyle} onChange={e => setForm({...form, precio_venta: e.target.value})} />
-          <input placeholder='Precio Costo S/.' type='number' value={form.precio_costo} style={inputStyle} onChange={e => setForm({...form, precio_costo: e.target.value})} />
-          <input placeholder='Batería %' type='number' value={form.salud_bateria} style={inputStyle} onChange={e => setForm({...form, salud_bateria: e.target.value})} />
-          
-          <div style={{ gridColumn: '1 / -1', marginTop: '15px' }}>
-            <p style={{ color: theme.cyan, fontWeight: 'bold', marginBottom: '10px' }}>Galería de Fotos ({form.imagen_url?.length || 0})</p>
-            <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', backgroundColor: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '20px', border: `1px dashed ${theme.cyan}` }}>
-              {form.imagen_url?.map((url, i) => (
-                <div key={i} style={{ position: 'relative' }}>
-                  <img src={url} style={{ width: '110px', height: '110px', objectFit: 'cover', borderRadius: '15px', border: `2px solid ${theme.cyan}`, boxShadow: '0 5px 15px rgba(0,0,0,0.3)' }} />
-                  <button onClick={() => eliminarFotoGaleria(i)} style={{ position: 'absolute', top: '-10px', right: '-10px', background: '#ff4b2b', color: 'white', border: 'none', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>X</button>
-                </div>
-              ))}
-              <label style={{ width: '110px', height: '110px', border: `2px dashed ${theme.cyan}`, borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '2.5rem', color: theme.cyan, backgroundColor: theme.cyan + '11', transition: 'background 0.3s' }} onMouseEnter={e => e.target.style.background = theme.cyan + '33'} onMouseLeave={e => e.target.style.background = theme.cyan + '11'}>
-                {subiendo ? '...' : '+'}
-                <input type="file" accept="image/*" multiple onChange={manejarFotos} style={{ display: 'none' }} />
-              </label>
-            </div>
-          </div>
-        </div>
-        <button onClick={guardar} style={{ marginTop: '30px', width: '100%', padding: '22px', background: theme.orange, color: theme.white, border: 'none', borderRadius: '20px', fontWeight: '900', fontSize: '1.2rem', cursor: 'pointer', boxShadow: '0 10px 25px rgba(243, 156, 18, 0.3)', transition: 'transform 0.2s' }} onMouseDown={e => e.target.style.transform = 'scale(0.98)'} onMouseUp={e => e.target.style.transform = 'scale(1)'}>
-          {editandoId ? 'CONFIRMAR CAMBIOS EN EL EQUIPO' : 'GUARDAR EQUIPO EN INVENTARIO'}
-        </button>
-      </div>
-
-      {/* Listado de STOCK con Galería */}
-      <h2 style={{ marginBottom: '35px', paddingLeft: '20px', borderLeft: `6px solid ${theme.cyan}`, maxWidth: '1200px', margin: '0 auto 35px' }}>STOCK EN TIENDA ({equipos.length})</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '35px', maxWidth: '1200px', margin: 'auto' }}>
-        {equipos.map(cel => (
-          <div key={cel.id} style={{ backgroundColor: theme.card, borderRadius: '30px', overflow: 'hidden', border: `1px solid ${theme.cyan}33`, boxShadow: '0 15px 35px rgba(0,0,0,0.3)', transition: 'transform 0.3s, box-shadow 0.3s' }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 25px 50px rgba(0, 210, 255, 0.2)'; }} onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 15px 35px rgba(0,0,0,0.3)'; }}>
+        {/* Formulario de Gestión con Descripción */}
+        <div style={{ backgroundColor: theme.card, padding: '45px', borderRadius: '35px', marginBottom: '70px', border: '1px solid rgba(0,210,255,0.1)', boxShadow: '0 30px 60px rgba(0,0,0,0.5)' }}>
+          <h2 style={{ marginBottom: '35px', borderLeft: `6px solid ${theme.orange}`, paddingLeft: '20px', fontSize: '1.6rem' }}>{editandoId ? '📝 ACTUALIZAR DISPOSITIVO' : '📦 REGISTRAR NUEVO STOCK'}</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '25px' }}>
+            <input placeholder="Marca (ej. Apple)" value={form.marca} style={inputStyle} onChange={e => setForm({...form, marca: e.target.value})} />
+            <input placeholder="Modelo (ej. iPhone 15 Pro)" value={form.modelo} style={inputStyle} onChange={e => setForm({...form, modelo: e.target.value})} />
+            <input placeholder="Almacenamiento (Gb/Tb)" value={form.almacenamiento} style={inputStyle} onChange={e => setForm({...form, almacenamiento: e.target.value})} />
+            <input placeholder="Precio Venta S/." type="number" value={form.precio_venta} style={inputStyle} onChange={e => setForm({...form, precio_venta: e.target.value})} />
+            <input placeholder="Precio Costo S/." type="number" value={form.precio_costo} style={inputStyle} onChange={e => setForm({...form, precio_costo: e.target.value})} />
+            <input placeholder="Salud Batería %" type="number" value={form.salud_bateria} style={inputStyle} onChange={e => setForm({...form, salud_bateria: e.target.value})} />
             
-            {/* Imagen Principal */}
-            <div style={{ position: 'relative', height: '250px' }}>
-                <img src={cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', padding: '20px 15px 10px' }}>
-                    <h3 style={{ margin: 0, fontSize: '1.6rem', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{cel.marca} {cel.modelo}</h3>
-                </div>
-            </div>
+            {/* Campo de Descripción */}
+            <textarea 
+                placeholder="Descripción detallada: estado estético, accesorios incluidos, tiempo de uso, etc." 
+                value={form.descripcion} 
+                style={{ ...inputStyle, gridColumn: '1 / -1', minHeight: '100px', resize: 'vertical' }} 
+                onChange={e => setForm({...form, descripcion: e.target.value})}
+            />
 
-            {/* Mini Galería de Fotos */}
-            {cel.imagen_url && cel.imagen_url.length > 1 && (
-                <div style={{ display: 'flex', gap: '8px', padding: '10px 15px', backgroundColor: 'rgba(0,0,0,0.3)', overflowX: 'auto', whiteSpace: 'nowrap' }}>
-                    {cel.imagen_url.map((url, index) => (
-                        <img key={index} src={url} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '10px', border: index === 0 ? `2px solid ${theme.orange}` : `1px solid ${theme.cyan}66`, opacity: index === 0 ? 1 : 0.7, cursor: 'pointer', transition: 'opacity 0.2s' }} onMouseEnter={e => e.target.style.opacity = 1} onMouseLeave={e => e.target.style.opacity = index === 0 ? 1 : 0.7} />
-                    ))}
-                </div>
-            )}
-
-            <div style={{ padding: '25px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                  <p style={{ color: theme.cyan, fontWeight: 'bold', margin: 0, display: 'flex', alignItems: 'center' }}>💾 {cel.almacenamiento || '---'}</p>
-                  <p style={{ color: '#aaa', fontSize: '0.9rem', margin: 0 }}>🔋 {cel.salud_bateria ? cel.salud_bateria + '%' : '---'}</p>
-              </div>
-              <p style={{ color: theme.orange, fontSize: '2rem', fontWeight: '900', margin: '0 0 25px', textShadow: '0 2px 10px rgba(243, 156, 18, 0.3)' }}>S/ {cel.precio_venta}</p>
-              <div style={{ display: 'flex', gap: '15px' }}>
-                <button onClick={() => { setEditandoId(cel.id); setForm(cel); window.scrollTo({top: 0, behavior: 'smooth'}); }} style={{ flex: 1, padding: '15px', background: 'transparent', border: `2px solid ${theme.cyan}`, color: theme.cyan, borderRadius: '15px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s', fontSize: '1rem' }} onMouseEnter={e => {e.target.style.background = theme.cyan; e.target.style.color = theme.navy;}} onMouseLeave={e => {e.target.style.background = 'transparent'; e.target.style.color = theme.cyan;}}>EDITAR</button>
-                <button onClick={() => eliminarEquipo(cel.id)} style={{ padding: '15px 20px', background: 'linear-gradient(135deg, #ff4b2b, #ff416c)', color: 'white', border: 'none', borderRadius: '15px', cursor: 'pointer', fontSize: '1.2rem', boxShadow: '0 5px 15px rgba(255, 75, 43, 0.3)', transition: 'transform 0.2s' }} onMouseDown={e => e.target.style.transform = 'scale(0.95)'} onMouseUp={e => e.target.style.transform = 'scale(1)'}>🗑️</button>
+            <div style={{ gridColumn: '1 / -1', marginTop: '10px' }}>
+              <p style={{ color: theme.cyan, marginBottom: '15px', fontWeight: 'bold' }}>IMÁGENES DEL EQUIPO ({form.imagen_url?.length || 0})</p>
+              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', backgroundColor: 'rgba(0,0,0,0.3)', padding: '25px', borderRadius: '25px', border: '1px dashed #25335a' }}>
+                {form.imagen_url?.map((url, i) => (
+                  <div key={i} style={{ position: 'relative' }}>
+                    <img src={url} style={{ width: '110px', height: '110px', objectFit: 'cover', borderRadius: '15px', border: `2px solid ${theme.cyan}` }} />
+                    <button onClick={() => setForm({...form, imagen_url: form.imagen_url.filter((_, idx) => idx !== i)})} style={{ position: 'absolute', top: '-10px', right: '-10px', background: '#ff4b2b', color: 'white', border: 'none', borderRadius: '50%', width: '30px', height: '30px', cursor: 'pointer', fontWeight: 'bold' }}>×</button>
+                  </div>
+                ))}
+                <label style={{ width: '110px', height: '110px', border: `3px dashed ${theme.cyan}`, borderRadius: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '2.5rem', color: theme.cyan, background: 'rgba(0,210,255,0.05)' }}>
+                  {subiendo ? '...' : '+'}
+                  <input type="file" multiple hidden onChange={manejarFotos} />
+                </label>
               </div>
             </div>
           </div>
-        ))}
+          <button onClick={guardar} style={{ width: '100%', padding: '22px', background: theme.orange, color: 'white', border: 'none', borderRadius: '20px', fontWeight: '900', fontSize: '1.2rem', marginTop: '40px', cursor: 'pointer', boxShadow: '0 15px 30px rgba(243, 156, 18, 0.3)', transition: 'transform 0.2s' }} onMouseDown={e => e.target.style.transform='scale(0.98)'} onMouseUp={e => e.target.style.transform='scale(1)'}>
+            {editandoId ? 'APLICAR CAMBIOS AL EQUIPO' : 'REGISTRAR EQUIPO EN EL SISTEMA'}
+          </button>
+        </div>
+
+        {/* Stock con Galería Dinámica */}
+        <h2 style={{ marginBottom: '40px', paddingLeft: '25px', borderLeft: `8px solid ${theme.cyan}`, fontSize: '2rem' }}>STOCK DISPONIBLE EN TIENDA ({equipos.length})</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '40px' }}>
+          {equipos.map(cel => (
+            <TarjetaEquipo 
+              key={cel.id} 
+              cel={cel} 
+              theme={theme} 
+              onEdit={(equipo) => { setForm(equipo); setEditandoId(equipo.id); window.scrollTo({top: 0, behavior: 'smooth'}); }}
+              onDelete={async (id) => { if(confirm('¿Deseas eliminar permanentemente este equipo?')) { await supabase.from('Celulares').delete().eq('id', id); cargarEquipos(); avisar("🗑️ Eliminado"); } }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
