@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
+// --- PASO 2A: Import Link (Next.js) ---
+import Link from 'next/link'
 
 export default function CatalogoPublico() {
   const [equipos, setEquipos] = useState([])
@@ -221,10 +223,9 @@ export default function CatalogoPublico() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
                   <span style={{ fontSize: '1.8rem', fontWeight: '900' }}>S/ {cel.precio_venta}</span>
 
-                  <a
-                    href={waLink}
-                    target="_blank"
-                    rel="noreferrer"
+                  {/* --- PASO 2B: Botón a Detalles --- */}
+                  <Link
+                    href={`/detalles/${cel.id}`}
                     style={{
                       padding: '12px 20px',
                       background: theme.buttonGradient,
@@ -233,11 +234,11 @@ export default function CatalogoPublico() {
                       borderRadius: '50px',
                       fontWeight: 'bold',
                       fontSize: '0.9rem',
-                      boxShadow: '0 4px 15px rgba(0, 210, 255, 0.3)',
+                      boxShadow: '0 4px 15px rgba(0, 210, 255, 0.3)'
                     }}
                   >
                     Ver Detalles 📱
-                  </a>
+                  </Link>
                 </div>
               </div>
 
