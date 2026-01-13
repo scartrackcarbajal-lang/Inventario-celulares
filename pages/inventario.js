@@ -300,10 +300,12 @@ export default function Inventario() {
   const [modalImagen, setModalImagen] = useState(null) // Estado para el Zoom
 
   // --- AUTH (Supabase email/password) ---
-const [autorizado, setAutorizado] = useState(false)
-const [email, setEmail] = useState('')
-const [password, setPassword] = useState('')
-const [cargandoLogin, setCargandoLogin] = useState(false)
+  const [autorizado, setAutorizado] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [cargandoLogin, setCargandoLogin] = useState(false)
+  // --- LOGIN: mensaje visible ---
+  const [loginError, setLoginError] = useState('')
 
 useEffect(() => {
   supabase.auth.getSession().then(({ data }) => {
@@ -319,13 +321,24 @@ useEffect(() => {
   }
 }, [])
 
+// --- LOGIN: función ---
 const login = async () => {
+  setLoginError('')
+
+  const emailLimpio = (email || '').trim()
+  if (!emailLimpio || !password) {
+    setLoginError('Escribe correo y contraseña.')
+    return
+  }
+
   setCargandoLogin(true)
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  const { error } = await supabase.auth.signInWithPassword({
+    email: emailLimpio,
+    password
+  })
   setCargandoLogin(false)
 
-  if (error) avisar("⚠️ " + error.message, "#ff4b2b")
-  else avisar("✅ Sesión iniciada")
+  if (error) setLoginError(error.message)
 }
 
 const logout = async () => {
@@ -445,7 +458,8 @@ if (!autorizado) {
 
         <button
           onClick={login}
-          disabled={cargandoLogin || !email || !password}
+          // --- BOTÓN LOGIN ---
+          disabled={cargandoLogin}
           style={{
             width: '100%',
             padding: '18px',
@@ -456,12 +470,19 @@ if (!autorizado) {
             fontWeight: 'bold',
             fontSize: '1.05rem',
             cursor: 'pointer',
-            opacity: (cargandoLogin || !email || !password) ? 0.7 : 1,
+            opacity: cargandoLogin ? 0.7 : 1,
             boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)',
           }}
         >
           {cargandoLogin ? 'CONECTANDO...' : 'ACCEDER'}
         </button>
+        
+        {/* --- ERROR LOGIN (visible) --- */}
+        {loginError && (
+          <div style={{ marginTop: '12px', color: '#ff4b2b', fontWeight: 'bold', fontSize: '0.9rem', textAlign: 'center' }}>
+            ⚠️ {loginError}
+          </div>
+        )}
       </div>
     </div>
   )
