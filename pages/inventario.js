@@ -248,7 +248,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
             </button>
 
             <button
-              onClick={() => { if (!vendido) onSell(cel.id) }}
+              onClick={() => { if (!vendido) onSell(cel) }}
               disabled={vendido}
               style={{
                 padding: '10px 16px',
@@ -306,6 +306,20 @@ export default function Inventario() {
   const [cargandoLogin, setCargandoLogin] = useState(false)
   // --- LOGIN: mensaje visible ---
   const [loginError, setLoginError] = useState('')
+  // --- VENTA: modal + form ---
+  const [ventaModalAbierto, setVentaModalAbierto] = useState(false)
+  const [ventaCel, setVentaCel] = useState(null)
+  const [ventaForm, setVentaForm] = useState({
+    precio_final: '',
+    cliente_nombre: '',
+    cliente_telefono: ''
+  })
+  const [guardandoVenta, setGuardandoVenta] = useState(false)
+
+  // --- FILTROS: básicos (luego ampliamos) ---
+  const [filtroEstado, setFiltroEstado] = useState('TODOS')
+  const [filtroPublicado, setFiltroPublicado] = useState('TODOS') // TODOS | PUBLICADO | OCULTO
+  const [filtroVendidos, setFiltroVendidos] = useState('TODOS') // TODOS | VENDIDOS | DISPONIBLES
 
 useEffect(() => {
   supabase.auth.getSession().then(({ data }) => {
@@ -407,17 +421,96 @@ const logout = async () => {
     setForm(estadoInicial); cargarEquipos();
   }
 
-  // --- VENDER (marca como vendido) ---
-  const vender = async (id) => {
-    if (!confirm('¿Marcar como vendido?')) return
+  // --- VENTA: abrir modal ---
+  const abrirModalVenta = (cel) => {
+    setVentaCel(cel)
+    setVentaForm({
+      precio_final: cel?.precio_venta ?? '',
+      cliente_nombre: '',
+      cliente_telefono: ''
+    })
+    setVentaModalAbierto(true)
+  }
 
-    const { error } = await supabase
+  // --- VENTA: confirmar (ventas + movimientos + update celulares) ---
+  const confirmarVenta = async () => {
+    if (!ventaCel) return
+
+    if (Number(ventaCel.stock) <= 0) {
+    avisar('⚠️ Este equipo ya está vendido', '#ff4b2b')
+    return
+    }
+
+    const precioFinal = Number(ventaForm.precio_final)
+    if (!precioFinal || precioFinal <= 0) {
+      avisar('⚠️ Ingresa el precio final', '#ff4b2b')
+      return
+    }
+
+    setGuardandoVenta(true)
+
+    // usuario logueado (para vender_por y actor_id)
+    const { data: sess } = await supabase.auth.getSession()
+    const userId = sess?.session?.user?.id
+    if (!userId) {
+      setGuardandoVenta(false)
+      avisar('⚠️ Sesión no válida, vuelve a iniciar sesión', '#ff4b2b')
+      return
+    }
+
+    // 1) Insert venta (OBLIGATORIO: vendido_por = userId para pasar RLS self)
+    const { error: errVenta } = await supabase.from('ventas').insert([{
+      celular_id: ventaCel.id,
+      precio_lista: ventaCel.precio_venta ?? null,
+      precio_final: precioFinal,
+      cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
+      cliente_telefono: ventaForm.cliente_telefono?.trim() || null,
+      vendido_por: userId
+    }])
+
+    if (errVenta) {
+      setGuardandoVenta(false)
+      avisar('❌ Error registrando venta: ' + errVenta.message, '#ff4b2b')
+      return
+    }
+
+    // 2) Update celular -> vendido
+    const { error: errUpd } = await supabase
       .from('Celulares')
       .update({ stock: 0, publicado: false })
-      .eq('id', id)
+      .eq('id', ventaCel.id)
 
-    if (error) avisar('Error: ' + error.message, 'red')
-    else { avisar('✅ Marcado como vendido'); cargarEquipos() }
+    if (errUpd) {
+      setGuardandoVenta(false)
+      avisar('❌ Error marcando vendido: ' + errUpd.message, '#ff4b2b')
+      return
+    }
+
+    // 3) Insert movimiento (OBLIGATORIO: actor_id = userId para pasar RLS self)
+    const { error: errMov } = await supabase.from('movimientos_inventario').insert([{
+      celular_id: ventaCel.id,
+      tipo: 'VENDIDO',
+      actor_id: userId,
+      detalle: {
+        precio_lista: ventaCel.precio_venta ?? null,
+        precio_final: precioFinal,
+        cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
+        cliente_telefono: ventaForm.cliente_telefono?.trim() || null
+      }
+    }])
+
+    if (errMov) {
+      // No bloquea la venta, pero avisa (ya se vendió)
+      avisar('⚠️ Vendido, pero no se registró movimiento: ' + errMov.message, '#ff4b2b')
+    } else {
+      avisar('✅ Venta registrada')
+    }
+
+    setGuardandoVenta(false)
+    setVentaModalAbierto(false)
+    setVentaCel(null)
+    setVentaForm({ precio_final: '', cliente_nombre: '', cliente_telefono: '' })
+    await cargarEquipos()
   }
 
   const equiposFiltrados = equipos.filter(cel => {
@@ -508,6 +601,104 @@ if (!autorizado) {
           />
         </div>
       )}
+      {/* --- MODAL VENTA --- */}
+      {ventaModalAbierto && ventaCel && (
+        <div
+          onClick={() => !guardandoVenta && setVentaModalAbierto(false)}
+          style={{
+            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+            backgroundColor: 'rgba(0,0,0,0.75)', zIndex: 99998,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '20px', boxSizing: 'border-box'
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '100%', maxWidth: 520,
+              background: theme.card,
+              borderRadius: 24,
+              border: `1px solid ${theme.cyan}33`,
+              padding: 22
+            }}
+          >
+            <h2 style={{ marginTop: 0 }}>Registrar venta</h2>
+            <div style={{ color: '#94a3b8', marginBottom: 14 }}>
+              {ventaCel.marca} {ventaCel.modelo} — IMEI: {ventaCel.imei || 'N/A'}
+            </div>
+
+            <label style={{ display: 'block', marginBottom: 6, color: theme.cyan, fontWeight: 'bold' }}>
+              Precio final (con descuento)
+            </label>
+            <input
+              type="number"
+              value={ventaForm.precio_final}
+              onChange={(e) => setVentaForm({ ...ventaForm, precio_final: e.target.value })}
+              style={inputStyle}
+            />
+
+            <div style={{ height: 12 }} />
+
+            <label style={{ display: 'block', marginBottom: 6, color: '#94a3b8' }}>
+              Cliente (opcional)
+            </label>
+            <input
+              placeholder="Nombre"
+              value={ventaForm.cliente_nombre}
+              onChange={(e) => setVentaForm({ ...ventaForm, cliente_nombre: e.target.value })}
+              style={inputStyle}
+            />
+
+            <div style={{ height: 10 }} />
+
+            <input
+              placeholder="Teléfono"
+              value={ventaForm.cliente_telefono}
+              onChange={(e) => setVentaForm({ ...ventaForm, cliente_telefono: e.target.value })}
+              style={inputStyle}
+            />
+
+            <div style={{ display: 'flex', gap: 12, marginTop: 18 }}>
+              <button
+                onClick={() => setVentaModalAbierto(false)}
+                disabled={guardandoVenta}
+                style={{
+                  flex: 1,
+                  padding: '14px 16px',
+                  borderRadius: 14,
+                  border: `1px solid ${theme.cyan}44`,
+                  background: 'transparent',
+                  color: theme.cyan,
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  opacity: guardandoVenta ? 0.6 : 1
+                }}
+              >
+                Cancelar
+              </button>
+
+              <button
+                onClick={confirmarVenta}
+                disabled={guardandoVenta}
+                style={{
+                  flex: 1,
+                  padding: '14px 16px',
+                  borderRadius: 14,
+                  border: 'none',
+                  background: theme.orange,
+                  color: 'white',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  opacity: guardandoVenta ? 0.6 : 1
+                }}
+              >
+                {guardandoVenta ? 'Guardando...' : 'Confirmar venta'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       <div style={{ maxWidth: '1400px', margin: 'auto' }}>
         <header style={{ textAlign: 'center', marginBottom: '60px' }}>
@@ -646,7 +837,7 @@ if (!autorizado) {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }}
               onDelete={async (id) => { if(confirm('¿Eliminar definitivamente?')) { await supabase.from('Celulares').delete().eq('id', id); cargarEquipos(); } }}
-              onSell={(id) => vender(id)}
+              onSell={(cel) => abrirModalVenta(cel)}
             />
           ))}
           {equiposFiltrados.length === 0 && <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#888', fontSize: '1.5rem' }}>No se encontraron resultados 🕵️‍♂️</p>}
