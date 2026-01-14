@@ -375,6 +375,8 @@ const logout = async () => {
   }
   const [form, setForm] = useState(estadoInicial)
 
+  const normalizarImei = (v) => (v || '').replace(/\D/g, '').slice(0, 15)
+
   const avisar = (msg, color = theme.cyan) => {
     setNotificacion({ mensaje: msg, visible: true, color: color })
     setTimeout(() => setNotificacion(prev => ({ ...prev, visible: false })), 3000)
@@ -410,7 +412,11 @@ const logout = async () => {
         precio_costo: form.precio_costo === '' ? null : form.precio_costo, 
         salud_bateria: form.salud_bateria === '' ? null : form.salud_bateria 
     }
-    
+    // --- Validación IMEI (opcional, pero si hay IMEI debe ser 15 dígitos) ---
+    if (datosLimpios.imei && normalizarImei(datosLimpios.imei).length !== 15) {
+      avisar('⚠️ IMEI debe tener 15 dígitos', '#ff4b2b')
+      return
+    }
     if (editandoId) {
       const { error } = await supabase.from('Celulares').update(datosLimpios).eq('id', editandoId)
       if (error) avisar('Error: ' + error.message, 'red'); else { setEditandoId(null); avisar("✅ Actualizado"); }
@@ -513,15 +519,34 @@ const logout = async () => {
     await cargarEquipos()
   }
 
-  const equiposFiltrados = equipos.filter(cel => {
-    const texto = busqueda.toLowerCase()
-    return (
-        cel.marca?.toLowerCase().includes(texto) || 
-        cel.modelo?.toLowerCase().includes(texto) ||
-        cel.estado?.toLowerCase().includes(texto) ||
-        cel.imei?.toLowerCase().includes(texto) || 
-        cel.color?.toLowerCase().includes(texto)
-    )
+    const equiposFiltrados = equipos.filter((cel) => {
+    const texto = (busqueda || '').toLowerCase()
+
+    const matchBusqueda =
+      cel.marca?.toLowerCase().includes(texto) ||
+      cel.modelo?.toLowerCase().includes(texto) ||
+      cel.estado?.toLowerCase().includes(texto) ||
+      cel.imei?.toLowerCase().includes(texto) ||
+      cel.color?.toLowerCase().includes(texto)
+
+    const matchEstado = filtroEstado === 'TODOS' ? true : cel.estado === filtroEstado
+
+    const matchPublicado =
+      filtroPublicado === 'TODOS'
+        ? true
+        : filtroPublicado === 'PUBLICADO'
+          ? !!cel.publicado
+          : !cel.publicado
+
+    const vendido = Number(cel.stock) <= 0
+    const matchVendidos =
+      filtroVendidos === 'TODOS'
+        ? true
+        : filtroVendidos === 'VENDIDOS'
+          ? vendido
+          : !vendido
+
+    return matchBusqueda && matchEstado && matchPublicado && matchVendidos
   })
 
 // --- LOGIN ---
@@ -773,7 +798,7 @@ if (!autorizado) {
 
         <div>
           <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>IMEI / SERIE</label>
-          <input placeholder="Escanea o escribe..." value={form.imei} style={{...inputStyle, fontFamily: 'monospace'}} onChange={e => setForm({...form, imei: e.target.value})} />
+          <input placeholder="Escanea o escribe..." value={form.imei} style={{...inputStyle, fontFamily: 'monospace'}} onChange={e => setForm({...form, imei: normalizarImei(e.target.value) })} />
         </div>
 
         <div>
@@ -825,6 +850,27 @@ if (!autorizado) {
 
         {/* --- LISTADO --- */}
         <h2 style={{ marginBottom: '20px', paddingLeft: '20px', borderLeft: `8px solid ${theme.cyan}`, fontSize: '2rem' }}>INVENTARIO ({equipos.length})</h2>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
+          <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)} style={inputStyle}>
+            <option value="TODOS">Estado: Todos</option>
+            <option value="Nuevo Sellado">Nuevo Sellado</option>
+            <option value="Semi Nuevo">Semi Nuevo</option>
+            <option value="Usado">Usado</option>
+            <option value="Open Box">Open Box</option>
+          </select>
+
+          <select value={filtroPublicado} onChange={(e) => setFiltroPublicado(e.target.value)} style={inputStyle}>
+            <option value="TODOS">Publicación: Todos</option>
+            <option value="PUBLICADO">Solo publicados</option>
+            <option value="OCULTO">Solo ocultos</option>
+          </select>
+
+          <select value={filtroVendidos} onChange={(e) => setFiltroVendidos(e.target.value)} style={inputStyle}>
+            <option value="TODOS">Stock: Todos</option>
+            <option value="DISPONIBLES">Disponibles</option>
+            <option value="VENDIDOS">Vendidos</option>
+          </select>
+        </div>
         <input type="text" placeholder="🔍 Buscar por IMEI, Marca, Modelo, Color..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} style={{ width: '100%', padding: '22px', fontSize: '1.2rem', borderRadius: '20px', border: 'none', background: '#162447', color: 'white', marginBottom: '40px', boxShadow: '0 10px 20px rgba(0,0,0,0.3)', outline: 'none' }} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '40px' }}>
           {equiposFiltrados.map(cel => (
