@@ -314,6 +314,9 @@ export default function Inventario() {
     cliente_nombre: '',
     cliente_telefono: ''
   })
+  const [ventas, setVentas] = useState([])
+  const [cargandoVentas, setCargandoVentas] = useState(false)
+
   const [guardandoVenta, setGuardandoVenta] = useState(false)
 
   // --- FILTROS: básicos (luego ampliamos) ---
@@ -386,7 +389,47 @@ const logout = async () => {
     const { data } = await supabase.from('Celulares').select('*').order('created_at', { ascending: false })
     setEquipos(data || [])
   }
-  useEffect(() => { if (autorizado) cargarEquipos() }, [autorizado])
+  const cargarVentas = async () => {
+  setCargandoVentas(true)
+
+  const { data, error } = await supabase
+    .from('ventas')
+    .select(`
+      id,
+      celular_id,
+      precio_lista,
+      precio_final,
+      descuento,
+      cliente_nombre,
+      cliente_telefono,
+      vendido_en,
+      vendido_por,
+      Celulares:celular_id (
+        id,
+        marca,
+        modelo,
+        imei,
+        precio_costo
+      )
+    `)
+    .order('vendido_en', { ascending: false })
+    .limit(100)
+
+  setCargandoVentas(false)
+
+  if (error) {
+    avisar('❌ Error cargando ventas: ' + error.message, '#ff4b2b')
+    return
+  }
+
+  setVentas(data || [])
+  }
+  useEffect(() => {
+  if (autorizado) {
+    cargarEquipos()
+    cargarVentas()
+  }
+  }, [autorizado])
 
   const manejarFotos = async (e) => {
     const archivos = Array.from(e.target.files)
@@ -558,6 +601,7 @@ const logout = async () => {
     setVentaCel(null)
     setVentaForm({ precio_final: '', cliente_nombre: '', cliente_telefono: '' })
     await cargarEquipos()
+    await cargarVentas()
   }
 
     const equiposFiltrados = equipos.filter((cel) => {
@@ -589,6 +633,18 @@ const logout = async () => {
 
     return matchBusqueda && matchEstado && matchPublicado && matchVendidos
   })
+    const resumenVentas = ventas.reduce(
+    (acc, v) => {
+      const costo = Number(v?.Celulares?.precio_costo ?? 0)
+      const final = Number(v?.precio_final ?? 0)
+      acc.totalVentas += final
+      acc.totalCosto += costo
+      acc.totalGanancia += (final - costo)
+      acc.count += 1
+      return acc
+    },
+    { totalVentas: 0, totalCosto: 0, totalGanancia: 0, count: 0 }
+  )
 
 // --- LOGIN ---
 if (!autorizado) {
@@ -929,6 +985,31 @@ if (!autorizado) {
           ))}
           {equiposFiltrados.length === 0 && <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#888', fontSize: '1.5rem' }}>No se encontraron resultados 🕵️‍♂️</p>}
         </div>
+        {/* ===== PANEL DE VENTAS (PASO 4) VA AQUÍ ===== */}
+        <div style={{ marginTop: 60, backgroundColor: theme.card, padding: 30, borderRadius: 24 }}>
+          <h2 style={{ marginTop: 0, borderLeft: `8px solid ${theme.orange}`, paddingLeft: 16 }}>
+            Ventas (últimas 100)
+          </h2>
+
+          
+          {/* === AQUÍ VA TU BLOQUE RESUMEN === */}
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
+            <div>Total ventas: <b>S/ {resumenVentas.totalVentas.toFixed(2)}</b></div>
+            <div>Total costo: <b>S/ {resumenVentas.totalCosto.toFixed(2)}</b></div>
+            <div>Ganancia: <b>S/ {resumenVentas.totalGanancia.toFixed(2)}</b></div>
+            <div># ventas: <b>{resumenVentas.count}</b></div>
+          </div>
+          {/* === FIN BLOQUE RESUMEN === */}
+
+          {cargandoVentas ? (
+            <div>Cargando ventas...</div>
+          ) : (
+            <div style={{ fontSize: '0.95rem', color: '#cbd5e1' }}>
+              Total registros: {ventas.length}
+            </div>
+          )}
+        </div>
+        {/* ===== FIN PANEL DE VENTAS ===== */}
       </div>
     </div>
   )
