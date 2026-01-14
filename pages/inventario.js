@@ -315,6 +315,8 @@ export default function Inventario() {
     cliente_telefono: ''
   })
   const [ventas, setVentas] = useState([])
+  const [ventasDesde, setVentasDesde] = useState('') // "YYYY-MM-DD"
+  const [ventasHasta, setVentasHasta] = useState('') // "YYYY-MM-DD"
   const [cargandoVentas, setCargandoVentas] = useState(false)
 
   const [guardandoVenta, setGuardandoVenta] = useState(false)
@@ -380,6 +382,18 @@ const logout = async () => {
 
   const normalizarImei = (v) => (v || '').replace(/\D/g, '').slice(0, 15)
 
+  const inicioDelDiaISO = (yyyyMmDd) => {
+    if (!yyyyMmDd) return null
+    const d = new Date(`${yyyyMmDd}T00:00:00`)
+    return d.toISOString()
+  }
+
+  const finDelDiaISO = (yyyyMmDd) => {
+    if (!yyyyMmDd) return null
+    const d = new Date(`${yyyyMmDd}T23:59:59.999`)
+    return d.toISOString()
+  }
+
   const avisar = (msg, color = theme.cyan) => {
     setNotificacion({ mensaje: msg, visible: true, color: color })
     setTimeout(() => setNotificacion(prev => ({ ...prev, visible: false })), 3000)
@@ -389,47 +403,63 @@ const logout = async () => {
     const { data } = await supabase.from('Celulares').select('*').order('created_at', { ascending: false })
     setEquipos(data || [])
   }
-  const cargarVentas = async () => {
-  setCargandoVentas(true)
+    const cargarVentas = async () => {
+    setCargandoVentas(true)
 
-  const { data, error } = await supabase
-    .from('ventas')
-    .select(`
-      id,
-      celular_id,
-      precio_lista,
-      precio_final,
-      descuento,
-      cliente_nombre,
-      cliente_telefono,
-      vendido_en,
-      vendido_por,
-      Celulares:celular_id (
+    let query = supabase
+      .from('ventas')
+      .select(`
         id,
-        marca,
-        modelo,
-        imei,
-        precio_costo
-      )
-    `)
-    .order('vendido_en', { ascending: false })
-    .limit(100)
+        celular_id,
+        precio_lista,
+        precio_final,
+        descuento,
+        cliente_nombre,
+        cliente_telefono,
+        vendido_en,
+        vendido_por,
+        Celulares:celular_id (
+          id,
+          marca,
+          modelo,
+          imei,
+          precio_costo
+        )
+      `)
+      .order('vendido_en', { ascending: false })
+      .limit(200)
 
-  setCargandoVentas(false)
+    const desdeISO = inicioDelDiaISO(ventasDesde)
+    const hastaISO = finDelDiaISO(ventasHasta)
 
-  if (error) {
-    avisar('❌ Error cargando ventas: ' + error.message, '#ff4b2b')
-    return
+    if (desdeISO) query = query.gte('vendido_en', desdeISO)
+    if (hastaISO) query = query.lte('vendido_en', hastaISO)
+
+    const { data, error } = await query
+
+    setCargandoVentas(false)
+
+    if (error) {
+      avisar('❌ Error cargando ventas: ' + error.message, '#ff4b2b')
+      return
+    }
+
+    setVentas(data || [])
   }
 
-  setVentas(data || [])
-  }
   useEffect(() => {
   if (autorizado) {
     cargarEquipos()
     cargarVentas()
   }
   }, [autorizado])
+
+  useEffect(() => {
+  if (autorizado) {
+    cargarVentas()
+  }
+  }, [autorizado, ventasDesde, ventasHasta])
+
 
   const manejarFotos = async (e) => {
     const archivos = Array.from(e.target.files)
@@ -508,6 +538,8 @@ const logout = async () => {
     }
 
     setForm(estadoInicial)
+    await cargarEquipos()
+    await cargarVentas()
     cargarEquipos()
   }
 
@@ -990,8 +1022,48 @@ if (!autorizado) {
           <h2 style={{ marginTop: 0, borderLeft: `8px solid ${theme.orange}`, paddingLeft: 16 }}>
             Ventas (últimas 100)
           </h2>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
+          <div style={{ flex: 1, minWidth: 180 }}>
+            <label style={{ display: 'block', marginBottom: 6, color: '#94a3b8' }}>Desde</label>
+            <input
+              type="date"
+              value={ventasDesde}
+              onChange={(e) => setVentasDesde(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
 
-          
+          <div style={{ flex: 1, minWidth: 180 }}>
+            <label style={{ display: 'block', marginBottom: 6, color: '#94a3b8' }}>Hasta</label>
+            <input
+              type="date"
+              value={ventasHasta}
+              onChange={(e) => setVentasHasta(e.target.value)}
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
+            <button
+              onClick={cargarVentas}
+              style={{ padding: '14px 16px', borderRadius: 14, border: 'none', background: theme.cyan, color: '#000', fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              Aplicar
+            </button>
+
+            <button
+              onClick={() => {
+                setVentasDesde('')
+                setVentasHasta('')
+                cargarVentas()
+              }}
+              style={{ padding: '14px 16px', borderRadius: 14, border: `1px solid ${theme.cyan}44`, background: 'transparent', color: theme.cyan, fontWeight: 'bold', cursor: 'pointer' }}
+            >
+              Limpiar
+            </button>
+          </div>
+        </div>
+
           {/* === AQUÍ VA TU BLOQUE RESUMEN === */}
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
             <div>Total ventas: <b>S/ {resumenVentas.totalVentas.toFixed(2)}</b></div>
@@ -1003,9 +1075,41 @@ if (!autorizado) {
 
           {cargandoVentas ? (
             <div>Cargando ventas...</div>
+          ) : ventas.length === 0 ? (
+            <div style={{ color: '#94a3b8' }}>Aún no hay ventas registradas.</div>
           ) : (
-            <div style={{ fontSize: '0.95rem', color: '#cbd5e1' }}>
-              Total registros: {ventas.length}
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.15)' }}>
+                    <th style={{ padding: 10 }}>Fecha</th>
+                    <th style={{ padding: 10 }}>Equipo</th>
+                    <th style={{ padding: 10 }}>IMEI</th>
+                    <th style={{ padding: 10 }}>Final</th>
+                    <th style={{ padding: 10 }}>Costo</th>
+                    <th style={{ padding: 10 }}>Ganancia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ventas.map((v) => {
+                    const costo = Number(v?.Celulares?.precio_costo ?? 0)
+                    const final = Number(v?.precio_final ?? 0)
+                    const ganancia = final - costo
+                    return (
+                      <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                        <td style={{ padding: 10 }}>{v.vendido_en ? new Date(v.vendido_en).toLocaleString() : '—'}</td>
+                        <td style={{ padding: 10 }}>{v?.Celulares?.marca} {v?.Celulares?.modelo}</td>
+                        <td style={{ padding: 10, fontFamily: 'monospace', color: '#94a3b8' }}>{v?.Celulares?.imei || 'N/A'}</td>
+                        <td style={{ padding: 10 }}>S/ {final.toFixed(2)}</td>
+                        <td style={{ padding: 10 }}>S/ {costo.toFixed(2)}</td>
+                        <td style={{ padding: 10, color: ganancia >= 0 ? '#7CFC98' : '#ff6b6b' }}>
+                          S/ {ganancia.toFixed(2)}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
