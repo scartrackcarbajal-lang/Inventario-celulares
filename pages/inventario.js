@@ -406,25 +406,66 @@ const logout = async () => {
   }
 
   const guardar = async () => {
-    const datosLimpios = { 
-        ...form, 
-        precio_venta: form.precio_venta === '' ? null : form.precio_venta, 
-        precio_costo: form.precio_costo === '' ? null : form.precio_costo, 
-        salud_bateria: form.salud_bateria === '' ? null : form.salud_bateria 
+    const datosLimpios = {
+      ...form,
+      precio_venta: form.precio_venta === '' ? null : form.precio_venta,
+      precio_costo: form.precio_costo === '' ? null : form.precio_costo,
+      salud_bateria: form.salud_bateria === '' ? null : form.salud_bateria
     }
-    // --- Validación IMEI (opcional, pero si hay IMEI debe ser 15 dígitos) ---
-    if (datosLimpios.imei && normalizarImei(datosLimpios.imei).length !== 15) {
+
+    // Normaliza IMEI (solo números, máx 15)
+    datosLimpios.imei = datosLimpios.imei ? normalizarImei(datosLimpios.imei) : ''
+
+    // Validación IMEI (si hay IMEI debe ser 15 dígitos)
+    if (datosLimpios.imei && datosLimpios.imei.length !== 15) {
       avisar('⚠️ IMEI debe tener 15 dígitos', '#ff4b2b')
       return
     }
+
     if (editandoId) {
-      const { error } = await supabase.from('Celulares').update(datosLimpios).eq('id', editandoId)
-      if (error) avisar('Error: ' + error.message, 'red'); else { setEditandoId(null); avisar("✅ Actualizado"); }
+      const { error: updateError } = await supabase
+        .from('Celulares')
+        .update(datosLimpios)
+        .eq('id', editandoId)
+
+      if (updateError) {
+        const msg = (updateError?.message || '').toLowerCase()
+        const code = updateError?.code
+
+        if (code === '23505' || msg.includes('duplicate') || msg.includes('unique')) {
+          avisar('⚠️ Ese IMEI ya existe en el inventario', '#ff4b2b')
+          return
+        }
+
+        avisar('Error: ' + updateError.message, 'red')
+        return
+      }
+
+      setEditandoId(null)
+      avisar('✅ Actualizado')
     } else {
-      const { error } = await supabase.from('Celulares').insert([datosLimpios])
-      if (error) avisar('Error: ' + error.message, 'red'); else { avisar("🚀 Registrado"); }
+      const { error: insertError } = await supabase
+        .from('Celulares')
+        .insert([datosLimpios])
+
+      if (insertError) {
+        const msg = (insertError?.message || '').toLowerCase()
+        const code = insertError?.code
+
+        if (code === '23505' || msg.includes('duplicate') || msg.includes('unique')) {
+          avisar('⚠️ Ese IMEI ya existe en el inventario', '#ff4b2b')
+          return
+        }
+
+        avisar('Error: ' + insertError.message, 'red')
+        return
+      }
+
+      avisar('🚀 Registrado')
     }
-    setForm(estadoInicial); cargarEquipos();
+
+    setForm(estadoInicial)
+    cargarEquipos()
   }
 
   // --- VENTA: abrir modal ---
