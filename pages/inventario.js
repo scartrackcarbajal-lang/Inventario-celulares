@@ -1091,7 +1091,9 @@ if (!autorizado) {
 
         <div>
           <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>IMEI / SERIE</label>
-          <input placeholder="Escanea o escribe..." value={form.imei} style={{...inputStyle, fontFamily: 'monospace'}} onChange={e => setForm({...form, imei: normalizarImei(e.target.value) })} />
+          <input placeholder="Escanea o escribe..." value={form.serial}
+          onChange={(e) => setForm({ ...form, serial: normalizarImei(e.target.value) })}
+          />
         </div>
 
         <div>
