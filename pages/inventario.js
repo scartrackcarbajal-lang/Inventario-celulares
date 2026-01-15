@@ -651,7 +651,7 @@ const logout = async () => {
         if (!serial) { avisar('IMEI/serie es obligatorio.', '#ff4b2b'); return }
 
         const { error: errUpd } = await supabase
-          .from('itemsserializados')
+          .from('items_serializados')
           .update({
             serial,
             estado: form.estado || null,
