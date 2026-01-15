@@ -20,7 +20,8 @@ export default function DetallesProducto() {
      URL ejemplo: /detalles/123
   ------------------------------ */
   const router = useRouter()
-  const { id } = router.query
+  const { id, tipo } = router.query
+
 
   /* -----------------------------
      ESTADOS
@@ -62,17 +63,34 @@ export default function DetallesProducto() {
      - Solo stock disponible
   ------------------------------ */
   useEffect(() => {
-    if (!id) return
+  if (!id || !tipo) return
 
-    const cargar = async () => {
-      setCargando(true)
+  const cargar = async () => {
+    setCargando(true)
 
+    // SERIAL = celulares por unidad
+    if (tipo === 'serial') {
       const { data, error } = await supabase
-        .from('Celulares')
-        .select('id, marca, modelo, estado, precio_venta, almacenamiento, salud_bateria, descripcion, color, imagen_url, created_at, stock, publicado')
+        .from('items_serializados')
+        .select(`
+          id,
+          serial,
+          estado,
+          salud_bateria,
+          almacenamiento,
+          color,
+          imagen_url,
+          vendido,
+          skus!inner(
+            id,
+            precio_venta,
+            publicado,
+            productos(marca, nombre)
+          )
+        `)
         .eq('id', id)
-        .eq('publicado', true)
-        .gt('stock', 0)
+        .eq('skus.publicado', true)
+        .eq('vendido', false)
         .single()
 
       if (error) {
@@ -81,13 +99,75 @@ export default function DetallesProducto() {
         return
       }
 
-      setCel(data)
-      setFotoActiva(Array.isArray(data?.imagen_url) ? data.imagen_url[0] : null)
+      // Adaptar a tu UI actual (cel.marca, cel.modelo, cel.precio_venta, etc.)
+      const adaptado = {
+        id: data.id,
+        marca: data?.skus?.productos?.marca || '',
+        modelo: data?.skus?.productos?.nombre || '',
+        estado: data?.estado || '',
+        precio_venta: data?.skus?.precio_venta ?? null,
+        almacenamiento: data?.almacenamiento || '',
+        salud_bateria: data?.salud_bateria ?? null,
+        descripcion: '',
+        color: data?.color || '',
+        imagen_url: data?.imagen_url || [],
+      }
+
+      setCel(adaptado)
+      setFotoActiva(Array.isArray(adaptado.imagen_url) ? adaptado.imagen_url[0] : null)
       setCargando(false)
+      return
     }
 
-    cargar()
-  }, [id])
+    // BULK = perfumes por stock
+    if (tipo === 'bulk') {
+      const { data, error } = await supabase
+        .from('skus')
+        .select(`
+          id,
+          precio_venta,
+          tracking,
+          publicado,
+          productos(marca, nombre),
+          stock_bulk(stock)
+        `)
+        .eq('id', id)
+        .eq('publicado', true)
+        .eq('tracking', 'BULK')
+        .single()
+
+      if (error) {
+        setCel(null)
+        setCargando(false)
+        return
+      }
+
+      const adaptado = {
+        id: data.id,
+        marca: data?.productos?.marca || '',
+        modelo: data?.productos?.nombre || '',
+        estado: 'Perfume',
+        precio_venta: data?.precio_venta ?? null,
+        almacenamiento: `Stock: ${data?.stock_bulk?.stock ?? 0}`,
+        salud_bateria: null,
+        descripcion: '',
+        color: '',
+        imagen_url: [],
+      }
+
+      setCel(adaptado)
+      setFotoActiva(null)
+      setCargando(false)
+      return
+    }
+
+    // Tipo inválido
+    setCel(null)
+    setCargando(false)
+  }
+
+  cargar()
+}, [id, tipo])
 
   /* -----------------------------
      UI: Estado Cargando
