@@ -412,30 +412,13 @@ const logout = async () => {
     const { data, error } = await supabase
       .from('items_serializados')
       .select(`
-        id,
-        serial,
-        estado,
-        salud_bateria,
-        almacenamiento,
-        color,
-        imagen_url,
-        vendido,
-        created_at,
-        skus(
-          id,
-          sku_codigo,
-          tracking,
-          precio_venta,
-          precio_costo,
-          publicado,
-          productos(
-            id,
-            marca,
-            nombre
-          )
+        id, serial, estado, saludbateria, almacenamiento, color, imagen_url, vendido, createdat,
+        skus ( id, skucodigo, tracking, precioventa, preciocosto, publicado,
+          productos ( id, marca, nombre )
         )
       `)
-      .order('created_at', { ascending: false })
+      .order('createdat', { ascending: false })
+
 
     if (error) {
       avisar(`Error cargando inventario: ${error.message}`, '#ff4b2b')
@@ -658,8 +641,8 @@ const logout = async () => {
             saludbateria: form.saludbateria ? Number(form.saludbateria) : null,
             almacenamiento: form.almacenamiento || null,
             color: form.color || null,
-            imagenurl: Array.isArray(form.imagenurl) ? form.imagenurl : [],
-            // vendido no lo toques aquí
+            imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+            // vendido: no lo toques aquí
           })
           .eq('id', editandoId)
 
@@ -683,7 +666,7 @@ const logout = async () => {
       })
 
       // 2) Crear SKU nuevo (por ahora 1 SKU por unidad; luego puedes agrupar por modelo si quieres)
-      const skuId = await crearSku({
+      const sku_id = await crearSku({
         productoId,
         precio_venta: form.precio_venta ? Number(form.precio_venta) : null,
         precio_costo: form.precio_costo ? Number(form.precio_costo) : null,
@@ -692,17 +675,18 @@ const logout = async () => {
 
       // 3) Insertar unidad serializada (el “celular real”)
       const { error: insErr } = await supabase
-        .from('items_serializados')
-        .insert({
-          sku_id: skuId,
-          serial,
-          estado: form.estado || null,
-          salud_bateria: form.salud_bateria ? Number(form.salud_bateria) : null,
-          almacenamiento: form.almacenamiento || null,
-          color: form.color || null,
-          vendido: false,
-          imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
-        })
+      .from('items_serializados')
+      .insert({
+        sku_id: skuId,           // ojo: en DB tu columna es sku_id (ver abajo)
+        serial,
+        estado: form.estado || null,
+        saludbateria: form.saludbateria ? Number(form.saludbateria) : null,
+        almacenamiento: form.almacenamiento || null,
+        color: form.color || null,
+        vendido: false,
+        imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+      })
+
 
       if (insErr) {
         avisar(`Error guardando: ${insErr.message}`, '#ff4b2b')
@@ -757,10 +741,10 @@ const logout = async () => {
     return
   }
 
-  const skuId = ventaCel?._raw?.skus?.id
-  if (!skuId) {
+  const sku_id = ventaCel?._raw?.skus?.id
+  if (!sku_id) {
     setGuardandoVenta(false)
-    avisar('No se encontró SKU del equipo (skuId). Recarga e intenta otra vez.', '#ff4b2b')
+    avisar('No se encontró SKU del equipo (sku_id). Recarga e intenta otra vez.', '#ff4b2b')
     return
   }
 
