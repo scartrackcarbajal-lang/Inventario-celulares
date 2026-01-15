@@ -1,5 +1,18 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
+    "/": [
+      "static/chunks/node_modules_next_dist_compiled_928382e4._.js",
+      "static/chunks/node_modules_next_dist_shared_lib_15080aa3._.js",
+      "static/chunks/node_modules_next_dist_client_881bc7f7._.js",
+      "static/chunks/node_modules_next_dist_75b597d7._.js",
+      "static/chunks/node_modules_next_link_207af988.js",
+      "static/chunks/node_modules_react-dom_4411d9bd._.js",
+      "static/chunks/node_modules_@supabase_auth-js_dist_module_e0400d86._.js",
+      "static/chunks/node_modules_1c5f76a5._.js",
+      "static/chunks/[root-of-the-server]__82e3c0ec._.js",
+      "static/chunks/pages_index_2da965e7._.js",
+      "static/chunks/turbopack-pages_index_8443590c._.js"
+    ],
     "/_app": [
       "static/chunks/node_modules_next_dist_compiled_8ca6b690._.js",
       "static/chunks/node_modules_next_dist_shared_lib_8bac8163._.js",
@@ -14,6 +27,7 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/turbopack-pages__app_0fce199e._.js"
     ],
     "/inventario": [
+      "static/chunks/[root-of-the-server]__f0ce973e._.js",
       "static/chunks/node_modules_next_dist_compiled_caaa605a._.js",
       "static/chunks/node_modules_next_dist_shared_lib_8bac8163._.js",
       "static/chunks/node_modules_next_dist_client_5a8a528e._.js",
@@ -21,9 +35,8 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_react-dom_4411d9bd._.js",
       "static/chunks/node_modules_@supabase_auth-js_dist_module_e0400d86._.js",
       "static/chunks/node_modules_99fa48be._.js",
-      "static/chunks/[root-of-the-server]__f0ce973e._.js",
       "static/chunks/pages_inventario_2da965e7._.js",
-      "static/chunks/turbopack-pages_inventario_5a331c3f._.js"
+      "static/chunks/turbopack-pages_inventario_f37f6de4._.js"
     ]
   },
   "devFiles": [],
