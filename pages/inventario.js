@@ -371,12 +371,20 @@ const logout = async () => {
   const inputStyle = { padding: '16px', borderRadius: '15px', border: '1px solid #25335a', background: '#0b1426', color: 'white', outline: 'none', fontSize: '1rem', width: '100%', boxSizing: 'border-box' }
   
   // --- Estado inicial (incluye publicado + stock) ---
+  // ====== FORM V2 (celular serializado) ======
   const estadoInicial = {
-    marca: '', modelo: '', color: '', almacenamiento: '', imei: '',
-    precio_venta: '', precio_costo: '', salud_bateria: '', descripcion: '',
-    estado: 'Nuevo Sellado', imagen_url: [],
+    marca: '',
+    modelo: '',
+    estado: 'Nuevo Sellado',
+    serial: '',            // antes imei
+    color: '',
+    almacenamiento: '',
+    salud_bateria: null,
+    descripcion: '',
+    precio_venta: null,
+    precio_costo: null,
     publicado: true,
-    stock: 1
+    imagen_url: [],        // array
   }
   const [form, setForm] = useState(estadoInicial)
 
@@ -399,9 +407,60 @@ const logout = async () => {
     setTimeout(() => setNotificacion(prev => ({ ...prev, visible: false })), 3000)
   }
 
+  // ====== CARGAR EQUIPOS (V2): celulares serializados ======
   const cargarEquipos = async () => {
-    const { data } = await supabase.from('Celulares').select('*').order('created_at', { ascending: false })
-    setEquipos(data || [])
+    const { data, error } = await supabase
+      .from('items_serializados')
+      .select(`
+        id,
+        serial,
+        estado,
+        salud_bateria,
+        almacenamiento,
+        color,
+        imagen_url,
+        vendido,
+        created_at,
+        skus(
+          id,
+          sku_codigo,
+          tracking,
+          precio_venta,
+          precio_costo,
+          publicado,
+          productos(
+            id,
+            marca,
+            nombre
+          )
+        )
+      `)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      avisar(`Error cargando inventario: ${error.message}`, '#ff4b2b')
+      return
+    }
+
+    // Adaptación mínima para que tu UI actual siga usando "cel.xxx"
+    const adaptados = (data || []).map((row) => ({
+      id: row.id,
+      marca: row?.skus?.productos?.marca || '',
+      modelo: row?.skus?.productos?.nombre || '',
+      estado: row.estado,
+      imei: row.serial,
+      precio_venta: row?.skus?.precio_venta ?? null,
+      precio_costo: row?.skus?.precio_costo ?? null,
+      almacenamiento: row.almacenamiento,
+      salud_bateria: row.salud_bateria,
+      color: row.color,
+      imagen_url: row.imagen_url,
+      publicado: row?.skus?.publicado ?? false,
+      stock: row.vendido ? 0 : 1, // para que tu UI marque "VENDIDO" si stock=0
+      _raw: row, // por si luego necesitas el objeto original
+    }))
+
+    setEquipos(adaptados)
   }
     const cargarVentas = async () => {
     setCargandoVentas(true)
@@ -461,86 +520,171 @@ const logout = async () => {
   }, [autorizado, ventasDesde, ventasHasta])
 
 
+  // ====== SUBIR FOTOS (V2): guarda URLs en form.imagen_url[] ======
   const manejarFotos = async (e) => {
-    const archivos = Array.from(e.target.files)
+    const archivos = Array.from(e.target.files || [])
+    if (archivos.length === 0) return
+
     setSubiendo(true)
-    let nuevasUrls = [...(form.imagen_url || [])]
+
+    let nuevasUrls = Array.isArray(form.imagen_url) ? [...form.imagen_url] : []
+
     for (const archivo of archivos) {
       const nombre = `${Date.now()}_${archivo.name}`
-      const { error } = await supabase.storage.from('Celulares - fotos').upload(nombre, archivo)
-      if (error) {
-        avisar("❌ Error subiendo foto: " + error.message, "#ff4b2b")
+
+      const { error: upErr } = await supabase
+        .storage
+        .from('Celulares - fotos')
+        .upload(nombre, archivo)
+
+      if (upErr) {
+        avisar(`Error subiendo foto: ${upErr.message}`, '#ff4b2b')
         continue
       }
-      const { data: u } = supabase.storage.from('Celulares - fotos').getPublicUrl(nombre)
-      nuevasUrls.push(u.publicUrl)
+
+      const { data } = supabase
+        .storage
+        .from('Celulares - fotos')
+        .getPublicUrl(nombre)
+
+      nuevasUrls.push(data.publicUrl)
     }
-    setForm({ ...form, imagen_url: nuevasUrls }); setSubiendo(false); avisar("📸 Fotos subidas")
+
+    setForm({ ...form, imagen_url: nuevasUrls })
+    setSubiendo(false)
+    avisar('📸Fotos subidas')
+  }
+  // ====== HELPERS V2: asegurar producto y sku ======
+  const asegurarCategoriaId = async (nombreCategoria) => {
+    const { data, error } = await supabase
+      .from('categorias')
+      .select('id')
+      .eq('nombre', nombreCategoria)
+      .maybeSingle()
+
+    if (error) throw error
+    if (data?.id) return data.id
+
+    const { data: ins, error: insErr } = await supabase
+      .from('categorias')
+      .insert({ nombre: nombreCategoria })
+      .select('id')
+      .single()
+
+    if (insErr) throw insErr
+    return ins.id
   }
 
+  const asegurarProductoId = async ({ categoriaId, marca, modelo, descripcion }) => {
+    const nombre = String(modelo || '').trim()
+    const marcaL = String(marca || '').trim()
+
+    // Busca si ya existe producto con misma marca+nombre
+    const { data, error } = await supabase
+      .from('productos')
+      .select('id')
+      .eq('categoria_id', categoriaId)
+      .eq('marca', marcaL)
+      .eq('nombre', nombre)
+      .maybeSingle()
+
+    if (error) throw error
+    if (data?.id) return data.id
+
+    const { data: ins, error: insErr } = await supabase
+      .from('productos')
+      .insert({
+        categoria_id: categoriaId,
+        marca: marcaL,
+        nombre,
+        descripcion: descripcion || null,
+        activo: true,
+      })
+      .select('id')
+      .single()
+
+    if (insErr) throw insErr
+    return ins.id
+  }
+
+  const crearSku = async ({ productoId, precio_venta, precio_costo, publicado }) => {
+    // sku_codigo simple (puedes mejorarlo luego)
+    const sku_codigo = `CEL-${productoId}-${Date.now()}`
+
+    const { data: sku, error } = await supabase
+      .from('skus')
+      .insert({
+        producto_id: productoId,
+        sku_codigo,
+        tracking: 'SERIAL',
+        precio_venta: precio_venta ?? null,
+        precio_costo: precio_costo ?? null,
+        publicado: !!publicado,
+      })
+      .select('id')
+      .single()
+
+    if (error) throw error
+    return sku.id
+  }
+  // ====== GUARDAR V2: crea unidad serializada ======
   const guardar = async () => {
-    const datosLimpios = {
-      ...form,
-      precio_venta: form.precio_venta === '' ? null : form.precio_venta,
-      precio_costo: form.precio_costo === '' ? null : form.precio_costo,
-      salud_bateria: form.salud_bateria === '' ? null : form.salud_bateria
-    }
+    try {
+      const marca = String(form.marca || '').trim()
+      const modelo = String(form.modelo || '').trim()
+      const serial = String(form.serial || '').replace(/\s/g, '').slice(0, 30) // IMEI/serie
 
-    // Normaliza IMEI (solo números, máx 15)
-    datosLimpios.imei = datosLimpios.imei ? normalizarImei(datosLimpios.imei) : ''
-
-    // Validación IMEI (si hay IMEI debe ser 15 dígitos)
-    if (datosLimpios.imei && datosLimpios.imei.length !== 15) {
-      avisar('⚠️ IMEI debe tener 15 dígitos', '#ff4b2b')
-      return
-    }
-
-    if (editandoId) {
-      const { error: updateError } = await supabase
-        .from('Celulares')
-        .update(datosLimpios)
-        .eq('id', editandoId)
-
-      if (updateError) {
-        const msg = (updateError?.message || '').toLowerCase()
-        const code = updateError?.code
-
-        if (code === '23505' || msg.includes('duplicate') || msg.includes('unique')) {
-          avisar('⚠️ Ese IMEI ya existe en el inventario', '#ff4b2b')
-          return
-        }
-
-        avisar('Error: ' + updateError.message, 'red')
+      if (!marca || !modelo) {
+        avisar('Marca y modelo son obligatorios.', '#ff4b2b')
+        return
+      }
+      if (!serial) {
+        avisar('IMEI/serie es obligatorio para celulares.', '#ff4b2b')
         return
       }
 
-      setEditandoId(null)
-      avisar('✅ Actualizado')
-    } else {
-      const { error: insertError } = await supabase
-        .from('Celulares')
-        .insert([datosLimpios])
+      // 1) Asegurar categoría/producto
+      const categoriaId = await asegurarCategoriaId('Celulares')
+      const productoId = await asegurarProductoId({
+        categoriaId,
+        marca,
+        modelo,
+        descripcion: form.descripcion,
+      })
 
-      if (insertError) {
-        const msg = (insertError?.message || '').toLowerCase()
-        const code = insertError?.code
+      // 2) Crear SKU nuevo (por ahora 1 SKU por unidad; luego puedes agrupar por modelo si quieres)
+      const skuId = await crearSku({
+        productoId,
+        precio_venta: form.precio_venta ? Number(form.precio_venta) : null,
+        precio_costo: form.precio_costo ? Number(form.precio_costo) : null,
+        publicado: form.publicado,
+      })
 
-        if (code === '23505' || msg.includes('duplicate') || msg.includes('unique')) {
-          avisar('⚠️ Ese IMEI ya existe en el inventario', '#ff4b2b')
-          return
-        }
+      // 3) Insertar unidad serializada (el “celular real”)
+      const { error: insErr } = await supabase
+        .from('items_serializados')
+        .insert({
+          sku_id: skuId,
+          serial,
+          estado: form.estado || null,
+          salud_bateria: form.salud_bateria ? Number(form.salud_bateria) : null,
+          almacenamiento: form.almacenamiento || null,
+          color: form.color || null,
+          vendido: false,
+          imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+        })
 
-        avisar('Error: ' + insertError.message, 'red')
+      if (insErr) {
+        avisar(`Error guardando: ${insErr.message}`, '#ff4b2b')
         return
       }
 
-      avisar('🚀 Registrado')
+      avisar('Equipo registrado (V2)')
+      setForm(estadoInicial)
+      await cargarEquipos()
+    } catch (e) {
+      avisar(`Error: ${e.message}`, '#ff4b2b')
     }
-
-    setForm(estadoInicial)
-    await cargarEquipos()
-    await cargarVentas()
-    cargarEquipos()
   }
 
   // --- VENTA: abrir modal ---
