@@ -641,8 +641,8 @@ const logout = async () => {
             saludbateria: form.saludbateria ? Number(form.saludbateria) : null,
             almacenamiento: form.almacenamiento || null,
             color: form.color || null,
-            imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
-            // vendido: no lo toques aquí
+            imagenurl: Array.isArray(form.imagenurl) ? form.imagenurl : [],
+            // vendido no lo toques aquí
           })
           .eq('id', editandoId)
 
@@ -675,18 +675,17 @@ const logout = async () => {
 
       // 3) Insertar unidad serializada (el “celular real”)
       const { error: insErr } = await supabase
-      .from('items_serializados')
-      .insert({
-        skuid: skuId,           // ojo: en DB tu columna es sku_id (ver abajo)
-        serial,
-        estado: form.estado || null,
-        saludbateria: form.saludbateria ? Number(form.saludbateria) : null,
-        almacenamiento: form.almacenamiento || null,
-        color: form.color || null,
-        vendido: false,
-        imagen_url: Array.isArray(form.imagen_url) ? form.imagenurl : [],
-      })
-
+        .from('items_serializados')
+        .insert({
+          sku_id: skuId,
+          serial,
+          estado: form.estado || null,
+          salud_bateria: form.salud_bateria ? Number(form.salud_bateria) : null,
+          almacenamiento: form.almacenamiento || null,
+          color: form.color || null,
+          vendido: false,
+          imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+        })
 
       if (insErr) {
         avisar(`Error guardando: ${insErr.message}`, '#ff4b2b')
