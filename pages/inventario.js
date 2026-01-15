@@ -1164,7 +1164,12 @@ if (!autorizado) {
             <option value="VENDIDOS">Vendidos</option>
           </select>
         </div>
-        <input type="text" placeholder="🔍 Buscar por IMEI, Marca, Modelo, Color..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} style={{ width: '100%', padding: '22px', fontSize: '1.2rem', borderRadius: '20px', border: 'none', background: '#162447', color: 'white', marginBottom: '40px', boxShadow: '0 10px 20px rgba(0,0,0,0.3)', outline: 'none' }} />
+        <input
+          placeholder="Escanea o escribe..."
+          value={form.serial}
+          onChange={(e) => setForm({ ...form, serial: normalizarImei(e.target.value) })}
+          style={{ ...inputStyle, fontFamily: 'monospace' }}
+        />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '40px' }}>
           {equiposFiltrados.map(cel => (
             <TarjetaEquipo 
