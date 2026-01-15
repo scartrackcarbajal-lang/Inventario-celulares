@@ -677,7 +677,7 @@ const logout = async () => {
       const { error: insErr } = await supabase
       .from('items_serializados')
       .insert({
-        sku_id: skuId,           // ojo: en DB tu columna es sku_id (ver abajo)
+        skuid: skuId,           // ojo: en DB tu columna es sku_id (ver abajo)
         serial,
         estado: form.estado || null,
         saludbateria: form.saludbateria ? Number(form.saludbateria) : null,
