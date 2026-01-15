@@ -666,7 +666,7 @@ const logout = async () => {
       })
 
       // 2) Crear SKU nuevo (por ahora 1 SKU por unidad; luego puedes agrupar por modelo si quieres)
-      const sku_id = await crearSku({
+      const skuId = await crearSku({
         productoId,
         precio_venta: form.precio_venta ? Number(form.precio_venta) : null,
         precio_costo: form.precio_costo ? Number(form.precio_costo) : null,
@@ -684,7 +684,7 @@ const logout = async () => {
         almacenamiento: form.almacenamiento || null,
         color: form.color || null,
         vendido: false,
-        imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+        imagen_url: Array.isArray(form.imagen_url) ? form.imagenurl : [],
       })
 
 
@@ -741,10 +741,10 @@ const logout = async () => {
     return
   }
 
-  const sku_id = ventaCel?._raw?.skus?.id
-  if (!sku_id) {
+  const skuId = ventaCel?._raw?.skus?.id
+  if (!skuId) {
     setGuardandoVenta(false)
-    avisar('No se encontró SKU del equipo (sku_id). Recarga e intenta otra vez.', '#ff4b2b')
+    avisar('No se encontró SKU del equipo (skuId). Recarga e intenta otra vez.', '#ff4b2b')
     return
   }
 
