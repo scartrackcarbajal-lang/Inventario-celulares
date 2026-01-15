@@ -463,48 +463,51 @@ const logout = async () => {
     setEquipos(adaptados)
   }
     const cargarVentas = async () => {
-    setCargandoVentas(true)
+      setCargandoVentas(true)
 
-    let query = supabase
-      .from('ventas')
-      .select(`
-        id,
-        celular_id,
-        precio_lista,
-        precio_final,
-        descuento,
-        cliente_nombre,
-        cliente_telefono,
-        vendido_en,
-        vendido_por,
-        Celulares:celular_id (
+      let query = supabase
+        .from('ventas_v2')
+        .select(`
           id,
-          marca,
-          modelo,
-          imei,
-          precio_costo
-        )
-      `)
-      .order('vendido_en', { ascending: false })
-      .limit(200)
+          precio_lista,
+          precio_final,
+          descuento,
+          cliente_nombre,
+          cliente_telefono,
+          vendido_en,
+          vendido_por,
+          item_serializado_id,
+          sku_id,
+          items_serializados:item_serializado_id (
+            serial
+          ),
+          skus:sku_id (
+            id,
+            precio_costo,
+            productos (
+              marca,
+              nombre
+            )
+          )
+        `)
+        .order('vendido_en', { ascending: false })
+        .limit(200)
 
-    const desdeISO = inicioDelDiaISO(ventasDesde)
-    const hastaISO = finDelDiaISO(ventasHasta)
+      const desdeISO = inicioDelDiaISO(ventasDesde)
+      const hastaISO = finDelDiaISO(ventasHasta)
+      if (desdeISO) query = query.gte('vendido_en', desdeISO)
+      if (hastaISO) query = query.lte('vendido_en', hastaISO)
 
-    if (desdeISO) query = query.gte('vendido_en', desdeISO)
-    if (hastaISO) query = query.lte('vendido_en', hastaISO)
+      const { data, error } = await query
+      setCargandoVentas(false)
 
-    const { data, error } = await query
+      if (error) {
+        avisar(`Error cargando ventas: ${error.message}`, '#ff4b2b')
+        return
+      }
 
-    setCargandoVentas(false)
-
-    if (error) {
-      avisar('❌ Error cargando ventas: ' + error.message, '#ff4b2b')
-      return
+      setVentas(data || [])
     }
-
-    setVentas(data || [])
-  }
 
   useEffect(() => {
   if (autorizado) {
@@ -689,6 +692,9 @@ const logout = async () => {
 
   // --- VENTA: abrir modal ---
   const abrirModalVenta = (cel) => {
+    console.log('ventaCel keys:', Object.keys(cel || {}))
+    console.log('ventaCel.raw:', cel?.raw)
+    console.log('ventaCel._raw:', cel?._raw)
     setVentaCel(cel)
     setVentaForm({
       precio_final: cel?.precio_venta ?? '',
@@ -700,85 +706,99 @@ const logout = async () => {
 
   // --- VENTA: confirmar (ventas + movimientos + update celulares) ---
   const confirmarVenta = async () => {
-    if (!ventaCel) return
+  if (!ventaCel) return
 
-    if (Number(ventaCel.stock) <= 0) {
+  if (Number(ventaCel.stock) <= 0) {
     avisar('⚠️ Este equipo ya está vendido', '#ff4b2b')
     return
-    }
-
-    const precioFinal = Number(ventaForm.precio_final)
-    if (!precioFinal || precioFinal <= 0) {
-      avisar('⚠️ Ingresa el precio final', '#ff4b2b')
-      return
-    }
-
-    setGuardandoVenta(true)
-
-    // usuario logueado (para vender_por y actor_id)
-    const { data: sess } = await supabase.auth.getSession()
-    const userId = sess?.session?.user?.id
-    if (!userId) {
-      setGuardandoVenta(false)
-      avisar('⚠️ Sesión no válida, vuelve a iniciar sesión', '#ff4b2b')
-      return
-    }
-
-    // 1) Insert venta (OBLIGATORIO: vendido_por = userId para pasar RLS self)
-    const { error: errVenta } = await supabase.from('ventas').insert([{
-      celular_id: ventaCel.id,
-      precio_lista: ventaCel.precio_venta ?? null,
-      precio_final: precioFinal,
-      cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
-      cliente_telefono: ventaForm.cliente_telefono?.trim() || null,
-      vendido_por: userId
-    }])
-
-    if (errVenta) {
-      setGuardandoVenta(false)
-      avisar('❌ Error registrando venta: ' + errVenta.message, '#ff4b2b')
-      return
-    }
-
-    // 2) Update celular -> vendido
-    const { error: errUpd } = await supabase
-      .from('Celulares')
-      .update({ stock: 0, publicado: false })
-      .eq('id', ventaCel.id)
-
-    if (errUpd) {
-      setGuardandoVenta(false)
-      avisar('❌ Error marcando vendido: ' + errUpd.message, '#ff4b2b')
-      return
-    }
-
-    // 3) Insert movimiento (OBLIGATORIO: actor_id = userId para pasar RLS self)
-    const { error: errMov } = await supabase.from('movimientos_inventario').insert([{
-      celular_id: ventaCel.id,
-      tipo: 'VENDIDO',
-      actor_id: userId,
-      detalle: {
-        precio_lista: ventaCel.precio_venta ?? null,
-        precio_final: precioFinal,
-        cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
-        cliente_telefono: ventaForm.cliente_telefono?.trim() || null
-      }
-    }])
-
-    if (errMov) {
-      // No bloquea la venta, pero avisa (ya se vendió)
-      avisar('⚠️ Vendido, pero no se registró movimiento: ' + errMov.message, '#ff4b2b')
-    } else {
-      avisar('✅ Venta registrada')
-    }
-
-    setGuardandoVenta(false)
-    setVentaModalAbierto(false)
-    setVentaCel(null)
-    setVentaForm({ precio_final: '', cliente_nombre: '', cliente_telefono: '' })
-    await cargarEquipos()
-    await cargarVentas()
   }
+
+  const precioFinal = Number(ventaForm.preciofinal)
+  if (!precioFinal || precioFinal <= 0) {
+    avisar('⚠️ Ingresa el precio final', '#ff4b2b')
+    return
+  }
+
+  setGuardandoVenta(true)
+
+  // usuario logueado para vendido_por y actorid
+  const { data: sess } = await supabase.auth.getSession()
+  const userId = sess?.session?.user?.id
+  if (!userId) {
+    setGuardandoVenta(false)
+    avisar('Sesión no válida, vuelve a iniciar sesión', '#ff4b2b')
+    return
+  }
+
+  const skuId = ventaCel?._raw?.skus?.id
+  if (!skuId) {
+    setGuardandoVenta(false)
+    avisar('No se encontró SKU del equipo (skuId). Recarga e intenta otra vez.', '#ff4b2b')
+    return
+  }
+
+  // 1) Insert venta_V2
+  const { error: errVenta } = await supabase
+    .from('ventas_v2')
+    .insert({
+      item_serializado_id: ventaCel.id, // bigint
+      sku_id: skuId,                   // bigint
+      precio_lista: ventaCel.precioventa ?? null,
+      precio_final: precioFinal,
+      descuento: (ventaCel.precioventa ? Number(ventaCel.precioventa) : null) ? (Number(ventaCel.precioventa) - precioFinal) : null,
+      cliente_nombre: ventaForm.clientenombre?.trim() || null,
+      cliente_telefono: ventaForm.clientetelefono?.trim() || null,
+      vendido_por: userId,
+    })
+
+  if (errVenta) {
+    setGuardandoVenta(false)
+    avisar(`Error registrando venta: ${errVenta.message}`, '#ff4b2b')
+    return
+  }
+
+  // 2) Update item_serializado - vendido
+  const { error: errUpd } = await supabase
+    .from('items_serializados')
+    .update({ vendido: true })
+    .eq('id', ventaCel.id)
+
+  if (errUpd) {
+    setGuardandoVenta(false)
+    avisar(`Error marcando vendido: ${errUpd.message}`, '#ff4b2b')
+    return
+  }
+
+  // 3) Movimiento (opcional). Si tu tabla sigue usando celularid (Celulares), COMENTA este bloque por ahora.
+  /*
+  const { error: errMov } = await supabase
+    .from('movimientosinventario')
+    .insert({
+      celularid: ventaCel.id,
+      tipo: 'VENDIDO',
+      actorid: userId,
+      detalle: {
+        precio_lista: ventaCel.precioventa ?? null,
+        precio_final: precioFinal,
+        cliente_nombre: ventaForm.clientenombre?.trim() || null,
+        cliente_telefono: ventaForm.clientetelefono?.trim() || null,
+      },
+    })
+
+  if (errMov) {
+    avisar(`Vendido, pero no se registró movimiento: ${errMov.message}`, '#ff4b2b')
+  }
+  */
+
+  avisar('Venta registrada ✅')
+  setGuardandoVenta(false)
+  setVentaModalAbierto(false)
+  setVentaCel(null)
+  setVentaForm({ preciofinal: '', clientenombre: '', clientetelefono: '' })
+
+  await cargarEquipos()
+  await cargarVentas()
+}
 
     const equiposFiltrados = equipos.filter((cel) => {
     const texto = (busqueda || '').toLowerCase()
@@ -1155,7 +1175,22 @@ if (!autorizado) {
                 setEditandoId(equipo.id)
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }}
-              onDelete={async (id) => { if(confirm('¿Eliminar definitivamente?')) { await supabase.from('Celulares').delete().eq('id', id); cargarEquipos(); } }}
+              onDelete={async (id) => {
+                if (!confirm('Eliminar definitivamente?')) return
+
+                const { error } = await supabase
+                  .from('items_serializados')
+                  .delete()
+                  .eq('id', id)
+
+                if (error) {
+                  avisar(`Error eliminando: ${error.message}`, '#ff4b2b')
+                  return
+                }
+
+                avisar('Eliminado')
+                cargarEquipos()
+              }}
               onSell={(cel) => abrirModalVenta(cel)}
             />
           ))}
@@ -1236,14 +1271,20 @@ if (!autorizado) {
                 </thead>
                 <tbody>
                   {ventas.map((v) => {
-                    const costo = Number(v?.Celulares?.precio_costo ?? 0)
+                    const costo = Number(v?.skus?.precio_costo ?? 0)
                     const final = Number(v?.precio_final ?? 0)
                     const ganancia = final - costo
+
+                    const fecha = v?.vendido_en ? new Date(v.vendido_en).toLocaleString() : '—'
+                    const marca = v?.skus?.productos?.marca ?? '—'
+                    const modelo = v?.skus?.productos?.nombre ?? '—'
+                    const serial = v?.items_serializados?.serial ?? 'NA'
+
                     return (
                       <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                        <td style={{ padding: 10 }}>{v.vendido_en ? new Date(v.vendido_en).toLocaleString() : '—'}</td>
-                        <td style={{ padding: 10 }}>{v?.Celulares?.marca} {v?.Celulares?.modelo}</td>
-                        <td style={{ padding: 10, fontFamily: 'monospace', color: '#94a3b8' }}>{v?.Celulares?.imei || 'N/A'}</td>
+                        <td style={{ padding: 10 }}>{fecha}</td>
+                        <td style={{ padding: 10 }}>{marca} {modelo}</td>
+                        <td style={{ padding: 10, fontFamily: 'monospace', color: '#94a3b8' }}>{serial}</td>
                         <td style={{ padding: 10 }}>S/ {final.toFixed(2)}</td>
                         <td style={{ padding: 10 }}>S/ {costo.toFixed(2)}</td>
                         <td style={{ padding: 10, color: ganancia >= 0 ? '#7CFC98' : '#ff6b6b' }}>
