@@ -645,6 +645,33 @@ const logout = async () => {
         avisar('IMEI/serie es obligatorio para celulares.', '#ff4b2b')
         return
       }
+      // EDIT MODE: update existing serializado instead of inserting a new one
+      if (editandoId) {
+        const serial = String(form.serial).replace(/\s/g, '').slice(0, 30)
+        if (!serial) { avisar('IMEI/serie es obligatorio.', '#ff4b2b'); return }
+
+        const { error: errUpd } = await supabase
+          .from('itemsserializados')
+          .update({
+            serial,
+            estado: form.estado || null,
+            saludbateria: form.saludbateria ? Number(form.saludbateria) : null,
+            almacenamiento: form.almacenamiento || null,
+            color: form.color || null,
+            imagenurl: Array.isArray(form.imagenurl) ? form.imagenurl : [],
+            // vendido no lo toques aquí
+          })
+          .eq('id', editandoId)
+
+        if (errUpd) { avisar('Error actualizando: ' + errUpd.message, '#ff4b2b'); return }
+
+        avisar('Equipo actualizado ✅')
+        setEditandoId(null)
+        setForm(estadoInicial)
+        await cargarEquipos()
+        return
+      }
+
 
       // 1) Asegurar categoría/producto
       const categoriaId = await asegurarCategoriaId('Celulares')
@@ -1090,10 +1117,15 @@ if (!autorizado) {
         </div>
 
         <div>
-          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>IMEI / SERIE</label>
-          <input placeholder="Escanea o escribe..." value={form.serial}
+          <label style={{ marginLeft: 10, color: '#888', fontSize: '0.8rem' }}>
+        IMEI / SERIE
+        </label>
+        <input
+          placeholder="Escanea o escribe..."
+          value={form.serial}
           onChange={(e) => setForm({ ...form, serial: normalizarImei(e.target.value) })}
-          />
+          style={{ ...inputStyle, fontFamily: 'monospace' }}
+        />
         </div>
 
         <div>
@@ -1166,19 +1198,14 @@ if (!autorizado) {
             <option value="VENDIDOS">Vendidos</option>
           </select>
         </div>
-        <input
-          placeholder="Escanea o escribe..."
-          value={form.serial}
-          onChange={(e) => setForm({ ...form, serial: normalizarImei(e.target.value) })}
-          style={{ ...inputStyle, fontFamily: 'monospace' }}
-        />
+       
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '40px' }}>
           {equiposFiltrados.map(cel => (
             <TarjetaEquipo 
               key={cel.id} cel={cel} theme={theme}
               onOpenModal={setModalImagen}
               onEdit={(equipo) => {
-                setForm({ ...estadoInicial, ...equipo, publicado: !!equipo.publicado })
+                setForm({ ...estadoInicial, ...equipo, serial: equipo.imei })
                 setEditandoId(equipo.id)
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }}
