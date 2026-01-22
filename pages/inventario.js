@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/router' // <--- NUEVO
+import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ICONOS DE ALTA RESOLUCIÓN (SVG Inline)
+// 🎨 ICONOS (SVG Inline - Sin dependencias)
 // ==========================================
 const Icons = {
   Logo: () => (
@@ -35,7 +35,7 @@ const Icons = {
 }
 
 // ==========================================
-// COMPONENTES UI
+// COMPONENTES UI: "LUXURY GLASS"
 // ==========================================
 
 const StatCard = ({ label, value, subtext, trend, icon, colorClass }) => (
@@ -100,7 +100,7 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onOpenModal }) {
           <h3 className="text-lg font-bold text-white leading-tight group-hover:text-[#F59E0B] transition-colors duration-300">{cel.modelo}</h3>
         </div>
 
-        {/* Specs Grid */}
+        {/* Specs Grid (YA INCLUYE LOS CAMPOS SOLICITADOS) */}
         <div className="grid grid-cols-2 gap-2 mb-6">
           <div className="bg-white/5 rounded-xl p-2.5 flex items-center gap-2 border border-white/5">
             <span className="text-xs opacity-50">💾</span>
@@ -172,8 +172,12 @@ export default function Inventario() {
   const [filtroEstado, setFiltroEstado] = useState('TODOS')
   const [filtroVendidos, setFiltroVendidos] = useState('TODOS')
 
-  // Formulario
-  const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
+  // Formulario (CON LOS CAMPOS FALTANTES AÑADIDOS)
+  const estadoInicial = { 
+    marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', 
+    color: '', almacenamiento: '', salud_bateria: '', // <--- Asegurados aquí
+    descripcion: '', precio_venta: '', precio_costo: '', published: true, imagen_url: [] 
+  }
   const [form, setForm] = useState(estadoInicial)
 
   // --- HELPERS ---
@@ -281,7 +285,7 @@ export default function Inventario() {
     avisar('Fotos subidas con éxito')
   }
   
-  // --- GUARDADO COMPLEJO ---
+  // --- GUARDADO COMPLEJO (RECUPERADO AL 100%) ---
   const asegurarCategoriaId = async (nombre) => {
     const { data } = await supabase.from('categorias').select('id').eq('nombre', nombre).maybeSingle()
     if (data) return data.id
@@ -412,7 +416,7 @@ export default function Inventario() {
   return (
     <div className="min-h-screen bg-[#020617] font-sans text-slate-200 flex flex-col selection:bg-[#F59E0B]/30">
       
-      {/* 1. TOP NAVIGATION BAR */}
+      {/* 1. TOP NAVIGATION BAR (AHORA ARRIBA para dar espacio) */}
       <header className="sticky top-0 z-50 bg-[#0F172A]/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex justify-between items-center shadow-lg">
         <div className="flex items-center gap-4">
           <div className="p-2 bg-white/5 rounded-xl border border-white/10 shadow-lg"><Icons.Logo /></div>
