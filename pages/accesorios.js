@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM (CSS-IN-JS GARANTIZADO)
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
 // ==========================================
 const styles = {
   container: {
@@ -13,13 +13,17 @@ const styles = {
     fontFamily: "'Inter', sans-serif",
     backgroundImage: `radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 20%)`,
     backgroundAttachment: 'fixed',
+    padding: '40px 20px',
   },
   glassPanel: {
-    backgroundColor: 'rgba(30, 41, 59, 0.7)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     backdropFilter: 'blur(16px)',
     border: '1px solid rgba(255, 255, 255, 0.08)',
-    borderRadius: '24px',
-    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+    borderRadius: '32px',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+    overflow: 'hidden',
+    maxWidth: '1200px',
+    margin: '0 auto',
   },
   goldText: {
     background: 'linear-gradient(to right, #F59E0B, #D97706)',
@@ -27,312 +31,313 @@ const styles = {
     WebkitTextFillColor: 'transparent',
     fontWeight: '900',
   },
-  input: {
-    width: '100%',
-    padding: '14px 16px',
-    backgroundColor: 'rgba(2, 6, 23, 0.5)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
-    color: 'white',
-    outline: 'none',
-    fontSize: '0.95rem',
-    transition: 'all 0.2s',
+  backLink: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+    color: '#94a3b8',
+    textDecoration: 'none',
+    fontWeight: 'bold',
+    marginBottom: '30px',
+    transition: 'color 0.2s',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
   },
-  label: {
-    display: 'block',
-    fontSize: '0.7rem',
+  pill: {
+    padding: '8px 16px',
+    borderRadius: '99px',
+    fontSize: '0.75rem',
+    fontWeight: 'bold',
     textTransform: 'uppercase',
     letterSpacing: '1px',
-    fontWeight: 'bold',
-    color: '#94a3b8',
-    marginBottom: '6px',
-  },
-  btnPrimary: {
-    background: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
-    color: 'white',
-    border: 'none',
-    padding: '12px 24px',
-    borderRadius: '16px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)',
-    display: 'flex', alignItems: 'center', gap: '8px',
-    justifyContent: 'center',
-    transition: 'transform 0.2s',
-  },
-  btnIcon: {
-    width: '36px', height: '36px',
-    borderRadius: '10px',
-    border: '1px solid rgba(255,255,255,0.1)',
-    background: 'rgba(255,255,255,0.05)',
-    color: '#cbd5e1',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: '24px',
-  },
+    display: 'inline-block',
+  }
 }
 
 // ==========================================
 // 🎨 ICONOS SVG
 // ==========================================
 const Icons = {
-  Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
-  Headphones: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
-  Dollar: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
-  Box: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>,
-  Logout: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>,
-  Smartphone: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
-  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
-  Chart: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>,
+  ArrowLeft: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg>,
+  Whatsapp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>,
+  Battery: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="16" height="10" rx="2" ry="2"/><line x1="22" x2="22" y1="11" y2="13"/></svg>,
+  Disc: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>,
+  Tag: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>,
+  Box: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
 }
 
-export default function Accesorios() {
+export default function DetallesProducto() {
   const router = useRouter()
-  const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(false)
-  
-  // Formulario para Nuevo Accesorio
-  const [form, setForm] = useState({ 
-    nombre: '', 
-    marca: '', 
-    precio_costo: '', 
-    precio_venta: '', 
-    cantidad_inicial: 0 
-  })
+  const { id, tipo } = router.query // tipo puede ser 'serial' (celular) o 'bulk' (accesorio)
 
-  // Estado para Venta
-  const [modalVenta, setModalVenta] = useState(null)
-  const [cantidadVenta, setCantidadVenta] = useState(1)
+  const [cel, setCel] = useState(null)
+  const [cargando, setCargando] = useState(true)
+  const [fotoActiva, setFotoActiva] = useState(null)
 
-  // --- CARGAR DATOS ---
-  const cargarAccesorios = async () => {
-    setLoading(true)
-    const { data, error } = await supabase
-      .from('stock_bulk')
-      .select(`
-        sku_id, stock,
-        skus:sku_id (
-          id, sku_codigo, precio_venta, precio_costo,
-          productos:producto_id ( nombre, marca, descripcion )
-        )
-      `)
-      .order('stock', { ascending: false })
-    
-    setLoading(false)
-    if (error) {
-      alert('Error cargando accesorios: ' + error.message)
-      return
-    }
-    setItems(data || [])
-  }
+  const whatsappPropio = '51992571579' // Tu número
 
+  // --- Generar enlace de WhatsApp ---
+  const waLink = useMemo(() => {
+    if (!cel) return '#'
+    const text = `Hola, me interesa el ${cel.marca} ${cel.modelo} que vi en la web.`
+    return `https://wa.me/${whatsappPropio}?text=${encodeURIComponent(text)}`
+  }, [cel])
+
+  // --- Cargar Datos ---
   useEffect(() => {
-    cargarAccesorios()
-  }, [])
+    if (!id || !tipo) return
 
-  // --- GUARDAR ---
-  const guardarAccesorio = async () => {
-    if (!form.nombre || !form.marca) return alert('Faltan datos obligatorios')
+    const cargar = async () => {
+      setCargando(true)
 
-    try {
-      setLoading(true)
-      // 1. Categoría
-      const { data: cat } = await supabase.from('categorias').select('id').eq('nombre', 'Accesorios').maybeSingle()
-      let catId = cat?.id
-      if (!catId) {
-        const { data: newCat } = await supabase.from('categorias').insert({ nombre: 'Accesorios' }).select('id').single()
-        catId = newCat.id
+      // CASO 1: CELULAR (Serializado)
+      if (tipo === 'serial') {
+        const { data, error } = await supabase
+          .from('items_serializados')
+          .select(`
+            id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido,
+            skus!inner( id, precio_venta, publicado, productos(marca, nombre, descripcion) )
+          `)
+          .eq('id', id)
+          .maybeSingle() 
+
+        if (error || !data) {
+          setCel(null)
+        } else {
+          const adaptado = {
+            id: data.id,
+            marca: data.skus?.productos?.marca || '',
+            modelo: data.skus?.productos?.nombre || '',
+            estado: data.estado,
+            precio_venta: data.skus?.precio_venta,
+            almacenamiento: data.almacenamiento,
+            salud_bateria: data.salud_bateria,
+            descripcion: data.skus?.productos?.descripcion,
+            color: data.color,
+            imagen_url: data.imagen_url || [],
+            vendido: data.vendido,
+            serial: data.serial // IMEI
+          }
+          setCel(adaptado)
+          setFotoActiva(adaptado.imagen_url?.[0] || null)
+        }
+      } 
+      // CASO 2: ACCESORIO (Bulk)
+      else if (tipo === 'bulk') {
+        const { data, error } = await supabase
+          .from('skus')
+          .select(`
+            id, precio_venta, tracking, publicado,
+            productos(marca, nombre, descripcion),
+            stock_bulk(stock)
+          `)
+          .eq('id', id)
+          .maybeSingle()
+
+        if (error || !data) {
+          setCel(null)
+        } else {
+          // stock_bulk puede ser un array o un objeto dependiendo de la relación, asumimos array
+          const stock = data.stock_bulk?.[0]?.stock ?? 0
+          
+          const adaptado = {
+            id: data.id,
+            marca: data.productos?.marca || '',
+            modelo: data.productos?.nombre || '',
+            estado: 'Nuevo',
+            precio_venta: data.precio_venta,
+            almacenamiento: `Stock: ${stock}`, // Reutilizamos campo para mostrar stock
+            salud_bateria: null,
+            descripcion: data.productos?.descripcion,
+            color: '',
+            imagen_url: [], // Los accesorios suelen no tener foto única por item, podrías agregarla al producto
+            vendido: stock <= 0
+          }
+          setCel(adaptado)
+        }
       }
-
-      // 2. Producto
-      const { data: prod, error: errProd } = await supabase.from('productos')
-        .insert({ categoria_id: catId, nombre: form.nombre, marca: form.marca, activo: true })
-        .select('id').single()
-      if (errProd) throw errProd
-
-      // 3. SKU
-      const { data: sku, error: errSku } = await supabase.from('skus')
-        .insert({
-          producto_id: prod.id,
-          sku_codigo: `ACC-${Date.now()}`,
-          tracking: 'BULK',
-          precio_costo: form.precio_costo || 0,
-          precio_venta: form.precio_venta || 0,
-          publicado: true
-        })
-        .select('id').single()
-      if (errSku) throw errSku
-
-      // 4. Stock Bulk
-      const { error: errBulk } = await supabase.from('stock_bulk').insert({
-        sku_id: sku.id,
-        stock: form.cantidad_inicial || 0
-      })
-      if (errBulk) throw errBulk
-
-      alert('¡Accesorio Guardado!')
-      setForm({ nombre: '', marca: '', precio_costo: '', precio_venta: '', cantidad_inicial: 0 })
-      cargarAccesorios()
-
-    } catch (e) {
-      alert('Error: ' + e.message)
-    } finally {
-      setLoading(false)
+      setCargando(false)
     }
+
+    cargar()
+  }, [id, tipo])
+
+  if (cargando) {
+    return (
+      <div style={{ ...styles.container, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: '#F59E0B', fontSize: '1.5rem', fontWeight: 'bold' }}>Cargando...</div>
+      </div>
+    )
   }
 
-  // --- VENDER ---
-  const confirmarVenta = async () => {
-    if (!modalVenta) return
-    const cant = Number(cantidadVenta)
-    if (cant <= 0 || cant > modalVenta.stock) return alert('Cantidad inválida')
-
-    try {
-      setLoading(true)
-      const skuId = modalVenta.skus.id
-      const precioUnit = modalVenta.skus.precio_venta
-      
-      // 1. Registrar Venta
-      const { error: errVenta } = await supabase.from('ventas_v2').insert({
-        sku_id: skuId,
-        item_serializado_id: null,
-        cantidad: cant,
-        precio_lista: precioUnit,
-        precio_final: precioUnit * cant,
-        tipo_venta: 'BULK'
-      })
-      if (errVenta) throw errVenta
-
-      // 2. Descontar Stock
-      const { error: errStock } = await supabase.from('stock_bulk')
-        .update({ stock: modalVenta.stock - cant })
-        .eq('sku_id', skuId)
-      if (errStock) throw errStock
-
-      alert('Venta realizada con éxito 💰')
-      setModalVenta(null)
-      cargarAccesorios()
-      
-    } catch (e) {
-      alert('Error: ' + e.message)
-    } finally {
-      setLoading(false)
-    }
+  if (!cel) {
+    return (
+      <div style={styles.container}>
+        <div style={{ ...styles.glassPanel, padding: '50px', textAlign: 'center' }}>
+          <h1 style={{ color: 'white', fontSize: '2rem', marginBottom: '20px' }}>Producto no encontrado 😔</h1>
+          <Link href="/" style={{ color: '#F59E0B', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.2rem' }}>
+            ← Volver al Catálogo
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div style={styles.container}>
-      {/* ⚠️ ESTILOS CSS RESPONSIVOS */}
+      {/* GLOBAL CSS FOR RESPONSIVE DESIGN */}
       <style>{`
-        .page-wrapper { padding: 30px; max-width: 1400px; margin: 0 auto; }
-        .form-grid { display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); }
-        @media (max-width: 1024px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px) { 
-           .form-grid { grid-template-columns: 1fr; }
-           .navbar-content { flex-direction: column; gap: 15px; }
-           .nav-menu { width: 100%; justify-content: space-between; overflow-x: auto; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        .layout-grid { display: flex; gap: 40px; }
+        .col-left { flex: 1; min-width: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .col-right { flex: 1; padding: 40px; }
+        .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 40px; }
+        
+        @media (max-width: 768px) {
+          .layout-grid { flex-direction: column; }
+          .col-left { padding: 20px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+          .col-right { padding: 30px; }
         }
       `}</style>
 
-      {/* NAVBAR */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px' }}>
-        <div className="navbar-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>ACCESORIOS</span></span></div>
-          
-          <div className="nav-menu" style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <button onClick={() => router.push('/inventario')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
-            <button style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: '#F59E0B', color: 'black', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {/* HEADER LINK */}
+        <Link href="/" style={styles.backLink}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Icons.ArrowLeft /> Volver al Catálogo
           </div>
-        </div>
-      </nav>
+        </Link>
 
-      <div className="page-wrapper">
-        
-        {/* FORMULARIO */}
-        <div style={{ ...styles.glassPanel, padding: '40px', marginBottom: '50px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}><Icons.Box /></div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>Ingresar Nuevo Stock</h2>
-          </div>
+        <div style={styles.glassPanel}>
+          <div className="layout-grid">
+            
+            {/* --- COLUMNA IZQUIERDA: IMÁGENES --- */}
+            <div className="col-left" style={{ backgroundColor: '#020617', borderRight: '1px solid rgba(255,255,255,0.05)' }}>
+              
+              {/* Imagen Principal */}
+              <div style={{ width: '100%', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', padding: '20px' }}>
+                <img 
+                  src={fotoActiva || 'https://via.placeholder.com/600x600/0f172a/334155?text=Sin+Foto'} 
+                  alt={cel.modelo} 
+                  style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.5))' }} 
+                />
+              </div>
 
-          <div className="form-grid">
-            <div><label style={styles.label}>Marca</label><input style={styles.input} placeholder="Ej. Samsung" value={form.marca} onChange={e=>setForm({...form, marca: e.target.value})} /></div>
-            <div><label style={styles.label}>Producto</label><input style={styles.input} placeholder="Ej. Cargador 25W" value={form.nombre} onChange={e=>setForm({...form, nombre: e.target.value})} /></div>
-            <div><label style={styles.label}>Costo Unitario</label><input type="number" style={styles.input} placeholder="0.00" value={form.precio_costo} onChange={e=>setForm({...form, precio_costo: e.target.value})} /></div>
-            <div><label style={{...styles.label, color: '#F59E0B'}}>Precio Venta</label><input type="number" style={{...styles.input, borderColor: '#F59E0B', color: '#F59E0B', fontWeight: 'bold'}} placeholder="0.00" value={form.precio_venta} onChange={e=>setForm({...form, precio_venta: e.target.value})} /></div>
-            <div><label style={styles.label}>Cantidad Inicial</label><input type="number" style={styles.input} placeholder="0" value={form.cantidad_inicial} onChange={e=>setForm({...form, cantidad_inicial: e.target.value})} /></div>
-          </div>
-          <button onClick={guardarAccesorio} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>
-            {loading ? 'Guardando...' : 'Registrar en Inventario'}
-          </button>
-        </div>
+              {/* Miniaturas */}
+              {Array.isArray(cel.imagen_url) && cel.imagen_url.length > 1 && (
+                <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', maxWidth: '100%', padding: '20px' }}>
+                  {cel.imagen_url.map((url, i) => (
+                    <img 
+                      key={i} 
+                      src={url} 
+                      onClick={() => setFotoActiva(url)}
+                      style={{ 
+                        width: '60px', height: '60px', objectFit: 'cover', borderRadius: '12px', 
+                        border: fotoActiva === url ? '2px solid #F59E0B' : '2px solid rgba(255,255,255,0.1)',
+                        cursor: 'pointer', opacity: fotoActiva === url ? 1 : 0.6,
+                        transition: 'all 0.2s'
+                      }} 
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
 
-        {/* LISTA DE STOCK */}
-        <h2 style={{ color: 'white', marginBottom: '20px', fontSize: '1.5rem', fontWeight: '900' }}>Inventario Disponible</h2>
-        <div style={styles.grid}>
-          {items.map((item, i) => (
-            <div key={i} style={{ ...styles.glassPanel, padding: '24px', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
-                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <div style={{ marginBottom: '16px' }}>
-                <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{item.skus.productos.marca}</p>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.2 }}>{item.skus.productos.nombre}</h3>
+            {/* --- COLUMNA DERECHA: INFO --- */}
+            <div className="col-right">
+              <div style={{ marginBottom: '10px' }}>
+                <span style={{ color: '#F59E0B', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.9rem' }}>{cel.marca}</span>
               </div>
               
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', background: 'rgba(2, 6, 23, 0.5)', padding: '12px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <span style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Stock Disponible</span>
-                <span style={{ fontSize: '1.5rem', fontWeight: '900', color: item.stock < 5 ? '#ef4444' : 'white' }}>{item.stock}</span>
+              <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: 'white', margin: '0 0 20px 0', lineHeight: '1.1' }}>{cel.modelo}</h1>
+
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '40px' }}>
+                <span style={{ ...styles.pill, background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.3)' }}>{cel.estado}</span>
+                {cel.vendido && <span style={{ ...styles.pill, background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)' }}>AGOTADO</span>}
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#94a3b8', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                <span>Costo: S/{item.skus.precio_costo}</span>
-                <span>Venta: <b style={{color: 'white'}}>S/{item.skus.precio_venta}</b></span>
+              {/* Grid de Specs */}
+              <div className="specs-grid">
+                {cel.almacenamiento && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ color: '#94a3b8' }}><Icons.Disc /></div>
+                    <div>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>Capacidad</span>
+                      <span style={{ color: 'white', fontWeight: '600' }}>{cel.almacenamiento}</span>
+                    </div>
+                  </div>
+                )}
+                {cel.color && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ color: '#94a3b8' }}><Icons.Tag /></div>
+                    <div>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>Color</span>
+                      <span style={{ color: 'white', fontWeight: '600' }}>{cel.color}</span>
+                    </div>
+                  </div>
+                )}
+                {cel.salud_bateria && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ color: '#94a3b8' }}><Icons.Battery /></div>
+                    <div>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>Batería</span>
+                      <span style={{ color: 'white', fontWeight: '600' }}>{cel.salud_bateria}%</span>
+                    </div>
+                  </div>
+                )}
+                {/* Serial solo si es relevante mostrarlo al cliente o admin */}
+                {cel.serial && (
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ color: '#94a3b8' }}><Icons.Box /></div>
+                    <div>
+                      <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>ID / Serial</span>
+                      <span style={{ color: 'white', fontWeight: '600', fontFamily:'monospace' }}>{cel.serial}</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <button 
-                onClick={() => { setModalVenta(item); setCantidadVenta(1); }}
-                style={{ ...styles.btnPrimary, width: '100%', marginTop: 'auto', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.3)', boxShadow: 'none' }}
-              >
-                <Icons.Dollar /> VENDER
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
+              <div style={{ marginBottom: '40px', borderLeft: '4px solid #F59E0B', paddingLeft: '20px' }}>
+                <h3 style={{ color: 'white', fontSize: '1.2rem', marginBottom: '10px' }}>Descripción</h3>
+                <p style={{ color: '#cbd5e1', lineHeight: '1.7', whiteSpace: 'pre-wrap' }}>
+                  {cel.descripcion || 'Este equipo ha sido revisado minuciosamente por nuestros expertos para garantizar su perfecto funcionamiento. Incluye garantía de tienda.'}
+                </p>
+              </div>
 
-      {/* MODAL VENTA */}
-      {modalVenta && (
-        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}>
-          <div style={{ ...styles.glassPanel, width: '100%', maxWidth: '400px', padding: '30px', backgroundColor: '#0f172a' }}>
-            <h2 style={{ margin: '0 0 10px', fontSize: '1.5rem', color: 'white' }}>Vender Accesorio</h2>
-            <p style={{ color: '#94a3b8', marginBottom: '20px' }}>{modalVenta.skus.productos.nombre}</p>
-            
-            <div style={{ marginBottom: '25px' }}>
-              <label style={styles.label}>Cantidad a vender (Max: {modalVenta.stock})</label>
-              <input 
-                type="number" 
-                autoFocus
-                style={{ ...styles.input, fontSize: '2rem', textAlign: 'center', color: '#F59E0B', fontWeight: 'bold', borderColor: '#F59E0B' }} 
-                value={cantidadVenta} 
-                onChange={e => setCantidadVenta(e.target.value)}
-                min="1" max={modalVenta.stock}
-              />
-            </div>
-            
-            <div style={{ display: 'flex', gap: '15px' }}>
-              <button onClick={() => setModalVenta(null)} style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8', fontWeight: 'bold', cursor: 'pointer' }}>Cancelar</button>
-              <button onClick={confirmarVenta} style={{ ...styles.btnPrimary, flex: 1, justifyContent: 'center' }}>CONFIRMAR</button>
+              {/* Footer de Compra */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '30px', flexWrap: 'wrap', gap: '20px' }}>
+                <div>
+                  <span style={{ display: 'block', fontSize: '0.8rem', color: '#94a3b8', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '5px' }}>Precio Final</span>
+                  <span style={{ fontSize: '2.5rem', fontWeight: '900', color: 'white' }}>S/ {cel.precio_venta}</span>
+                </div>
+                
+                {!cel.vendido ? (
+                  <a 
+                    href={waLink} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    style={{ 
+                      display: 'inline-flex', alignItems: 'center', gap: '10px',
+                      padding: '16px 32px', borderRadius: '16px', 
+                      background: '#10b981', color: 'white', fontWeight: 'bold', textDecoration: 'none',
+                      boxShadow: '0 10px 20px -5px rgba(16, 185, 129, 0.4)', transition: 'transform 0.2s'
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                    onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+                  >
+                    <Icons.Whatsapp /> Comprar Ahora
+                  </a>
+                ) : (
+                   <button disabled style={{ padding: '16px 32px', borderRadius: '16px', background: '#334155', color: '#94a3b8', border: 'none', fontWeight: 'bold', cursor: 'not-allowed' }}>
+                     No Disponible
+                   </button>
+                )}
+              </div>
+
             </div>
           </div>
         </div>
-      )}
-
+      </div>
     </div>
   )
 }
