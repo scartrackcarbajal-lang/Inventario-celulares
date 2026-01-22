@@ -254,7 +254,7 @@ const estadoLabel = {
         <div>
           <p style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>ORDEN #{rep.id}</p>
           <h3 style={{ fontSize: '1.2rem', color: 'white', fontWeight: 'bold', margin: '4px 0' }}>{rep.equipo_modelo}</h3>
-          <p style={{ color: '#F59E0B', fontSize: '0.9rem' }}>{rep.falla}</p>
+          <p style={{ color: '#F59E0B', fontSize: '0.9rem' }}>{rep.falla_reportada}</p>
         </div>
         <div style={{ padding: '4px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: `${estadoColor[rep.estado]}22`, color: estadoColor[rep.estado], border: `1px solid ${estadoColor[rep.estado]}44` }}>
           {rep.estado}
@@ -264,7 +264,7 @@ const estadoLabel = {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Eye /><span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{rep.cliente_nombre}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Smartphone /><span>{rep.cliente_telefono}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_estimado}</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_mano_obra}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Check /><span>Total S/ {Number(rep.total ?? 0)}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {rep.fecha_ingreso}</span></div>
       </div>
@@ -330,7 +330,18 @@ export default function Inventario() {
   const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
   const [form, setForm] = useState(estadoInicial)
 
-  const estadoReparacionInicial = { cliente_nombre: '', cliente_telefono: '', equipo_marca: '', equipo_model: '', imei: '', falla_reportada: '', diagnostico: '', costo_mano_obra: 0, costo_repuestos: 0, estado: 'Recibido', fecha_ingreso: new Date().toISOString().split('T')[0] }
+  const estadoReparacionInicial = {
+  cliente_nombre: "",
+  cliente_telefono: "",
+  equipo_marca: "",
+  equipo_modelo: "",
+  imei: "",
+  falla_reportada: "",
+  diagnostico: "",
+  estado: "RECEIVED",
+  costo_mano_obra: 0,
+  costo_repuestos: 0,
+}
   const [formReparacion, setFormReparacion] = useState(estadoReparacionInicial)
 
   // --- HELPERS ---
@@ -385,29 +396,15 @@ export default function Inventario() {
   }
 
     const cargarReparaciones = async () => {
-    const { data, error } = await supabase
-      .from('reparaciones')
-      .select('*')
-      .order('created_at', { ascending: false })
+  const { data, error } = await supabase
+    .from("reparaciones")
+    .select("*")
+    .order("created_at", { ascending: false })
 
-    if (error) return avisar(error.message, 'error')
-
-    const adaptadas = (data || []).map((r) => ({
-      id: r.id,
-      cliente_nombre: r.cliente_nombre,
-      cliente_telefono: r.cliente_telefono,
-      equipo_marca: r.equipo_marca,
-      equipo_model: r.equipo_model,
-      imei: r.imei,
-      falla_reportada: r.falla_reportada,
-      diagnostico: r.diagnostico,
-      estado: r.estado,
-      total: Number(r.total || 0),
-      created_at: r.created_at,
-    }))
-
-    setReparaciones(adaptadas)
+  if (error) return avisar(error.message, "error")
+  setReparaciones(data || [])
   }
+
   
   const manejarFotos = async (e) => {
     const archivos = Array.from(e.target.files || [])
@@ -472,42 +469,40 @@ export default function Inventario() {
     } catch (e) { avisar(e.message, 'error') }
   }
 
-    const guardarReparacion = async () => {
-    // Validación mínima
-    if (!formReparacion.cliente_nombre?.trim() || !formReparacion.equipo_model?.trim()) {
-      return avisar('Nombre y Equipo son obligatorios', 'error')
+        const guardarReparacion = async () => {
+      if (!formReparacion.cliente_nombre?.trim() || !formReparacion.equipo_modelo?.trim()) {
+        return avisar("Nombre y Equipo son obligatorios", "error")
+      }
+
+      const { data: sess } = await supabase.auth.getSession()
+      const userId = sess?.session?.user?.id
+      if (!userId) return avisar("Sesión no válida, vuelve a iniciar sesión", "error")
+
+      const mano = Number(formReparacion.costo_mano_obra || 0)
+      const rep = Number(formReparacion.costo_repuestos || 0)
+
+      const payload = {
+        cliente_nombre: formReparacion.cliente_nombre.trim(),
+        cliente_telefono: formReparacion.cliente_telefono?.trim() || null,
+        equipo_marca: formReparacion.equipo_marca?.trim() || null,
+        equipo_modelo: formReparacion.equipo_modelo.trim(),
+        imei: formReparacion.imei?.trim() || null,
+        falla_reportada: formReparacion.falla_reportada?.trim() || null,
+        diagnostico: formReparacion.diagnostico?.trim() || null,
+        estado: formReparacion.estado, // enum repair_status
+        costo_mano_obra: mano,
+        costo_repuestos: rep,
+        total: mano + rep,
+        creado_por: userId,
+      }
+
+      const { error } = await supabase.from("reparaciones").insert(payload)
+      if (error) return avisar(error.message, "error")
+
+      avisar("Ticket de reparación creado", "success")
+      setFormReparacion(estadoReparacionInicial)
+      cargarReparaciones()
     }
-
-    const { data: sess } = await supabase.auth.getSession()
-    const userId = sess?.session?.user?.id
-    if (!userId) return avisar('Sesión no válida, vuelve a iniciar sesión', 'error')
-
-    const mano = Number(formReparacion.costo_mano_obra || 0)
-    const rep = Number(formReparacion.costo_repuestos || 0)
-
-    const payload = {
-      cliente_nombre: formReparacion.cliente_nombre?.trim() || null,
-      cliente_telefono: formReparacion.cliente_telefono?.trim() || null,
-      equipo_marca: formReparacion.equipo_marca?.trim() || null,
-      equipo_model: formReparacion.equipo_model?.trim() || null,
-      imei: formReparacion.imei?.trim() || null,
-      falla_reportada: formReparacion.falla_reportada?.trim() || null,
-      diagnostico: formReparacion.diagnostico?.trim() || null,
-      estado: formReparacion.estado, // usa valores DB (RECEIVED, etc.)
-      costo_mano_obra: mano,
-      costo_repuestos: rep,
-      total: mano + rep, // opcional, pero te evita dudas si el default/calculado falla
-      creado_por: userId,
-    }
-
-    const { error } = await supabase.from('reparaciones').insert(payload)
-    if (error) return avisar(error.message, 'error')
-
-    avisar('Ticket de reparación creado', 'success')
-    setFormReparacion(estadoReparacionInicial)
-    cargarReparaciones()
-  }
-
 
   const cambiarEstadoReparacion = async (id, nuevoEstado) => {
     const { error } = await supabase.from('reparaciones').update({ estado: nuevoEstado }).eq('id', id)
@@ -714,12 +709,38 @@ export default function Inventario() {
             <div style={{ ...styles.glassPanel, padding: '30px', marginBottom: '30px' }}>
               <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white', marginBottom: '20px' }}>⚡ Ingreso Rápido de Servicio</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                <input style={styles.input} placeholder="Cliente" value={formReparacion.cliente_nombre} onChange={e=>setFormReparacion({...formReparacion, cliente_nombre:e.target.value})} />
-                <input style={styles.input} placeholder="Teléfono" value={formReparacion.cliente_telefono} onChange={e=>setFormReparacion({...formReparacion, cliente_telefono:e.target.value})} />
-                <input style={styles.input} placeholder="Equipo / Modelo" value={formReparacion.equipomodel}  onChange={(e) => setFormReparacion({ ...formReparacion, equipomodel: e.target.value })}/>
-                <input style={styles.input} placeholder="Falla Reportada" value={formReparacion.falla} onChange={e=>setFormReparacion({...formReparacion, falla:e.target.value})} />
-                <input type="number" style={styles.input} placeholder="Costo Estimado" value={formReparacion.costo_estimado} onChange={e=>setFormReparacion({...formReparacion, costo_estimado:e.target.value})} />
-                <input type="date" style={styles.input} placeholder="Fecha Ingreso" value={formReparacion.fecha_ingreso} onChange={e=>setFormReparacion({...formReparacion, fecha_ingreso:e.target.value})} />
+                <input
+                  style={styles.input}
+                  placeholder="Cliente"
+                  value={formReparacion.cliente_nombre}
+                  onChange={(e) => setFormReparacion({ ...formReparacion, cliente_nombre: e.target.value })}
+                />
+                <input
+                  style={styles.input}
+                  placeholder="Equipo Marca"
+                  value={formReparacion.equipo_marca}
+                  onChange={(e) => setFormReparacion({ ...formReparacion, equipo_marca: e.target.value })}
+                />
+                <input
+                  style={styles.input}
+                  placeholder="Equipo Modelo"
+                  value={formReparacion.equipo_modelo}
+                  onChange={(e) => setFormReparacion({ ...formReparacion, equipo_modelo: e.target.value })}
+                />
+                <input
+                  type="number"
+                  style={styles.input}
+                  placeholder="Mano de obra"
+                  value={formReparacion.costo_mano_obra}
+                  onChange={(e) => setFormReparacion({ ...formReparacion, costo_mano_obra: e.target.value })}
+                />
+                <input
+                  type="number"
+                  style={styles.input}
+                  placeholder="Repuestos"
+                  value={formReparacion.costo_repuestos}
+                  onChange={(e) => setFormReparacion({ ...formReparacion, costo_repuestos: e.target.value })}
+                />
                 <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, height: '100%' }}>Crear Ticket</button>
               </div>
             </div>
