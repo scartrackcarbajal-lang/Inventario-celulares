@@ -232,21 +232,30 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
 }
 
 function RepairCard({ rep, onCambiarEstado }) {
+  // Colores por estado (ajusta si quieres)
   const estadoColor = {
-  RECEIVED: "#94a3b8",
-  INREVIEW: "#F59E0B",
-  WAITINGPARTS: "#f43f5e",
-  READY: "#10b981",
-  DELIVERED: "#3b82f6",
-}
+    RECEIVED: "#94a3b8",
+    DIAGNOSIS: "#f59e0b",
+    IN_REPAIR: "#f59e0b",
+    WAITING_PARTS: "#f43f5e",
+    READY: "#10b981",
+    DELIVERED: "#3b82f6",
+    CANCELLED: "#ef4444",
+  }
 
-const estadoLabel = {
-  RECEIVED: "Recibido",
-  INREVIEW: "En Revisión",
-  WAITINGPARTS: "Esperando Repuesto",
-  READY: "Listo",
-  DELIVERED: "Entregado",
-}
+  const estadoLabel = {
+    RECEIVED: "Recibido",
+    DIAGNOSIS: "Diagnóstico",
+    IN_REPAIR: "En reparación",
+    WAITING_PARTS: "Esperando repuestos",
+    READY: "Listo",
+    DELIVERED: "Entregado",
+    CANCELLED: "Cancelado",
+  }
+
+  // En tu badge/píldora:
+  const color = estadoColor[rep.estado] ?? "#94a3b8"
+  const label = estadoLabel[rep.estado] ?? rep.estado
 
   return (
     <div style={{ ...styles.glassPanel, padding: '20px', position: 'relative' }}>
@@ -277,10 +286,12 @@ const estadoLabel = {
           onChange={(e) => onCambiarEstado(rep.id, e.target.value)}
         >
           <option value="RECEIVED">Recibido</option>
-          <option value="INREVIEW">En Revisión</option>
-          <option value="WAITINGPARTS">Esperando Repuesto</option>
+          <option value="DIAGNOSIS">Diagnóstico</option>
+          <option value="IN_REPAIR">En reparación</option>
+          <option value="WAITING_PARTS">Esperando repuestos</option>
           <option value="READY">Listo</option>
           <option value="DELIVERED">Entregado</option>
+          <option value="CANCELLED">Cancelado</option>
         </select>
       </div>
     </div>
@@ -478,22 +489,21 @@ export default function Inventario() {
       const userId = sess?.session?.user?.id
       if (!userId) return avisar("Sesión no válida, vuelve a iniciar sesión", "error")
 
-      const mano = Number(formReparacion.costomanoobra || 0)
-      const rep = Number(formReparacion.costorepuestos || 0)
+      const mano = Number(formReparacion.costo_mano_obra || 0)
+      const rep = Number(formReparacion.costo_repuestos || 0)
 
       const payload = {
-        clientenombre: formReparacion.clientenombre.trim(),
-        clientetelefono: formReparacion.clientetelefono?.trim() ?? null,
-        equipomarca: formReparacion.equipomarca?.trim() ?? null,
-        equipomodelo: formReparacion.equipomodelo.trim(),
-        imei: formReparacion.imei?.trim() ?? null,
-        fallareportada: formReparacion.fallareportada?.trim() ?? null,
-        diagnostico: formReparacion.diagnostico?.trim() ?? null,
+        cliente_nombre: formReparacion.cliente_nombre.trim(),
+        cliente_telefono: formReparacion.cliente_telefono?.trim() || null,
+        equipo_marca: formReparacion.equipo_marca?.trim() || null,
+        equipo_modelo: formReparacion.equipo_modelo.trim(),
+        imei: formReparacion.imei?.trim() || null,
+        falla_reportada: formReparacion.falla_reportada?.trim() || null,
+        diagnostico: formReparacion.diagnostico?.trim() || null,
         estado: formReparacion.estado,
-        costomanoobra: mano,
-        costorepuestos: rep,
-        creadopor: userId,
-        // NO mandes "total"
+        costo_mano_obra: mano,
+        costo_repuestos: rep,
+        creado_por: userId,
       }
 
       const { error } = await supabase.from("reparaciones").insert(payload)
