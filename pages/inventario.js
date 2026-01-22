@@ -515,15 +515,10 @@ export default function Inventario() {
 
   // IMEI o SERIE: quita espacios, MAYÚSCULAS, máx 30
     const normalizarSerial = (v) =>
-      String(v || '')
-        .trim()
-        .replace(/\s+/g, '')
-        .toUpperCase()
-        .slice(0, 30)
+  String(v || '').trim().replace(/\s+/g, '').toUpperCase().slice(0, 30)
 
-    // Validación opcional (para usar en guardar())
-    const esImei = (s) => /^\d{15}$/.test(s)
-    const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
+const esImei = (s) => /^\d{15}$/.test(s)
+const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
 
 
   const inicioDelDiaISO = (yyyyMmDd) => {
@@ -1207,18 +1202,6 @@ export default function Inventario() {
           </select>
         </div>
         
-        {/* --- stock --- */}
-        <div>
-          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>STOCK</label>
-          <input
-            type="number"
-            min="0"
-            placeholder="Ej. 1"
-            value={form.stock ?? 0}
-            style={inputStyle}
-            onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
-          />
-        </div>
 
         {/* ✅ PUBLICAR */}
         <div>
