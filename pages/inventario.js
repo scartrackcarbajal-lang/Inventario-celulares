@@ -3,11 +3,11 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ICONOS (SVG Inline - Sin dependencias)
+// 🎨 ICONOS DE ALTA RESOLUCIÓN (SVG Inline)
 // ==========================================
 const Icons = {
   Logo: () => (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M2 17L12 22L22 17" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       <path d="M2 12L12 17L22 12" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -100,7 +100,7 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onOpenModal }) {
           <h3 className="text-lg font-bold text-white leading-tight group-hover:text-[#F59E0B] transition-colors duration-300">{cel.modelo}</h3>
         </div>
 
-        {/* Specs Grid (YA INCLUYE LOS CAMPOS SOLICITADOS) */}
+        {/* Specs Grid */}
         <div className="grid grid-cols-2 gap-2 mb-6">
           <div className="bg-white/5 rounded-xl p-2.5 flex items-center gap-2 border border-white/5">
             <span className="text-xs opacity-50">💾</span>
@@ -172,12 +172,8 @@ export default function Inventario() {
   const [filtroEstado, setFiltroEstado] = useState('TODOS')
   const [filtroVendidos, setFiltroVendidos] = useState('TODOS')
 
-  // Formulario (CON LOS CAMPOS FALTANTES AÑADIDOS)
-  const estadoInicial = { 
-    marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', 
-    color: '', almacenamiento: '', salud_bateria: '', // <--- Asegurados aquí
-    descripcion: '', precio_venta: '', precio_costo: '', published: true, imagen_url: [] 
-  }
+  // Formulario
+  const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
   const [form, setForm] = useState(estadoInicial)
 
   // --- HELPERS ---
@@ -285,7 +281,7 @@ export default function Inventario() {
     avisar('Fotos subidas con éxito')
   }
   
-  // --- GUARDADO COMPLEJO (RECUPERADO AL 100%) ---
+  // --- GUARDADO COMPLEJO ---
   const asegurarCategoriaId = async (nombre) => {
     const { data } = await supabase.from('categorias').select('id').eq('nombre', nombre).maybeSingle()
     if (data) return data.id
@@ -416,18 +412,18 @@ export default function Inventario() {
   return (
     <div className="min-h-screen bg-[#020617] font-sans text-slate-200 flex flex-col selection:bg-[#F59E0B]/30">
       
-      {/* 1. TOP NAVIGATION BAR (AHORA ARRIBA para dar espacio) */}
-      <header className="sticky top-0 z-50 bg-[#0F172A]/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex justify-between items-center shadow-lg">
+      {/* 1. TOP NAVIGATION BAR */}
+      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex justify-between items-center shadow-lg">
         <div className="flex items-center gap-4">
           <div className="p-2 bg-white/5 rounded-xl border border-white/10 shadow-lg"><Icons.Logo /></div>
-          <h1 className="text-xl font-black text-white tracking-wide hidden sm:block">FARRUS<span className="text-[#F59E0B]">HUB</span></h1>
+          <h1 className="text-xl font-black text-white tracking-wide hidden sm:block">FARRUS<span className="text-amber-500">HUB</span></h1>
         </div>
 
         <nav className="flex items-center gap-1 bg-black/20 p-1.5 rounded-2xl border border-white/5">
-          <button onClick={() => setActiveTab('inventory')} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'inventory' ? 'bg-[#F59E0B] text-black shadow-lg shadow-[#F59E0B]/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+          <button onClick={() => setActiveTab('inventory')} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'inventory' ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
             <Icons.Smartphone /> <span className="hidden md:inline">Inventario</span>
           </button>
-          <button onClick={() => setActiveTab('sales')} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'sales' ? 'bg-[#F59E0B] text-black shadow-lg shadow-[#F59E0B]/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+          <button onClick={() => setActiveTab('sales')} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'sales' ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
             <Icons.Chart /> <span className="hidden md:inline">Finanzas</span>
           </button>
           <button onClick={() => router.push('/accesorios')} className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300">
@@ -452,7 +448,7 @@ export default function Inventario() {
           {activeTab === 'inventory' && (
             <button 
               onClick={() => { setEditandoId(null); setForm(estadoInicial); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}); }}
-              className="px-6 py-3 bg-gradient-to-r from-[#F59E0B] to-[#D97706] hover:brightness-110 text-white font-bold rounded-2xl shadow-[0_10px_40px_-10px_rgba(245,158,11,0.4)] transition-all flex items-center gap-3 transform hover:-translate-y-1"
+              className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/20 transition-all flex items-center gap-3 transform hover:-translate-y-1"
             >
               <Icons.Plus /> Nuevo Ingreso
             </button>
@@ -461,7 +457,7 @@ export default function Inventario() {
 
         {/* DASHBOARD METRICS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} trend="up" subtext="Este mes" icon={<Icons.Dollar />} colorClass="text-[#F59E0B]" />
+          <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} trend="up" subtext="Este mes" icon={<Icons.Dollar />} colorClass="text-amber-500" />
           <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} trend="up" subtext="Margen saludable" icon={<Icons.Chart />} colorClass="text-emerald-400" />
           <StatCard label="Inversión" value={`S/ ${resumenVentas.totalCosto.toLocaleString()}`} subtext="Capital activo" icon={<Icons.Box />} colorClass="text-slate-400" />
           <StatCard label="Unidades" value={resumenVentas.count} subtext="Equipos vendidos" icon={<Icons.Check />} colorClass="text-blue-400" />
@@ -470,12 +466,12 @@ export default function Inventario() {
         {activeTab === 'inventory' ? (
           <>
             {/* FORMULARIO */}
-            <div id="form-area" className="bg-[#0F172A]/60 backdrop-blur-xl rounded-[32px] p-8 md:p-10 border border-white/5 shadow-2xl mb-16 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F59E0B] via-yellow-300 to-[#D97706] opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
+            <div id="form-area" className="bg-slate-900/50 backdrop-blur-xl rounded-3xl p-8 md:p-10 border border-white/5 shadow-2xl mb-16 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-600 opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
               
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 pb-6 border-b border-white/5 gap-6">
                 <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 text-[#F59E0B] flex items-center justify-center border border-white/10 shadow-inner">{editandoId ? <Icons.Edit /> : <Icons.Box />}</div>
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 text-amber-500 flex items-center justify-center border border-white/10 shadow-inner">{editandoId ? <Icons.Edit /> : <Icons.Box />}</div>
                   <h2 className="text-2xl font-bold text-white tracking-tight">{editandoId ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}</h2>
                 </div>
                 
@@ -497,51 +493,51 @@ export default function Inventario() {
                 {/* Fila 1 */}
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Marca</label>
-                  <input className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. Apple" value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} />
+                  <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. Apple" value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} />
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Modelo</label>
-                  <input className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. iPhone 15" value={form.modelo} onChange={e=>setForm({...form, modelo:e.target.value})} />
+                  <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. iPhone 15" value={form.modelo} onChange={e=>setForm({...form, modelo:e.target.value})} />
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Estado</label>
-                  <select className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all appearance-none font-medium cursor-pointer" value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}>
+                  <select className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all appearance-none font-medium cursor-pointer" value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}>
                     <option>Nuevo Sellado</option><option>Semi Nuevo</option><option>Usado</option><option>Open Box</option>
                   </select>
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Serial / IMEI</label>
-                  <input className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all placeholder-slate-600 font-mono tracking-wide" placeholder="Escanea..." value={form.serial} onChange={e=>setForm({...form, serial:normalizarSerial(e.target.value)})} />
+                  <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-mono tracking-wide" placeholder="Escanea..." value={form.serial} onChange={e=>setForm({...form, serial:normalizarSerial(e.target.value)})} />
                 </div>
 
                 {/* Fila 2 - Nuevos Campos Agregados */}
                 <div className="space-y-3">
                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Color</label>
-                    <input className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. Titanium Blue" value={form.color} onChange={e=>setForm({...form, color:e.target.value})} />
+                    <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. Titanium Blue" value={form.color} onChange={e=>setForm({...form, color:e.target.value})} />
                 </div>
                 <div className="space-y-3">
                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Almacenamiento</label>
-                    <input className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. 256GB" value={form.almacenamiento} onChange={e=>setForm({...form, almacenamiento:e.target.value})} />
+                    <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. 256GB" value={form.almacenamiento} onChange={e=>setForm({...form, almacenamiento:e.target.value})} />
                 </div>
                 <div className="space-y-3">
                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Batería (%)</label>
-                    <input type="number" className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. 100" value={form.salud_bateria} onChange={e=>setForm({...form, salud_bateria:e.target.value})} />
+                    <input type="number" className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. 100" value={form.salud_bateria} onChange={e=>setForm({...form, salud_bateria:e.target.value})} />
                 </div>
 
                  {/* Fila 3 - Precios */}
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-[#F59E0B] uppercase tracking-widest pl-1">Precio Venta</label>
-                  <input type="number" className="w-full px-5 py-4 bg-[#F59E0B]/5 border border-[#F59E0B]/20 rounded-2xl text-[#F59E0B] focus:border-[#F59E0B] focus:bg-[#F59E0B]/10 outline-none transition-all font-black text-lg" placeholder="0.00" value={form.precio_venta} onChange={e=>setForm({...form, precio_venta:e.target.value})} />
+                  <label className="text-[10px] font-bold text-amber-500 uppercase tracking-widest pl-1">Precio Venta</label>
+                  <input type="number" className="w-full px-5 py-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-400 focus:border-amber-500 focus:bg-amber-500/20 outline-none transition-all font-black text-lg" placeholder="0.00" value={form.precio_venta} onChange={e=>setForm({...form, precio_venta:e.target.value})} />
                 </div>
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Costo Compra</label>
-                  <input type="number" className="w-full px-5 py-4 bg-[#020617]/50 border border-white/10 rounded-2xl text-white focus:border-[#F59E0B]/50 focus:bg-[#020617]/80 outline-none transition-all placeholder-slate-600 font-medium" placeholder="0.00" value={form.precio_costo} onChange={e=>setForm({...form, precio_costo:e.target.value})} />
+                  <input type="number" className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="0.00" value={form.precio_costo} onChange={e=>setForm({...form, precio_costo:e.target.value})} />
                 </div>
 
                 {/* Subida de Fotos - Ocupa resto de espacio */}
                 <div className="col-span-1 md:col-span-2 lg:col-span-3 border-2 border-dashed border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-white/5 hover:border-white/30 transition-all group" onClick={()=>document.getElementById('file-input').click()}>
                   <p className="font-bold text-slate-500 group-hover:text-white transition-colors flex items-center gap-3 text-sm">
-                    <span className="p-2 bg-white/5 rounded-lg text-[#F59E0B]"><Icons.Upload /></span> 
+                    <span className="p-2 bg-white/5 rounded-lg text-amber-500"><Icons.Upload /></span> 
                     {subiendo ? 'Subiendo...' : 'Click para subir fotos'}
                   </p>
                   <input id="file-input" type="file" hidden multiple onChange={manejarFotos} />
@@ -554,7 +550,7 @@ export default function Inventario() {
             </div>
 
             {/* BARRA FILTROS */}
-            <div className="flex flex-wrap gap-4 mb-10 bg-[#0F172A]/70 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-white/5 w-fit mx-auto lg:mx-0">
+            <div className="flex flex-wrap gap-4 mb-10 bg-slate-900/70 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-white/5 w-fit mx-auto lg:mx-0">
               <div className="relative">
                 <div className="absolute left-4 top-3.5 text-slate-500"><Icons.Search /></div>
                 <input className="pl-12 pr-6 py-3 bg-black/30 rounded-xl outline-none border border-transparent focus:border-white/10 text-white w-72 placeholder-slate-600 font-medium transition-all" placeholder="Buscar por IMEI, modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
@@ -578,7 +574,7 @@ export default function Inventario() {
           </>
         ) : (
           /* TABLA DE VENTAS */
-          <div className="bg-[#0F172A]/70 backdrop-blur-xl rounded-[32px] border border-white/5 shadow-2xl overflow-hidden">
+          <div className="bg-slate-900/70 backdrop-blur-xl rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-black/40 border-b border-white/5 text-[10px] uppercase text-slate-500 font-bold tracking-widest">
@@ -600,7 +596,7 @@ export default function Inventario() {
                       <td className="p-6 font-mono text-xs text-slate-500 bg-black/20 rounded-lg m-2 w-fit px-3 py-1">{v.items_serializados?.serial || 'Bulk'}</td>
                       <td className="p-6 text-right font-bold text-white text-base">S/ {final.toFixed(2)}</td>
                       <td className="p-6 text-right text-slate-500">S/ {costo.toFixed(2)}</td>
-                      <td className="p-6 text-right"><span className={`px-4 py-1.5 rounded-full text-xs font-bold border ${ganancia >= 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>S/ {ganancia.toFixed(2)}</span></td>
+                      <td className="p-6 text-right"><span className={`px-4 py-1.5 rounded-full text-xs font-bold border ${ganancia >= 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-lg' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>S/ {ganancia.toFixed(2)}</span></td>
                     </tr>
                   )
                 })}
@@ -619,14 +615,14 @@ export default function Inventario() {
 
       {ventaModalAbierto && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[90] flex items-center justify-center p-4">
-          <div className="bg-[#0F172A] w-full max-w-md p-10 rounded-[32px] shadow-2xl border border-white/10 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F59E0B] to-[#D97706]"></div>
+          <div className="bg-[#0F172A] w-full max-w-md p-10 rounded-3xl shadow-2xl border border-white/10 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-amber-600"></div>
             <h2 className="text-3xl font-black text-white mb-2 tracking-tight">Confirmar Venta</h2>
-            <p className="text-slate-400 mb-8 font-medium">Estás vendiendo: <b className="text-[#F59E0B]">{ventaCel?.marca} {ventaCel?.modelo}</b></p>
+            <p className="text-slate-400 mb-8 font-medium">Estás vendiendo: <b className="text-amber-500">{ventaCel?.marca} {ventaCel?.modelo}</b></p>
             <div className="space-y-6">
               <div>
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Precio Final Real</label>
-                <input type="number" autoFocus className="w-full mt-2 px-6 py-5 bg-black/40 border border-[#F59E0B]/30 rounded-2xl focus:border-[#F59E0B] focus:bg-black/60 outline-none text-3xl font-black text-white placeholder-slate-600" value={ventaForm.precio_final} onChange={e=>setVentaForm({...ventaForm, precio_final:e.target.value})} />
+                <input type="number" autoFocus className="w-full mt-2 px-6 py-5 bg-black/40 border border-amber-500/30 rounded-2xl focus:border-amber-500 focus:bg-black/60 outline-none text-3xl font-black text-white placeholder-slate-600" value={ventaForm.precio_final} onChange={e=>setVentaForm({...ventaForm, precio_final:e.target.value})} />
               </div>
               <div>
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Cliente (Opcional)</label>
@@ -635,7 +631,7 @@ export default function Inventario() {
             </div>
             <div className="flex gap-4 mt-10">
               <button onClick={()=>setVentaModalAbierto(false)} className="flex-1 py-4 bg-white/5 border border-white/10 text-slate-400 font-bold rounded-2xl hover:bg-white/10 hover:text-white transition-all">Cancelar</button>
-              <button onClick={confirmarVenta} disabled={guardandoVenta} className="flex-1 py-4 bg-[#F59E0B] text-black font-bold rounded-2xl hover:bg-[#D97706] transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] transform hover:-translate-y-1">{guardandoVenta ? '...' : 'Confirmar Venta'}</button>
+              <button onClick={confirmarVenta} disabled={guardandoVenta} className="flex-1 py-4 bg-amber-500 text-black font-bold rounded-2xl hover:bg-amber-600 transition-all shadow-lg transform hover:-translate-y-1">{guardandoVenta ? '...' : 'Confirmar Venta'}</button>
             </div>
           </div>
         </div>
