@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 // ==========================================
 // 🎨 ESTILOS PREMIUM (CSS-IN-JS)
 // ==========================================
+
 const styles = {
   container: {
     minHeight: '100vh',
@@ -74,6 +75,16 @@ const styles = {
     fontSize: '0.85rem',
     fontWeight: 'bold'
   },
+  iconButtonSmall: {
+    width: '36px', height: '36px',
+    borderRadius: '10px',
+    border: '1px solid rgba(255,255,255,0.1)',
+    background: 'rgba(255,255,255,0.05)',
+    color: '#cbd5e1',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
@@ -81,9 +92,6 @@ const styles = {
   },
 }
 
-// ==========================================
-// 🎨 ICONOS SVG
-// ==========================================
 const Icons = {
   Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
   Headphones: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
@@ -93,59 +101,60 @@ const Icons = {
   Smartphone: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
   Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
   Chart: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>,
+  Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
+  Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+  Wrench: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
 }
 
 export default function Accesorios() {
   const router = useRouter()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
-  
-  // Formulario para Nuevo Accesorio
-  const [form, setForm] = useState({ 
-    nombre: '', 
-    marca: '', 
-    precio_costo: '', 
-    precio_venta: '', 
-    cantidad_inicial: 0 
-  })
-
-  // Estado para Venta
   const [modalVenta, setModalVenta] = useState(null)
   const [cantidadVenta, setCantidadVenta] = useState(1)
+  
+  // Estado para Edición
+  const [editandoItem, setEditandoItem] = useState(null)
+  
+  // Formulario
+  const estadoInicial = { nombre: '', marca: '', precio_costo: '', precio_venta: '', cantidad_inicial: 0 }
+  const [form, setForm] = useState(estadoInicial)
 
-  // --- CARGAR DATOS ---
   const cargarAccesorios = async () => {
     setLoading(true)
     const { data, error } = await supabase
       .from('stock_bulk')
-      .select(`
-        sku_id, stock,
-        skus:sku_id (
-          id, sku_codigo, precio_venta, precio_costo,
-          productos:producto_id ( nombre, marca, descripcion )
-        )
-      `)
+      .select(`sku_id, stock, skus:sku_id ( id, sku_codigo, precio_venta, precio_costo, productos:producto_id ( id, nombre, marca, descripcion ) )`)
       .order('stock', { ascending: false })
     
     setLoading(false)
-    if (error) {
-      alert('Error cargando accesorios: ' + error.message)
-      return
-    }
+    if (error) return alert('Error: ' + error.message)
     setItems(data || [])
   }
 
-  useEffect(() => {
-    cargarAccesorios()
-  }, [])
+  useEffect(() => { cargarAccesorios() }, [])
 
-  // --- GUARDAR ---
+  // --- PREPARAR EDICIÓN ---
+  const prepararEdicion = (item) => {
+    setEditandoItem(item)
+    setForm({
+      nombre: item.skus.productos.nombre,
+      marca: item.skus.productos.marca,
+      precio_costo: item.skus.precio_costo,
+      precio_venta: item.skus.precio_venta,
+      cantidad_inicial: item.stock // Al editar, esto sobreescribe el stock actual
+    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // --- GUARDAR (Crear o Actualizar) ---
   const guardarAccesorio = async () => {
     if (!form.nombre || !form.marca) return alert('Faltan datos obligatorios')
 
     try {
       setLoading(true)
-      // 1. Categoría
+
+      // 1. Obtener/Crear Categoría "Accesorios"
       const { data: cat } = await supabase.from('categorias').select('id').eq('nombre', 'Accesorios').maybeSingle()
       let catId = cat?.id
       if (!catId) {
@@ -153,34 +162,60 @@ export default function Accesorios() {
         catId = newCat.id
       }
 
-      // 2. Producto
-      const { data: prod, error: errProd } = await supabase.from('productos')
-        .insert({ categoria_id: catId, nombre: form.nombre, marca: form.marca, activo: true })
-        .select('id').single()
-      if (errProd) throw errProd
+      if (editandoItem) {
+        // --- MODO EDICIÓN ---
+        const prodId = editandoItem.skus.productos.id
+        const skuId = editandoItem.skus.id
 
-      // 3. SKU
-      const { data: sku, error: errSku } = await supabase.from('skus')
-        .insert({
-          producto_id: prod.id,
-          sku_codigo: `ACC-${Date.now()}`,
-          tracking: 'BULK',
-          precio_costo: form.precio_costo || 0,
-          precio_venta: form.precio_venta || 0,
-          publicado: true
+        // Actualizar Producto
+        await supabase.from('productos')
+          .update({ nombre: form.nombre, marca: form.marca })
+          .eq('id', prodId)
+
+        // Actualizar SKU (Precios)
+        await supabase.from('skus')
+          .update({ precio_costo: form.precio_costo, precio_venta: form.precio_venta })
+          .eq('id', skuId)
+
+        // Actualizar Stock
+        await supabase.from('stock_bulk')
+          .update({ stock: form.cantidad_inicial })
+          .eq('sku_id', skuId)
+
+        alert('Accesorio Actualizado')
+        setEditandoItem(null)
+
+      } else {
+        // --- MODO CREACIÓN ---
+        // 2. Producto
+        const { data: prod, error: errProd } = await supabase.from('productos')
+          .insert({ categoria_id: catId, nombre: form.nombre, marca: form.marca, activo: true })
+          .select('id').single()
+        if (errProd) throw errProd
+
+        // 3. SKU
+        const { data: sku, error: errSku } = await supabase.from('skus')
+          .insert({
+            producto_id: prod.id,
+            sku_codigo: `ACC-${Date.now()}`,
+            tracking: 'BULK',
+            precio_costo: form.precio_costo || 0,
+            precio_venta: form.precio_venta || 0,
+            publicado: true
+          })
+          .select('id').single()
+        if (errSku) throw errSku
+
+        // 4. Stock Bulk
+        await supabase.from('stock_bulk').insert({
+          sku_id: sku.id,
+          stock: form.cantidad_inicial || 0
         })
-        .select('id').single()
-      if (errSku) throw errSku
 
-      // 4. Stock Bulk
-      const { error: errBulk } = await supabase.from('stock_bulk').insert({
-        sku_id: sku.id,
-        stock: form.cantidad_inicial || 0
-      })
-      if (errBulk) throw errBulk
+        alert('Accesorio Registrado')
+      }
 
-      alert('¡Accesorio Guardado!')
-      setForm({ nombre: '', marca: '', precio_costo: '', precio_venta: '', cantidad_inicial: 0 })
+      setForm(estadoInicial)
       cargarAccesorios()
 
     } catch (e) {
@@ -190,7 +225,20 @@ export default function Accesorios() {
     }
   }
 
-  // --- VENDER ---
+  // --- ELIMINAR ---
+  const eliminarAccesorio = async (skuId) => {
+    if(!confirm('¿Estás seguro de eliminar este accesorio? Se borrará del inventario.')) return
+    
+    // Al ser una relación en cascada, a veces basta con borrar el SKU o el Producto.
+    // Intentaremos borrar el SKU, lo cual debería borrar el stock_bulk asociado.
+    const { error } = await supabase.from('skus').delete().eq('id', skuId)
+    
+    if (error) return alert('Error al eliminar: ' + error.message)
+    
+    alert('Accesorio eliminado')
+    cargarAccesorios()
+  }
+
   const confirmarVenta = async () => {
     if (!modalVenta) return
     const cant = Number(cantidadVenta)
@@ -201,32 +249,16 @@ export default function Accesorios() {
       const skuId = modalVenta.skus.id
       const precioUnit = modalVenta.skus.precio_venta
       
-      // 1. Registrar Venta
-      const { error: errVenta } = await supabase.from('ventas_v2').insert({
-        sku_id: skuId,
-        item_serializado_id: null,
-        cantidad: cant,
-        precio_lista: precioUnit,
-        precio_final: precioUnit * cant,
-        tipo_venta: 'BULK'
-      })
+      const { error: errVenta } = await supabase.from('ventas_v2').insert({ sku_id: skuId, item_serializado_id: null, cantidad: cant, precio_lista: precioUnit, precio_final: precioUnit * cant, tipo_venta: 'BULK' })
       if (errVenta) throw errVenta
-
-      // 2. Descontar Stock
-      const { error: errStock } = await supabase.from('stock_bulk')
-        .update({ stock: modalVenta.stock - cant })
-        .eq('sku_id', skuId)
+      
+      const { error: errStock } = await supabase.from('stock_bulk').update({ stock: modalVenta.stock - cant }).eq('sku_id', skuId)
       if (errStock) throw errStock
 
       alert('Venta realizada con éxito 💰')
       setModalVenta(null)
       cargarAccesorios()
-      
-    } catch (e) {
-      alert('Error: ' + e.message)
-    } finally {
-      setLoading(false)
-    }
+    } catch (e) { alert('Error: ' + e.message) } finally { setLoading(false) }
   }
 
   return (
@@ -244,25 +276,25 @@ export default function Accesorios() {
       `}</style>
 
       {/* NAVBAR */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px' }}>
-        <div className="navbar-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>ACCESORIOS</span></span></div>
-          
-          <div className="nav-menu" style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <button onClick={() => router.push('/inventario')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
-            <button onClick={() => router.push('/servicios_tecnicos')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
-            <button style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: '#F59E0B', color: 'black', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
-          </div>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="navbar-content" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>ACCESORIOS</span></span></div>
+        <div className="nav-menu" style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <button onClick={() => router.push('/inventario')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
+          <button onClick={() => router.push('/servicios_tecnicos')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
+          <button style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: '#F59E0B', color: 'black', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
         </div>
       </nav>
 
       <div className="page-wrapper">
-        
         {/* FORMULARIO */}
         <div style={{ ...styles.glassPanel, padding: '40px', marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}><Icons.Box /></div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>Ingresar Nuevo Stock</h2>
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+               {editandoItem ? <Icons.Edit /> : <Icons.Box />}
+            </div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+               {editandoItem ? 'Editar Accesorio' : 'Ingresar Nuevo Stock'}
+            </h2>
           </div>
 
           <div className="form-grid">
@@ -270,11 +302,21 @@ export default function Accesorios() {
             <div><label style={styles.label}>Producto</label><input style={styles.input} placeholder="Ej. Cargador 25W" value={form.nombre} onChange={e=>setForm({...form, nombre: e.target.value})} /></div>
             <div><label style={styles.label}>Costo Unitario</label><input type="number" style={styles.input} placeholder="0.00" value={form.precio_costo} onChange={e=>setForm({...form, precio_costo: e.target.value})} /></div>
             <div><label style={{...styles.label, color: '#F59E0B'}}>Precio Venta</label><input type="number" style={{...styles.input, borderColor: '#F59E0B', color: '#F59E0B', fontWeight: 'bold'}} placeholder="0.00" value={form.precio_venta} onChange={e=>setForm({...form, precio_venta: e.target.value})} /></div>
-            <div><label style={styles.label}>Cantidad Inicial</label><input type="number" style={styles.input} placeholder="0" value={form.cantidad_inicial} onChange={e=>setForm({...form, cantidad_inicial: e.target.value})} /></div>
+            <div><label style={styles.label}>Stock Total</label><input type="number" style={styles.input} placeholder="0" value={form.cantidad_inicial} onChange={e=>setForm({...form, cantidad_inicial: e.target.value})} /></div>
           </div>
+          
           <button onClick={guardarAccesorio} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>
-            {loading ? 'Guardando...' : 'Registrar en Inventario'}
+            {loading ? 'Guardando...' : (editandoItem ? 'Actualizar Accesorio' : 'Registrar en Inventario')}
           </button>
+          
+          {editandoItem && (
+            <button 
+              onClick={() => { setEditandoItem(null); setForm(estadoInicial); }} 
+              style={{ width: '100%', background: 'transparent', color: '#94a3b8', border: '1px solid #94a3b8', padding: '12px', borderRadius: '16px', marginTop: '10px', cursor: 'pointer' }}
+            >
+              Cancelar Edición
+            </button>
+          )}
         </div>
 
         {/* LISTA DE STOCK */}
@@ -300,12 +342,16 @@ export default function Accesorios() {
                 <span>Venta: <b style={{color: 'white'}}>S/{item.skus.precio_venta}</b></span>
               </div>
 
-              <button 
-                onClick={() => { setModalVenta(item); setCantidadVenta(1); }}
-                style={{ ...styles.btnPrimary, width: '100%', marginTop: 'auto', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.3)', boxShadow: 'none' }}
-              >
-                <Icons.Dollar /> VENDER
-              </button>
+              <div style={{ marginTop: 'auto', display: 'flex', gap: '8px' }}>
+                <button 
+                  onClick={() => { setModalVenta(item); setCantidadVenta(1); }}
+                  style={{ ...styles.btnPrimary, flex: 2, marginTop: 0, background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.3)', boxShadow: 'none' }}
+                >
+                  <Icons.Dollar /> VENDER
+                </button>
+                <button onClick={() => prepararEdicion(item)} style={{ ...styles.iconButtonSmall, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }} title="Editar"><Icons.Edit /></button>
+                <button onClick={() => eliminarAccesorio(item.skus.id)} style={{ ...styles.iconButtonSmall, color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }} title="Eliminar"><Icons.Trash /></button>
+              </div>
             </div>
           ))}
         </div>
