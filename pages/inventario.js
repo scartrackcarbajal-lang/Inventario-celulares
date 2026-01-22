@@ -265,7 +265,7 @@ const estadoLabel = {
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Eye /><span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{rep.cliente_nombre}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Smartphone /><span>{rep.cliente_telefono}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_mano_obra}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Check /><span>Total S/ {Number(rep.total ?? 0)}</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Check /><span>total S/ {Number(rep.total ?? 0)}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {rep.fecha_ingreso}</span></div>
       </div>
 
