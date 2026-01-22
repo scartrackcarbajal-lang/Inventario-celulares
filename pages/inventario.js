@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 // --- COMPONENTE TARJETA (con VENDIDO + borde rojo + eliminar visible) ---
@@ -10,9 +10,9 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
   // Colores para la etiqueta de estado
   const colorEstado = {
     'Nuevo Sellado': '#00d2ff', // Cyan
-    'Semi Nuevo': '#f39c12',    // Naranja
-    'Usado': '#e74c3c',         // Rojo
-    'Open Box': '#f39c12'       // Naranja
+    'Semi Nuevo': '#f39c12', // Naranja
+    'Usado': '#e74c3c', // Rojo
+    'Open Box': '#f39c12', // Naranja
   }
 
   // --- VENDIDO (estado calculado por stock) ---
@@ -22,8 +22,10 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
   const sombraNormal = `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`
   const sombraHover = `0 0 30px ${theme.cyan}66, inset 0 0 20px ${theme.cyan}33`
 
-  const sombraNormalVendido = '0 0 20px rgba(255,107,107,0.35), inset 0 0 12px rgba(255,107,107,0.18)'
-  const sombraHoverVendido  = '0 0 35px rgba(255,107,107,0.45), inset 0 0 18px rgba(255,107,107,0.22)'
+  const sombraNormalVendido =
+    '0 0 20px rgba(255,107,107,0.35), inset 0 0 12px rgba(255,107,107,0.18)'
+  const sombraHoverVendido =
+    '0 0 35px rgba(255,107,107,0.45), inset 0 0 18px rgba(255,107,107,0.22)'
 
   return (
     <div
@@ -38,7 +40,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
         maxWidth: '360px',
         margin: '0 auto',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-5px)'
@@ -50,17 +52,29 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
       }}
     >
       {/* 1. SECCIÓN DE IMAGEN */}
-      <div style={{ height: '220px', position: 'relative', overflow: 'hidden', backgroundColor: '#050a14', flexShrink: 0 }}>
+      <div
+        style={{
+          height: '220px',
+          position: 'relative',
+          overflow: 'hidden',
+          backgroundColor: '#050a14',
+          flexShrink: 0,
+        }}
+      >
         {/* Fondo Ambiental */}
         <div
           style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
             backgroundImage: `url(${fotoActiva})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             filter: 'blur(50px) brightness(0.4)',
             transform: 'scale(1.5)',
-            zIndex: 1
+            zIndex: 1,
           }}
         />
 
@@ -68,9 +82,17 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
         <div
           onClick={() => onOpenModal(fotoActiva)}
           style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 2, padding: '15px', cursor: 'zoom-in'
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2,
+            padding: '15px',
+            cursor: 'zoom-in',
           }}
         >
           <img
@@ -82,7 +104,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
               maxHeight: '100%',
               objectFit: 'contain',
               filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))',
-              transition: 'transform 0.2s'
+              transition: 'transform 0.2s',
             }}
             alt="Celular"
           />
@@ -91,7 +113,9 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
         {/* ETIQUETA DE ESTADO (Arriba a la derecha) */}
         <div
           style={{
-            position: 'absolute', top: '12px', right: '12px',
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
             backgroundColor: colorEstado[cel.estado] || '#888',
             color: 'white',
             padding: '5px 12px',
@@ -101,7 +125,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
             zIndex: 3,
             boxShadow: '0 4px 15px rgba(0,0,0,0.6)',
             textTransform: 'uppercase',
-            letterSpacing: '0.5px'
+            letterSpacing: '0.5px',
           }}
         >
           {cel.estado}
@@ -112,14 +136,16 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
           <div
             style={{
               position: 'absolute',
-              top: 0, left: 0,
-              width: '100%', height: '100%',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: 5,
               background: 'linear-gradient(135deg, rgba(0,0,0,0.60), rgba(0,0,0,0.25))',
-              backdropFilter: 'blur(2px)'
+              backdropFilter: 'blur(2px)',
             }}
           >
             <div
@@ -133,7 +159,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
                 fontSize: '1.5rem',
                 letterSpacing: '5px',
                 textTransform: 'uppercase',
-                boxShadow: '0 12px 30px rgba(0,0,0,0.55)'
+                boxShadow: '0 12px 30px rgba(0,0,0,0.55)',
               }}
             >
               VENDIDO
@@ -154,7 +180,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
             borderBottom: `1px solid ${theme.cyan}11`,
             zIndex: 4,
             position: 'relative',
-            flexShrink: 0
+            flexShrink: 0,
           }}
         >
           {cel.imagen_url.map((url, index) => (
@@ -170,8 +196,9 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
                 border: fotoActiva === url ? `2px solid ${theme.orange}` : `1px solid transparent`,
                 cursor: 'pointer',
                 opacity: fotoActiva === url ? 1 : 0.5,
-                transition: 'all 0.2s'
+                transition: 'all 0.2s',
               }}
+              alt="Mini"
             />
           ))}
         </div>
@@ -186,35 +213,93 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
           zIndex: 4,
           flexGrow: 1,
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         {/* Título */}
         <div style={{ marginBottom: '12px' }}>
-          <h3 style={{ margin: 0, fontSize: '1.4rem', color: 'white', fontWeight: '800', letterSpacing: '0.5px', lineHeight: '1.2' }}>
+          <h3
+            style={{
+              margin: 0,
+              fontSize: '1.4rem',
+              color: 'white',
+              fontWeight: '800',
+              letterSpacing: '0.5px',
+              lineHeight: '1.2',
+            }}
+          >
             {cel.marca} {cel.modelo}
           </h3>
         </div>
 
         {/* Specs */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: theme.cyan, fontSize: '0.9rem', fontWeight: '600', marginBottom: '15px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            color: theme.cyan,
+            fontSize: '0.9rem',
+            fontWeight: '600',
+            marginBottom: '15px',
+          }}
+        >
           <span>💾 {cel.almacenamiento}</span>
-          {cel.salud_bateria && (<><span style={{ opacity: 0.3 }}>|</span><span>🔋 {cel.salud_bateria}%</span></>)}
+          {cel.salud_bateria && (
+            <>
+              <span style={{ opacity: 0.3 }}>|</span>
+              <span>🔋 {cel.salud_bateria}%</span>
+            </>
+          )}
         </div>
 
         {/* Color e IMEI */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '15px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '8px',
+            marginBottom: '15px',
+          }}
+        >
           {cel.color && (
-            <div style={{ display: 'inline-block', padding: '5px 12px', borderRadius: '8px', border: `1px solid ${theme.cyan}44`, backgroundColor: 'rgba(0, 210, 255, 0.05)', color: '#fff', fontSize: '0.85rem' }}>
+            <div
+              style={{
+                display: 'inline-block',
+                padding: '5px 12px',
+                borderRadius: '8px',
+                border: `1px solid ${theme.cyan}44`,
+                backgroundColor: 'rgba(0, 210, 255, 0.05)',
+                color: '#fff',
+                fontSize: '0.85rem',
+              }}
+            >
               🎨 <span style={{ fontWeight: 'bold', color: theme.cyan }}>{cel.color}</span>
             </div>
           )}
-          {cel.imei && (<div style={{ fontSize: '0.75rem', color: '#666', fontFamily: 'monospace' }}>IMEI: {cel.imei}</div>)}
+          {cel.imei && (
+            <div style={{ fontSize: '0.75rem', color: '#666', fontFamily: 'monospace' }}>
+              IMEI: {cel.imei}
+            </div>
+          )}
         </div>
 
         {/* Descripción */}
         {cel.descripcion && (
-          <div style={{ marginBottom: '20px', padding: '12px', backgroundColor: 'rgba(0,0,0,0.25)', borderRadius: '12px', fontSize: '0.85rem', color: '#ccc', lineHeight: '1.5', borderLeft: `3px solid ${theme.orange}` }}>
+          <div
+            style={{
+              marginBottom: '20px',
+              padding: '12px',
+              backgroundColor: 'rgba(0,0,0,0.25)',
+              borderRadius: '12px',
+              fontSize: '0.85rem',
+              color: '#ccc',
+              lineHeight: '1.5',
+              borderLeft: `3px solid ${theme.orange}`,
+            }}
+          >
             {cel.descripcion}
           </div>
         )}
@@ -222,10 +307,32 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
         <div style={{ flexGrow: 1 }} />
 
         {/* Footer: Precio y Botones */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', paddingTop: '15px', borderTop: '1px solid rgba(255,255,255,0.08)', gap: '20px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: '10px',
+            paddingTop: '15px',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            gap: '20px',
+          }}
+        >
           <div>
-            <span style={{ display: 'block', fontSize: '0.7rem', color: '#888', marginBottom: '4px', letterSpacing: '1px' }}>PRECIO</span>
-            <div style={{ color: 'white', fontSize: '1.7rem', fontWeight: '900', whiteSpace: 'nowrap' }}>S/ {cel.precio_venta}</div>
+            <span
+              style={{
+                display: 'block',
+                fontSize: '0.7rem',
+                color: '#888',
+                marginBottom: '4px',
+                letterSpacing: '1px',
+              }}
+            >
+              PRECIO
+            </span>
+            <div style={{ color: 'white', fontSize: '1.7rem', fontWeight: '900', whiteSpace: 'nowrap' }}>
+              S/ {cel.precio_venta}
+            </div>
           </div>
 
           {/* --- BOTONES (EDITAR / VENDIDO / ELIMINAR) --- */}
@@ -241,14 +348,16 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
                 fontWeight: 'bold',
                 cursor: 'pointer',
                 fontSize: '0.85rem',
-                boxShadow: '0 5px 15px rgba(0,210,255,0.2)'
+                boxShadow: '0 5px 15px rgba(0,210,255,0.2)',
               }}
             >
               EDITAR
             </button>
 
             <button
-              onClick={() => { if (!vendido) onSell(cel) }}
+              onClick={() => {
+                if (!vendido) onSell(cel)
+              }}
               disabled={vendido}
               style={{
                 padding: '10px 16px',
@@ -259,7 +368,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
                 fontWeight: 'bold',
                 cursor: vendido ? 'not-allowed' : 'pointer',
                 fontSize: '0.85rem',
-                letterSpacing: '1px'
+                letterSpacing: '1px',
               }}
               title={vendido ? 'Este equipo ya está vendido' : 'Marcar como vendido'}
             >
@@ -277,7 +386,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
                 cursor: 'pointer',
                 fontWeight: 'bold',
                 fontSize: '0.85rem',
-                boxShadow: '0 6px 18px rgba(255,107,107,0.15)'
+                boxShadow: '0 6px 18px rgba(255,107,107,0.15)',
               }}
               title="Eliminar del inventario"
             >
@@ -296,6 +405,7 @@ export default function Inventario() {
   const [busqueda, setBusqueda] = useState('')
   const [subiendo, setSubiendo] = useState(false)
   const [editandoId, setEditandoId] = useState(null)
+  const [editandoSkuId, setEditandoSkuId] = useState(null)
   const [notificacion, setNotificacion] = useState({ mensaje: '', visible: false, color: '#00d2ff' })
   const [modalImagen, setModalImagen] = useState(null) // Estado para el Zoom
 
@@ -304,79 +414,94 @@ export default function Inventario() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [cargandoLogin, setCargandoLogin] = useState(false)
-  // --- LOGIN: mensaje visible ---
   const [loginError, setLoginError] = useState('')
+
   // --- VENTA: modal + form ---
   const [ventaModalAbierto, setVentaModalAbierto] = useState(false)
   const [ventaCel, setVentaCel] = useState(null)
   const [ventaForm, setVentaForm] = useState({
     precio_final: '',
     cliente_nombre: '',
-    cliente_telefono: ''
+    cliente_telefono: '',
   })
   const [ventas, setVentas] = useState([])
   const [ventasDesde, setVentasDesde] = useState('') // "YYYY-MM-DD"
   const [ventasHasta, setVentasHasta] = useState('') // "YYYY-MM-DD"
   const [cargandoVentas, setCargandoVentas] = useState(false)
-
   const [guardandoVenta, setGuardandoVenta] = useState(false)
 
-  // --- FILTROS: básicos (luego ampliamos) ---
+  // --- FILTROS ---
   const [filtroEstado, setFiltroEstado] = useState('TODOS')
   const [filtroPublicado, setFiltroPublicado] = useState('TODOS') // TODOS | PUBLICADO | OCULTO
   const [filtroVendidos, setFiltroVendidos] = useState('TODOS') // TODOS | VENDIDOS | DISPONIBLES
 
-useEffect(() => {
-  supabase.auth.getSession().then(({ data }) => {
-    setAutorizado(!!data.session)
-  })
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setAutorizado(!!data.session)
+    })
 
-  const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-    setAutorizado(!!session)
-  })
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAutorizado(!!session)
+    })
 
-  return () => {
-    sub.subscription.unsubscribe()
+    return () => {
+      sub.subscription.unsubscribe()
+    }
+  }, [])
+
+  // --- LOGIN ---
+  const login = async () => {
+    setLoginError('')
+
+    const emailLimpio = (email || '').trim()
+    if (!emailLimpio || !password) {
+      setLoginError('Escribe correo y contraseña.')
+      return
+    }
+
+    setCargandoLogin(true)
+    const { error } = await supabase.auth.signInWithPassword({
+      email: emailLimpio,
+      password,
+    })
+    setCargandoLogin(false)
+
+    if (error) setLoginError(error.message)
   }
-}, [])
 
-// --- LOGIN: función ---
-const login = async () => {
-  setLoginError('')
-
-  const emailLimpio = (email || '').trim()
-  if (!emailLimpio || !password) {
-    setLoginError('Escribe correo y contraseña.')
-    return
+  const logout = async () => {
+    await supabase.auth.signOut()
+    setAutorizado(false)
+    avisar('Sesión cerrada')
   }
-
-  setCargandoLogin(true)
-  const { error } = await supabase.auth.signInWithPassword({
-    email: emailLimpio,
-    password
-  })
-  setCargandoLogin(false)
-
-  if (error) setLoginError(error.message)
-}
-
-const logout = async () => {
-  await supabase.auth.signOut()
-  setAutorizado(false)
-  avisar("🔒 Sesión cerrada")
-}
 
   // Estilos
-  const theme = { navy: '#0b1426', card: '#162447', orange: '#f39c12', cyan: '#00d2ff', white: '#ffffff', gradient: 'linear-gradient(135deg, #050a14 0%, #162447 100%)' }
-  const inputStyle = { padding: '16px', borderRadius: '15px', border: '1px solid #25335a', background: '#0b1426', color: 'white', outline: 'none', fontSize: '1rem', width: '100%', boxSizing: 'border-box' }
-  
-  // --- Estado inicial (incluye publicado + stock) ---
+  const theme = {
+    navy: '#0b1426',
+    card: '#162447',
+    orange: '#f39c12',
+    cyan: '#00d2ff',
+    white: '#ffffff',
+    gradient: 'linear-gradient(135deg, #050a14 0%, #162447 100%)',
+  }
+  const inputStyle = {
+    padding: '16px',
+    borderRadius: '15px',
+    border: '1px solid #25335a',
+    background: '#0b1426',
+    color: 'white',
+    outline: 'none',
+    fontSize: '1rem',
+    width: '100%',
+    boxSizing: 'border-box',
+  }
+
   // ====== FORM V2 (celular serializado) ======
   const estadoInicial = {
     marca: '',
     modelo: '',
     estado: 'Nuevo Sellado',
-    serial: '',            // antes imei
+    serial: '', // IMEI/serie
     color: '',
     almacenamiento: '',
     salud_bateria: null,
@@ -384,11 +509,11 @@ const logout = async () => {
     precio_venta: null,
     precio_costo: null,
     publicado: true,
-    imagen_url: [],        // array
+    imagen_url: [],
   }
   const [form, setForm] = useState(estadoInicial)
 
-  const normalizarImei = (v) => (v || '').replace(/\D/g, '').slice(0, 15)
+  const normalizarSerial = (v) => String(v || '').replace(/\s/g, '').slice(0, 30)
 
   const inicioDelDiaISO = (yyyyMmDd) => {
     if (!yyyyMmDd) return null
@@ -403,29 +528,28 @@ const logout = async () => {
   }
 
   const avisar = (msg, color = theme.cyan) => {
-    setNotificacion({ mensaje: msg, visible: true, color: color })
-    setTimeout(() => setNotificacion(prev => ({ ...prev, visible: false })), 3000)
+    setNotificacion({ mensaje: msg, visible: true, color })
+    setTimeout(() => setNotificacion((prev) => ({ ...prev, visible: false })), 3000)
   }
 
-  // ====== CARGAR EQUIPOS (V2): celulares serializados ======
+  // ====== CARGAR EQUIPOS ======
   const cargarEquipos = async () => {
     const { data, error } = await supabase
       .from('items_serializados')
       .select(`
-        id, serial, estado, saludbateria, almacenamiento, color, imagen_url, vendido, createdat,
-        skus ( id, skucodigo, tracking, precioventa, preciocosto, publicado,
-          productos ( id, marca, nombre )
+        id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, created_at,
+        skus:sku_id (
+          id, sku_codigo, tracking, precio_venta, precio_costo, publicado,
+          productos:producto_id ( id, marca, nombre )
         )
       `)
-      .order('createdat', { ascending: false })
-
+      .order('created_at', { ascending: false })
 
     if (error) {
       avisar(`Error cargando inventario: ${error.message}`, '#ff4b2b')
       return
     }
 
-    // Adaptación mínima para que tu UI actual siga usando "cel.xxx"
     const adaptados = (data || []).map((row) => ({
       id: row.id,
       marca: row?.skus?.productos?.marca || '',
@@ -439,74 +563,57 @@ const logout = async () => {
       color: row.color,
       imagen_url: row.imagen_url,
       publicado: row?.skus?.publicado ?? false,
-      stock: row.vendido ? 0 : 1, // para que tu UI marque "VENDIDO" si stock=0
-      _raw: row, // por si luego necesitas el objeto original
+      stock: row.vendido ? 0 : 1,
+      _raw: row,
     }))
 
     setEquipos(adaptados)
   }
-    const cargarVentas = async () => {
-      setCargandoVentas(true)
 
-      let query = supabase
-        .from('ventas_v2')
-        .select(`
-          id,
-          precio_lista,
-          precio_final,
-          descuento,
-          cliente_nombre,
-          cliente_telefono,
-          vendido_en,
-          vendido_por,
-          item_serializado_id,
-          sku_id,
-          items_serializados:item_serializado_id (
-            serial
-          ),
-          skus:sku_id (
-            id,
-            precio_costo,
-            productos (
-              marca,
-              nombre
-            )
-          )
-        `)
-        .order('vendido_en', { ascending: false })
-        .limit(200)
+  const cargarVentas = async () => {
+    setCargandoVentas(true)
 
-      const desdeISO = inicioDelDiaISO(ventasDesde)
-      const hastaISO = finDelDiaISO(ventasHasta)
-      if (desdeISO) query = query.gte('vendido_en', desdeISO)
-      if (hastaISO) query = query.lte('vendido_en', hastaISO)
+    let query = supabase
+      .from('ventas_v2')
+      .select(`
+        id, precio_lista, precio_final, descuento, cliente_nombre, cliente_telefono,
+        vendido_en, vendido_por, item_serializado_id, sku_id,
+        items_serializados:item_serializado_id ( serial ),
+        skus:sku_id ( id, precio_costo, productos:producto_id ( marca, nombre ) )
+      `)
+      .order('vendido_en', { ascending: false })
+      .limit(300)
 
-      const { data, error } = await query
-      setCargandoVentas(false)
+    const desdeISO = inicioDelDiaISO(ventasDesde)
+    const hastaISO = finDelDiaISO(ventasHasta)
+    if (desdeISO) query = query.gte('vendido_en', desdeISO)
+    if (hastaISO) query = query.lte('vendido_en', hastaISO)
 
-      if (error) {
-        avisar(`Error cargando ventas: ${error.message}`, '#ff4b2b')
-        return
-      }
+    const { data, error } = await query
+    setCargandoVentas(false)
 
-      setVentas(data || [])
+    if (error) {
+      avisar(`Error cargando ventas: ${error.message}`, '#ff4b2b')
+      return
     }
 
-  useEffect(() => {
-  if (autorizado) {
-    cargarEquipos()
-    cargarVentas()
+    setVentas(data || [])
   }
+
+  useEffect(() => {
+    if (autorizado) {
+      cargarEquipos()
+      cargarVentas()
+    }
   }, [autorizado])
 
   useEffect(() => {
-  if (autorizado) {
-    cargarVentas()
-  }
+    if (autorizado) {
+      cargarVentas()
+    }
   }, [autorizado, ventasDesde, ventasHasta])
 
-
-  // ====== SUBIR FOTOS (V2): guarda URLs en form.imagen_url[] ======
+  // ====== SUBIR FOTOS ======
   const manejarFotos = async (e) => {
     const archivos = Array.from(e.target.files || [])
     if (archivos.length === 0) return
@@ -518,36 +625,25 @@ const logout = async () => {
     for (const archivo of archivos) {
       const nombre = `${Date.now()}_${archivo.name}`
 
-      const { error: upErr } = await supabase
-        .storage
-        .from('Celulares - fotos')
-        .upload(nombre, archivo)
+      const { error: upErr } = await supabase.storage.from('Celulares - fotos').upload(nombre, archivo)
 
       if (upErr) {
         avisar(`Error subiendo foto: ${upErr.message}`, '#ff4b2b')
         continue
       }
 
-      const { data } = supabase
-        .storage
-        .from('Celulares - fotos')
-        .getPublicUrl(nombre)
-
+      const { data } = supabase.storage.from('Celulares - fotos').getPublicUrl(nombre)
       nuevasUrls.push(data.publicUrl)
     }
 
     setForm({ ...form, imagen_url: nuevasUrls })
     setSubiendo(false)
-    avisar('📸Fotos subidas')
+    avisar('Fotos subidas')
   }
-  // ====== HELPERS V2: asegurar producto y sku ======
-  const asegurarCategoriaId = async (nombreCategoria) => {
-    const { data, error } = await supabase
-      .from('categorias')
-      .select('id')
-      .eq('nombre', nombreCategoria)
-      .maybeSingle()
 
+  // ====== HELPERS: asegurar producto y sku ======
+  const asegurarCategoriaId = async (nombreCategoria) => {
+    const { data, error } = await supabase.from('categorias').select('id').eq('nombre', nombreCategoria).maybeSingle()
     if (error) throw error
     if (data?.id) return data.id
 
@@ -556,7 +652,6 @@ const logout = async () => {
       .insert({ nombre: nombreCategoria })
       .select('id')
       .single()
-
     if (insErr) throw insErr
     return ins.id
   }
@@ -565,7 +660,6 @@ const logout = async () => {
     const nombre = String(modelo || '').trim()
     const marcaL = String(marca || '').trim()
 
-    // Busca si ya existe producto con misma marca+nombre
     const { data, error } = await supabase
       .from('productos')
       .select('id')
@@ -594,9 +688,7 @@ const logout = async () => {
   }
 
   const crearSku = async ({ productoId, precio_venta, precio_costo, publicado }) => {
-    // sku_codigo simple (puedes mejorarlo luego)
     const sku_codigo = `CEL-${productoId}-${Date.now()}`
-
     const { data: sku, error } = await supabase
       .from('skus')
       .insert({
@@ -613,12 +705,13 @@ const logout = async () => {
     if (error) throw error
     return sku.id
   }
-  // ====== GUARDAR V2: crea unidad serializada ======
+
+  // ====== GUARDAR ======
   const guardar = async () => {
     try {
       const marca = String(form.marca || '').trim()
       const modelo = String(form.modelo || '').trim()
-      const serial = String(form.serial || '').replace(/\s/g, '').slice(0, 30) // IMEI/serie
+      const serial = normalizarSerial(form.serial)
 
       if (!marca || !modelo) {
         avisar('Marca y modelo son obligatorios.', '#ff4b2b')
@@ -628,35 +721,53 @@ const logout = async () => {
         avisar('IMEI/serie es obligatorio para celulares.', '#ff4b2b')
         return
       }
-      // EDIT MODE: update existing serializado instead of inserting a new one
-      if (editandoId) {
-        const serial = String(form.serial).replace(/\s/g, '').slice(0, 30)
-        if (!serial) { avisar('IMEI/serie es obligatorio.', '#ff4b2b'); return }
 
-        const { error: errUpd } = await supabase
+      // EDIT MODE: actualizar item + sku
+      if (editandoId) {
+        // 1) Update item_serializados
+        const { error: errUpdItem } = await supabase
           .from('items_serializados')
           .update({
             serial,
             estado: form.estado || null,
-            saludbateria: form.saludbateria ? Number(form.saludbateria) : null,
+            salud_bateria: form.salud_bateria ? Number(form.salud_bateria) : null,
             almacenamiento: form.almacenamiento || null,
             color: form.color || null,
-            imagenurl: Array.isArray(form.imagenurl) ? form.imagenurl : [],
-            // vendido no lo toques aquí
+            imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
           })
           .eq('id', editandoId)
 
-        if (errUpd) { avisar('Error actualizando: ' + errUpd.message, '#ff4b2b'); return }
+        if (errUpdItem) {
+          avisar('Error actualizando item: ' + errUpdItem.message, '#ff4b2b')
+          return
+        }
 
-        avisar('Equipo actualizado ✅')
+        // 2) Update skus (precio/publicado)
+        if (editandoSkuId) {
+          const { error: errUpdSku } = await supabase
+            .from('skus')
+            .update({
+              precio_venta: form.precio_venta ? Number(form.precio_venta) : null,
+              precio_costo: form.precio_costo ? Number(form.precio_costo) : null,
+              publicado: !!form.publicado,
+            })
+            .eq('id', editandoSkuId)
+
+          if (errUpdSku) {
+            avisar('Item actualizado, pero error actualizando SKU: ' + errUpdSku.message, '#ff4b2b')
+            // No return: el item ya se actualizó.
+          }
+        }
+
+        avisar('Equipo actualizado')
         setEditandoId(null)
+        setEditandoSkuId(null)
         setForm(estadoInicial)
         await cargarEquipos()
         return
       }
 
-
-      // 1) Asegurar categoría/producto
+      // NUEVO: crear producto+sku+item
       const categoriaId = await asegurarCategoriaId('Celulares')
       const productoId = await asegurarProductoId({
         categoriaId,
@@ -665,7 +776,6 @@ const logout = async () => {
         descripcion: form.descripcion,
       })
 
-      // 2) Crear SKU nuevo (por ahora 1 SKU por unidad; luego puedes agrupar por modelo si quieres)
       const skuId = await crearSku({
         productoId,
         precio_venta: form.precio_venta ? Number(form.precio_venta) : null,
@@ -673,26 +783,23 @@ const logout = async () => {
         publicado: form.publicado,
       })
 
-      // 3) Insertar unidad serializada (el “celular real”)
-      const { error: insErr } = await supabase
-        .from('items_serializados')
-        .insert({
-          sku_id: skuId,
-          serial,
-          estado: form.estado || null,
-          salud_bateria: form.salud_bateria ? Number(form.salud_bateria) : null,
-          almacenamiento: form.almacenamiento || null,
-          color: form.color || null,
-          vendido: false,
-          imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
-        })
+      const { error: insErr } = await supabase.from('items_serializados').insert({
+        sku_id: skuId,
+        serial,
+        estado: form.estado || null,
+        salud_bateria: form.salud_bateria ? Number(form.salud_bateria) : null,
+        almacenamiento: form.almacenamiento || null,
+        color: form.color || null,
+        vendido: false,
+        imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+      })
 
       if (insErr) {
         avisar(`Error guardando: ${insErr.message}`, '#ff4b2b')
         return
       }
 
-      avisar('Equipo registrado (V2)')
+      avisar('Equipo registrado')
       setForm(estadoInicial)
       await cargarEquipos()
     } catch (e) {
@@ -702,223 +809,256 @@ const logout = async () => {
 
   // --- VENTA: abrir modal ---
   const abrirModalVenta = (cel) => {
-    console.log('ventaCel keys:', Object.keys(cel || {}))
-    console.log('ventaCel.raw:', cel?.raw)
-    console.log('ventaCel._raw:', cel?._raw)
     setVentaCel(cel)
     setVentaForm({
       precio_final: cel?.precio_venta ?? '',
       cliente_nombre: '',
-      cliente_telefono: ''
+      cliente_telefono: '',
     })
     setVentaModalAbierto(true)
   }
 
-  // --- VENTA: confirmar (ventas + movimientos + update celulares) ---
+  // --- VENTA: confirmar ---
   const confirmarVenta = async () => {
-  if (!ventaCel) return
+    if (!ventaCel) return
 
-  if (Number(ventaCel.stock) <= 0) {
-    avisar('⚠️ Este equipo ya está vendido', '#ff4b2b')
-    return
-  }
+    if (Number(ventaCel.stock) <= 0) {
+      avisar('Este equipo ya está vendido', '#ff4b2b')
+      return
+    }
 
-  const precioFinal = Number(ventaForm.preciofinal)
-  if (!precioFinal || precioFinal <= 0) {
-    avisar('⚠️ Ingresa el precio final', '#ff4b2b')
-    return
-  }
+    const precioFinal = Number(ventaForm.precio_final)
+    if (!precioFinal || precioFinal <= 0) {
+      avisar('Ingresa el precio final', '#ff4b2b')
+      return
+    }
 
-  setGuardandoVenta(true)
+    setGuardandoVenta(true)
 
-  // usuario logueado para vendido_por y actorid
-  const { data: sess } = await supabase.auth.getSession()
-  const userId = sess?.session?.user?.id
-  if (!userId) {
-    setGuardandoVenta(false)
-    avisar('Sesión no válida, vuelve a iniciar sesión', '#ff4b2b')
-    return
-  }
+    const { data: sess } = await supabase.auth.getSession()
+    const userId = sess?.session?.user?.id
+    if (!userId) {
+      setGuardandoVenta(false)
+      avisar('Sesión no válida, vuelve a iniciar sesión', '#ff4b2b')
+      return
+    }
 
-  const skuId = ventaCel?._raw?.skus?.id
-  if (!skuId) {
-    setGuardandoVenta(false)
-    avisar('No se encontró SKU del equipo (skuId). Recarga e intenta otra vez.', '#ff4b2b')
-    return
-  }
+    const skuId = ventaCel?._raw?.skus?.id
+    if (!skuId) {
+      setGuardandoVenta(false)
+      avisar('No se encontró SKU del equipo (skuId). Recarga e intenta otra vez.', '#ff4b2b')
+      return
+    }
 
-  // 1) Insert venta_V2
-  const { error: errVenta } = await supabase
-    .from('ventas_v2')
-    .insert({
-      item_serializado_id: ventaCel.id, // bigint
-      sku_id: skuId,                   // bigint
-      precio_lista: ventaCel.precioventa ?? null,
+    const { error: errVenta } = await supabase.from('ventas_v2').insert({
+      item_serializado_id: ventaCel.id,
+      sku_id: skuId,
+      precio_lista: ventaCel.precio_venta ?? null,
       precio_final: precioFinal,
-      descuento: (ventaCel.precioventa ? Number(ventaCel.precioventa) : null) ? (Number(ventaCel.precioventa) - precioFinal) : null,
-      cliente_nombre: ventaForm.clientenombre?.trim() || null,
-      cliente_telefono: ventaForm.clientetelefono?.trim() || null,
+      descuento: ventaCel.precio_venta != null ? Number(ventaCel.precio_venta) - precioFinal : null,
+      cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
+      cliente_telefono: ventaForm.cliente_telefono?.trim() || null,
       vendido_por: userId,
     })
 
-  if (errVenta) {
+    if (errVenta) {
+      setGuardandoVenta(false)
+      avisar(`Error registrando venta: ${errVenta.message}`, '#ff4b2b')
+      return
+    }
+
+    const { error: errUpd } = await supabase.from('items_serializados').update({ vendido: true }).eq('id', ventaCel.id)
+    if (errUpd) {
+      setGuardandoVenta(false)
+      avisar(`Venta registrada, pero error marcando vendido: ${errUpd.message}`, '#ff4b2b')
+      return
+    }
+
+    avisar('Venta registrada')
     setGuardandoVenta(false)
-    avisar(`Error registrando venta: ${errVenta.message}`, '#ff4b2b')
-    return
+    setVentaModalAbierto(false)
+    setVentaCel(null)
+    setVentaForm({ precio_final: '', cliente_nombre: '', cliente_telefono: '' })
+
+    await cargarEquipos()
+    await cargarVentas()
   }
 
-  // 2) Update item_serializado - vendido
-  const { error: errUpd } = await supabase
-    .from('items_serializados')
-    .update({ vendido: true })
-    .eq('id', ventaCel.id)
+  const equiposFiltrados = useMemo(() => {
+    return equipos.filter((cel) => {
+      const texto = (busqueda || '').toLowerCase()
 
-  if (errUpd) {
-    setGuardandoVenta(false)
-    avisar(`Error marcando vendido: ${errUpd.message}`, '#ff4b2b')
-    return
-  }
+      const matchBusqueda =
+        cel.marca?.toLowerCase().includes(texto) ||
+        cel.modelo?.toLowerCase().includes(texto) ||
+        cel.estado?.toLowerCase().includes(texto) ||
+        cel.imei?.toLowerCase().includes(texto) ||
+        cel.color?.toLowerCase().includes(texto)
 
-  // 3) Movimiento (opcional). Si tu tabla sigue usando celularid (Celulares), COMENTA este bloque por ahora.
-  /*
-  const { error: errMov } = await supabase
-    .from('movimientosinventario')
-    .insert({
-      celularid: ventaCel.id,
-      tipo: 'VENDIDO',
-      actorid: userId,
-      detalle: {
-        precio_lista: ventaCel.precioventa ?? null,
-        precio_final: precioFinal,
-        cliente_nombre: ventaForm.clientenombre?.trim() || null,
-        cliente_telefono: ventaForm.clientetelefono?.trim() || null,
-      },
+      const matchEstado = filtroEstado === 'TODOS' ? true : cel.estado === filtroEstado
+
+      const matchPublicado =
+        filtroPublicado === 'TODOS' ? true : filtroPublicado === 'PUBLICADO' ? !!cel.publicado : !cel.publicado
+
+      const vendido = Number(cel.stock) <= 0
+      const matchVendidos =
+        filtroVendidos === 'TODOS' ? true : filtroVendidos === 'VENDIDOS' ? vendido : !vendido
+
+      return matchBusqueda && matchEstado && matchPublicado && matchVendidos
     })
+  }, [equipos, busqueda, filtroEstado, filtroPublicado, filtroVendidos])
 
-  if (errMov) {
-    avisar(`Vendido, pero no se registró movimiento: ${errMov.message}`, '#ff4b2b')
-  }
-  */
+  const resumenVentas = useMemo(() => {
+    return (ventas || []).reduce(
+      (acc, v) => {
+        const costo = Number(v?.skus?.precio_costo ?? 0)
+        const final = Number(v?.precio_final ?? 0)
+        acc.totalVentas += final
+        acc.totalCosto += costo
+        acc.totalGanancia += final - costo
+        acc.count += 1
+        return acc
+      },
+      { totalVentas: 0, totalCosto: 0, totalGanancia: 0, count: 0 }
+    )
+  }, [ventas])
 
-  avisar('Venta registrada ✅')
-  setGuardandoVenta(false)
-  setVentaModalAbierto(false)
-  setVentaCel(null)
-  setVentaForm({ preciofinal: '', clientenombre: '', clientetelefono: '' })
-
-  await cargarEquipos()
-  await cargarVentas()
-}
-
-    const equiposFiltrados = equipos.filter((cel) => {
-    const texto = (busqueda || '').toLowerCase()
-
-    const matchBusqueda =
-      cel.marca?.toLowerCase().includes(texto) ||
-      cel.modelo?.toLowerCase().includes(texto) ||
-      cel.estado?.toLowerCase().includes(texto) ||
-      cel.imei?.toLowerCase().includes(texto) ||
-      cel.color?.toLowerCase().includes(texto)
-
-    const matchEstado = filtroEstado === 'TODOS' ? true : cel.estado === filtroEstado
-
-    const matchPublicado =
-      filtroPublicado === 'TODOS'
-        ? true
-        : filtroPublicado === 'PUBLICADO'
-          ? !!cel.publicado
-          : !cel.publicado
-
-    const vendido = Number(cel.stock) <= 0
-    const matchVendidos =
-      filtroVendidos === 'TODOS'
-        ? true
-        : filtroVendidos === 'VENDIDOS'
-          ? vendido
-          : !vendido
-
-    return matchBusqueda && matchEstado && matchPublicado && matchVendidos
-  })
-    const resumenVentas = ventas.reduce(
-    (acc, v) => {
-      const costo = Number(v?.Celulares?.precio_costo ?? 0)
-      const final = Number(v?.precio_final ?? 0)
-      acc.totalVentas += final
-      acc.totalCosto += costo
-      acc.totalGanancia += (final - costo)
-      acc.count += 1
-      return acc
-    },
-    { totalVentas: 0, totalCosto: 0, totalGanancia: 0, count: 0 }
-  )
-
-// --- LOGIN ---
-if (!autorizado) {
-  return (
-    <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: theme.gradient, display: 'grid', placeItems: 'center', zIndex: 9999, fontFamily: 'sans-serif' }}>
-      <div style={{ backgroundColor: theme.card, padding: '50px 40px', borderRadius: '35px', textAlign: 'center', border: `2px solid ${theme.cyan}`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)', width: '90%', maxWidth: '420px' }}>
-        <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px', fontWeight: '900', color: 'white' }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
-        <p style={{ color: theme.cyan, marginBottom: '25px', letterSpacing: '2px', fontSize: '0.9rem' }}>PANEL DE GESTIÓN</p>
-
-        <input
-          type="email"
-          placeholder="Correo (admin)"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ width: '100%', padding: '18px', borderRadius: '15px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '12px', textAlign: 'center', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
-        />
-
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && login()}
-          style={{ width: '100%', padding: '18px', borderRadius: '15px', border: 'none', backgroundColor: '#0b1426', color: 'white', marginBottom: '18px', textAlign: 'center', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
-        />
-
-        <button
-          onClick={login}
-          // --- BOTÓN LOGIN ---
-          disabled={cargandoLogin}
+  // --- LOGIN ---
+  if (!autorizado) {
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          background: theme.gradient,
+          display: 'grid',
+          placeItems: 'center',
+          zIndex: 9999,
+          fontFamily: 'sans-serif',
+        }}
+      >
+        <div
           style={{
-            width: '100%',
-            padding: '18px',
-            background: theme.orange,
-            color: 'white',
-            border: 'none',
-            borderRadius: '15px',
-            fontWeight: 'bold',
-            fontSize: '1.05rem',
-            cursor: 'pointer',
-            opacity: cargandoLogin ? 0.7 : 1,
-            boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)',
+            backgroundColor: theme.card,
+            padding: '50px 40px',
+            borderRadius: '35px',
+            textAlign: 'center',
+            border: `2px solid ${theme.cyan}`,
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+            width: '90%',
+            maxWidth: '420px',
           }}
         >
-          {cargandoLogin ? 'CONECTANDO...' : 'ACCEDER'}
-        </button>
-        
-        {/* --- ERROR LOGIN (visible) --- */}
-        {loginError && (
-          <div style={{ marginTop: '12px', color: '#ff4b2b', fontWeight: 'bold', fontSize: '0.9rem', textAlign: 'center' }}>
-            ⚠️ {loginError}
-          </div>
-        )}
+          <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px', fontWeight: '900', color: 'white' }}>
+            LOS FARRUS <span style={{ color: theme.orange }}>HUB</span>
+          </h1>
+          <p style={{ color: theme.cyan, marginBottom: '25px', letterSpacing: '2px', fontSize: '0.9rem' }}>
+            PANEL DE GESTIÓN
+          </p>
+
+          <input
+            type="email"
+            placeholder="Correo (admin)"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '18px',
+              borderRadius: '15px',
+              border: 'none',
+              backgroundColor: '#0b1426',
+              color: 'white',
+              marginBottom: '12px',
+              textAlign: 'center',
+              fontSize: '1rem',
+              outline: 'none',
+              boxSizing: 'border-box',
+            }}
+          />
+
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && login()}
+            style={{
+              width: '100%',
+              padding: '18px',
+              borderRadius: '15px',
+              border: 'none',
+              backgroundColor: '#0b1426',
+              color: 'white',
+              marginBottom: '18px',
+              textAlign: 'center',
+              fontSize: '1rem',
+              outline: 'none',
+              boxSizing: 'border-box',
+            }}
+          />
+
+          <button
+            onClick={login}
+            disabled={cargandoLogin}
+            style={{
+              width: '100%',
+              padding: '18px',
+              background: theme.orange,
+              color: 'white',
+              border: 'none',
+              borderRadius: '15px',
+              fontWeight: 'bold',
+              fontSize: '1.05rem',
+              cursor: 'pointer',
+              opacity: cargandoLogin ? 0.7 : 1,
+              boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)',
+            }}
+          >
+            {cargandoLogin ? 'CONECTANDO...' : 'ACCEDER'}
+          </button>
+
+          {loginError && (
+            <div style={{ marginTop: '12px', color: '#ff4b2b', fontWeight: 'bold', fontSize: '0.9rem', textAlign: 'center' }}>
+              {loginError}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: theme.gradient, padding: '50px 20px', color: 'white', fontFamily: 'sans-serif' }}>
-      {notificacion.visible && <div style={{ position: 'fixed', top: '20px', right: '20px', backgroundColor: theme.card, color: theme.white, padding: '15px 30px', borderRadius: '15px', borderLeft: `6px solid ${notificacion.color}`, zIndex: 10000, boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>{notificacion.mensaje}</div>}
+      {notificacion.visible && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            backgroundColor: theme.card,
+            color: theme.white,
+            padding: '15px 30px',
+            borderRadius: '15px',
+            borderLeft: `6px solid ${notificacion.color}`,
+            zIndex: 10000,
+            boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          }}
+        >
+          {notificacion.mensaje}
+        </div>
+      )}
 
       {/* --- MODAL ZOOM --- */}
       {modalImagen && (
-        <div 
+        <div
           onClick={() => setModalImagen(null)}
           style={{
-            position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+            position: 'fixed',
+            top: 0
+, left: 0, width: '100vw', height: '100vh',
             backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 99999,
             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out',
             padding: '20px', boxSizing: 'border-box', backdropFilter: 'blur(5px)'
