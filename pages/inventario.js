@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM (CSS-IN-JS GARANTIZADO)
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
 // ==========================================
 const styles = {
   container: {
@@ -104,8 +104,7 @@ const Icons = {
   Eye: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
   Info: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>,
   Wrench: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
-  Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-  User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
 }
 
 // ==========================================
@@ -123,7 +122,6 @@ const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
   </div>
 )
 
-// Modal de Detalles Completos
 const DetallesModal = ({ cel, onClose }) => {
   if (!cel) return null
   return (
@@ -185,44 +183,19 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
     onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
     onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
     >
-      {/* IMAGEN HERO */}
-      <div style={{ 
-        height: '240px', 
-        backgroundColor: '#020617', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        position: 'relative',
-        cursor: 'zoom-in'
-      }} onClick={() => onOpenModal(fotoActiva)}>
+      <div style={{ height: '240px', backgroundColor: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'zoom-in' }} onClick={() => onOpenModal(fotoActiva)}>
         <img src={fotoActiva} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} />
-        
-        {/* Badges */}
-        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
-          {cel.estado}
-        </div>
-
-        {!cel.publicado && (
-          <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>
-            Oculto
-          </div>
-        )}
-
-        {vendido && (
-          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}>
-            <span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span>
-          </div>
-        )}
+        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>{cel.estado}</div>
+        {!cel.publicado && <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>Oculto</div>}
+        {vendido && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}><span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span></div>}
       </div>
 
-      {/* CUERPO */}
       <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ marginBottom: '16px' }}>
           <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{cel.marca}</p>
           <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.2 }}>{cel.modelo}</h3>
         </div>
 
-        {/* INFO CLAVE VISIBLE SIEMPRE */}
         <div style={{ marginBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '4px', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '4px' }}>
             <span>IMEI</span> <span style={{ fontFamily: 'monospace', color: '#cbd5e1' }}>{cel.imei}</span>
@@ -291,7 +264,7 @@ function RepairCard({ rep, onCambiarEstado }) {
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px' }}>
         <label style={{ ...styles.label, marginBottom: '8px' }}>Cambiar Estado:</label>
         <select 
-          style={{ ...styles.input, padding: '8px' }} 
+          style={{ ...styles.input, padding: '8px', cursor: 'pointer' }} 
           value={rep.estado} 
           onChange={(e) => onCambiarEstado(rep.id, e.target.value)}
         >
@@ -313,7 +286,7 @@ export default function Inventario() {
   const router = useRouter()
   
   // --- ESTADOS ---
-  const [activeTab, setActiveTab] = useState('inventory') // 'inventory', 'sales', 'register', 'service'
+  const [activeTab, setActiveTab] = useState('inventory')
   const [equipos, setEquipos] = useState([])
   const [reparaciones, setReparaciones] = useState([])
   const [busqueda, setBusqueda] = useState('')
@@ -463,7 +436,7 @@ export default function Inventario() {
         const catId = await asegurarCategoriaId('Celulares')
         const prodId = await asegurarProductoId({ categoriaId: catId, marca: form.marca, modelo: form.modelo, descripcion: form.descripcion })
         const skuId = await crearSku({ productoId: prodId, precio_venta: form.precio_venta, precio_costo: form.precio_costo, publicado: form.publicado })
-        await supabase.from('items_serializados').insert({ sku_id: skuId, serial, estado: form.estado, salud_bateria: form.salud_bateria, almacenamiento: form.almacenamiento, color: form.color, vendido: false, imagen_url: form.imagen_url, costo_compra: form.precio_costo })
+        await supabase.from('items_serializados').insert({ sku_id: sku.id, serial, estado: form.estado, salud_bateria: form.salud_bateria, almacenamiento: form.almacenamiento, color: form.color, vendido: false, imagen_url: form.imagen_url, costo_compra: form.precio_costo })
         avisar('Equipo registrado')
       }
       setForm(estadoInicial)
@@ -472,15 +445,20 @@ export default function Inventario() {
   }
 
   const guardarReparacion = async () => {
+    // Validación básica para evitar errores
+    if (!formReparacion.cliente_nombre || !formReparacion.equipo_modelo) {
+        return avisar('Nombre y Equipo son obligatorios', 'error')
+    }
     const { error } = await supabase.from('reparaciones').insert(formReparacion)
     if(error) return avisar(error.message, 'error')
     avisar('Ticket de reparación creado')
-    setFormReparacion(estadoReparacionInicial)
+    setFormReparacion({ cliente_nombre: '', cliente_telefono: '', equipo_modelo: '', falla: '', costo_estimado: '', abono: '', estado: 'Recibido', fecha_ingreso: new Date().toISOString().split('T')[0] })
     cargarReparaciones()
   }
 
   const cambiarEstadoReparacion = async (id, nuevoEstado) => {
-    await supabase.from('reparaciones').update({ estado: nuevoEstado }).eq('id', id)
+    const { error } = await supabase.from('reparaciones').update({ estado: nuevoEstado }).eq('id', id)
+    if (error) return avisar('Error actualizando estado', 'error')
     cargarReparaciones()
     avisar('Estado actualizado')
   }
@@ -530,22 +508,45 @@ export default function Inventario() {
 
   return (
     <div style={styles.container}>
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span></div>
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', flexWrap: 'wrap' }}>
-          <button onClick={() => setActiveTab('register')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'register' ? '#F59E0B' : 'transparent', color: activeTab === 'register' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Registro</button>
-          <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
-          <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Finanzas</button>
-          <button onClick={() => setActiveTab('service')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'service' ? '#F59E0B' : 'transparent', color: activeTab === 'service' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
-          <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
+      {/* ⚠️ ESTILOS CSS RESPONSIVOS GLOBALES */}
+      <style>{`
+        .page-wrapper { padding: 30px; max-width: 1400px; margin: 0 auto; }
+        .filters-container { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; align-items: center; }
+        .cards-grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+        .form-grid { display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); }
+        @media (max-width: 1024px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) {
+           .page-wrapper { padding: 15px; }
+           .form-grid { grid-template-columns: 1fr; }
+           .cards-grid { grid-template-columns: 1fr; }
+           .header-actions { flex-direction: column; align-items: stretch !important; gap: 20px; }
+           .filters-container { flex-direction: column; align-items: stretch; }
+           .filters-container input, .filters-container select { width: 100% !important; min-width: 0 !important; }
+           .navbar-content { flex-direction: column; gap: 15px; }
+           .nav-menu { width: 100%; justify-content: space-between; overflow-x: auto; }
+        }
+      `}</style>
+
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px' }}>
+        <div className="navbar-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span></div>
+          
+          <div className="nav-menu" style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <button onClick={() => setActiveTab('register')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'register' ? '#F59E0B' : 'transparent', color: activeTab === 'register' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Registro</button>
+            <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
+            <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Finanzas</button>
+            <button onClick={() => setActiveTab('service')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'service' ? '#F59E0B' : 'transparent', color: activeTab === 'service' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
+            <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
+          </div>
+          
+          <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>Salir</button>
         </div>
-        <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>Salir</button>
       </nav>
 
-      <div style={{ padding: '30px', maxWidth: '1400px', margin: '0 auto' }}>
+      <div className="page-wrapper">
         
-        {/* DASHBOARD METRICS */}
-        <div style={{ ...styles.grid, gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', marginBottom: '40px' }}>
+        {/* METRICS WIDGETS */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' }}>
           <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} icon={<Icons.Dollar />} />
           <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} color="#10b981" icon={<Icons.Chart />} subtext="Margen saludable" />
           <StatCard label="Inversión Activa" value={`S/ ${resumenVentas.totalCosto.toLocaleString()}`} color="#94a3b8" icon={<Icons.Box />} />
@@ -562,7 +563,7 @@ export default function Inventario() {
                 </div>
               </div>
 
-              <div style={styles.grid}>
+              <div className="form-grid">
                 <div><label style={styles.label}>Marca</label><input style={styles.input} placeholder="Ej. Apple" value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} /></div>
                 <div><label style={styles.label}>Modelo</label><input style={styles.input} placeholder="Ej. iPhone 15" value={form.modelo} onChange={e=>setForm({...form, modelo:e.target.value})} /></div>
                 <div>
@@ -620,7 +621,7 @@ export default function Inventario() {
               </div>
             </div>
 
-            <div style={styles.grid}>
+            <div className="cards-grid">
               {equiposFiltrados.map(cel => (
                 <ProductCard key={cel.id} cel={cel} onEdit={(c) => { setForm({...estadoInicial, ...c, serial: c.imei}); setEditandoId(c.id); setEditandoSkuId(c._raw.skus.id); setActiveTab('register'); window.scrollTo({top:0, behavior:'smooth'}) }} onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} onOpenModal={setModalImagen} onVerDetalle={setDetalleModalOpen} />
               ))}
