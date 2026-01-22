@@ -473,8 +473,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/@supabase/supabase-js/dist/index.mjs [client] (ecmascript) <locals>");
 ;
 const supabaseUrl = ("TURBOPACK compile-time value", "https://lptiwrdmvxyisaixnuel.supabase.co");
-const supabaseAnonKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwdGl3cmRtdnh5aXNhaXhudWVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMDI0MDIsImV4cCI6MjA4MzY3ODQwMn0.iotGFhBfo2Fjvj9LhEk-z1CpCaM7wrZINrfDn0uGzD8");
-const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createClient"])(supabaseUrl, supabaseAnonKey);
+const supabaseKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwdGl3cmRtdnh5aXNhaXhudWVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMDI0MDIsImV4cCI6MjA4MzY3ODQwMn0.iotGFhBfo2Fjvj9LhEk-z1CpCaM7wrZINrfDn0uGzD8");
+const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createClient"])(supabaseUrl, supabaseKey);
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -488,115 +488,1097 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/jsx-dev-runtime.js [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/index.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/router.js [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/supabase.js [client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
 ;
 ;
-// --- COMPONENTE TARJETA (con VENDIDO + borde rojo + eliminar visible) ---
-function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
-    _s();
-    const [fotoActiva, setFotoActiva] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x250?text=Sin+Foto');
-    // Colores para la etiqueta de estado
-    const colorEstado = {
-        'Nuevo Sellado': '#00d2ff',
-        'Semi Nuevo': '#f39c12',
-        'Usado': '#e74c3c',
-        'Open Box': '#f39c12' // Naranja
-    };
-    // --- VENDIDO (estado calculado por stock) ---
-    const vendido = Number(cel.stock) <= 0;
-    // Sombras/borde según vendido
-    const sombraNormal = `0 0 15px ${theme.cyan}44, inset 0 0 10px ${theme.cyan}22`;
-    const sombraHover = `0 0 30px ${theme.cyan}66, inset 0 0 20px ${theme.cyan}33`;
-    const sombraNormalVendido = '0 0 20px rgba(255,107,107,0.35), inset 0 0 12px rgba(255,107,107,0.18)';
-    const sombraHoverVendido = '0 0 35px rgba(255,107,107,0.45), inset 0 0 18px rgba(255,107,107,0.22)';
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        style: {
-            backgroundColor: theme.card,
-            borderRadius: '20px',
-            overflow: 'hidden',
-            border: vendido ? '2px solid rgba(255,107,107,0.85)' : `2px solid ${theme.cyan}`,
-            boxShadow: vendido ? sombraNormalVendido : sombraNormal,
-            transition: 'transform 0.3s, box-shadow 0.3s',
-            position: 'relative',
-            maxWidth: '360px',
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column'
-        },
-        onMouseEnter: (e)=>{
-            e.currentTarget.style.transform = 'translateY(-5px)';
-            e.currentTarget.style.boxShadow = vendido ? sombraHoverVendido : sombraHover;
-        },
-        onMouseLeave: (e)=>{
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = vendido ? sombraNormalVendido : sombraNormal;
-        },
+;
+// ==========================================
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
+// ==========================================
+const styles = {
+    container: {
+        minHeight: '100vh',
+        backgroundColor: '#020617',
+        color: '#e2e8f0',
+        fontFamily: "'Inter', sans-serif",
+        backgroundImage: `radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 100%)`,
+        backgroundAttachment: 'fixed'
+    },
+    glassPanel: {
+        backgroundColor: 'rgba(30, 41, 59, 0.7)',
+        backdropFilter: 'blur(20px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '24px',
+        boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)'
+    },
+    goldText: {
+        background: 'linear-gradient(to right, #F59E0B, #D97706)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        fontWeight: '900'
+    },
+    input: {
+        width: '100%',
+        padding: '14px 16px',
+        backgroundColor: 'rgba(15, 23, 42, 0.6)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: '12px',
+        color: 'white',
+        outline: 'none',
+        fontSize: '0.95rem',
+        transition: 'all 0.2s'
+    },
+    label: {
+        display: 'block',
+        fontSize: '0.7rem',
+        textTransform: 'uppercase',
+        letterSpacing: '1px',
+        fontWeight: 'bold',
+        color: '#94a3b8',
+        marginBottom: '6px'
+    },
+    btnPrimary: {
+        background: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
+        color: 'white',
+        border: 'none',
+        padding: '12px 24px',
+        borderRadius: '16px',
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        justifyContent: 'center',
+        transition: 'transform 0.2s'
+    },
+    btnIcon: {
+        width: '36px',
+        height: '36px',
+        borderRadius: '10px',
+        border: '1px solid rgba(255,255,255,0.1)',
+        background: 'rgba(255,255,255,0.05)',
+        color: '#cbd5e1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        transition: 'all 0.2s'
+    },
+    grid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '24px'
+    },
+    statCard: {
+        backgroundColor: 'rgba(30, 41, 59, 0.4)',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        borderRadius: '20px',
+        padding: '24px',
+        position: 'relative',
+        overflow: 'hidden'
+    }
+};
+// ==========================================
+// 🎨 ICONOS SVG
+// ==========================================
+const Icons = {
+    Logo: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 2L2 7L12 12L22 7L12 2Z",
+                    stroke: "#F59E0B",
+                    strokeWidth: "2",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 92,
+                    columnNumber: 75
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M2 17L12 22L22 17",
+                    stroke: "#F59E0B",
+                    strokeWidth: "2",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 92,
+                    columnNumber: 168
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M2 12L12 17L22 12",
+                    stroke: "#F59E0B",
+                    strokeWidth: "2",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 92,
+                    columnNumber: 252
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 92,
+            columnNumber: 15
+        }, ("TURBOPACK compile-time value", void 0)),
+    Search: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "20",
+            height: "20",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "11",
+                    cy: "11",
+                    r: "8"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 93,
+                    columnNumber: 115
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "m21 21-4.3-4.3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 93,
+                    columnNumber: 146
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 93,
+            columnNumber: 17
+        }, ("TURBOPACK compile-time value", void 0)),
+    Plus: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "20",
+            height: "20",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M5 12h14"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 94,
+                    columnNumber: 113
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 5v14"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 94,
+                    columnNumber: 133
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 94,
+            columnNumber: 15
+        }, ("TURBOPACK compile-time value", void 0)),
+    Smartphone: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "20",
+            height: "20",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                    x: "5",
+                    y: "2",
+                    width: "14",
+                    height: "20",
+                    rx: "2"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 95,
+                    columnNumber: 119
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 18h.01"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 95,
+                    columnNumber: 168
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 95,
+            columnNumber: 21
+        }, ("TURBOPACK compile-time value", void 0)),
+    Chart: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "20",
+            height: "20",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M3 3v18h18"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 96,
+                    columnNumber: 114
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M18 17V9"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 96,
+                    columnNumber: 136
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M13 17V5"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 96,
+                    columnNumber: 156
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M8 17v-3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 96,
+                    columnNumber: 176
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 96,
+            columnNumber: 16
+        }, ("TURBOPACK compile-time value", void 0)),
+    Headphones: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "20",
+            height: "20",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 97,
+                    columnNumber: 119
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 97,
+                    columnNumber: 171
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 97,
+                    columnNumber: 224
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 97,
+            columnNumber: 21
+        }, ("TURBOPACK compile-time value", void 0)),
+    Dollar: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 1v22"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 98,
+                    columnNumber: 115
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 98,
+                    columnNumber: 135
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 98,
+            columnNumber: 17
+        }, ("TURBOPACK compile-time value", void 0)),
+    Box: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 99,
+                    columnNumber: 112
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
+                    points: "3.27 6.96 12 12.01 20.73 6.96"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 99,
+                    columnNumber: 245
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
+                    x1: "12",
+                    x2: "12",
+                    y1: "22.08",
+                    y2: "12"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 99,
+                    columnNumber: 295
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 99,
+            columnNumber: 14
+        }, ("TURBOPACK compile-time value", void 0)),
+    Check: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
+                points: "20 6 9 17 4 12"
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 100,
+                columnNumber: 114
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 100,
+            columnNumber: 16
+        }, ("TURBOPACK compile-time value", void 0)),
+    Edit: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                d: "M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 101,
+                columnNumber: 113
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 101,
+            columnNumber: 15
+        }, ("TURBOPACK compile-time value", void 0)),
+    Trash: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M3 6h18"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 102,
+                    columnNumber: 114
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 102,
+                    columnNumber: 133
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 102,
+                    columnNumber: 185
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 102,
+            columnNumber: 16
+        }, ("TURBOPACK compile-time value", void 0)),
+    Upload: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 103,
+                    columnNumber: 115
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
+                    points: "17 8 12 3 7 8"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 103,
+                    columnNumber: 168
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
+                    x1: "12",
+                    x2: "12",
+                    y1: "3",
+                    y2: "15"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 103,
+                    columnNumber: 202
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 103,
+            columnNumber: 17
+        }, ("TURBOPACK compile-time value", void 0)),
+    Eye: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 104,
+                    columnNumber: 112
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "12",
+                    cy: "12",
+                    r: "3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 104,
+                    columnNumber: 168
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 104,
+            columnNumber: 14
+        }, ("TURBOPACK compile-time value", void 0)),
+    Info: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "18",
+            height: "18",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "12",
+                    cy: "12",
+                    r: "10"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 105,
+                    columnNumber: 113
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 16v-4"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 105,
+                    columnNumber: 145
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 8h.01"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 105,
+                    columnNumber: 166
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 105,
+            columnNumber: 15
+        }, ("TURBOPACK compile-time value", void 0))
+};
+// ==========================================
+// COMPONENTES UI
+// ==========================================
+const StatCard = ({ label, value, subtext, color = '#F59E0B', icon })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        style: styles.statCard,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
-                    height: '220px',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    backgroundColor: '#050a14',
-                    flexShrink: 0
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    padding: '20px',
+                    opacity: 0.1,
+                    color: color
                 },
+                children: icon
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 114,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                style: {
+                    fontSize: '0.7rem',
+                    fontWeight: 'bold',
+                    color: '#64748b',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    marginBottom: '8px'
+                },
+                children: label
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 117,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                style: {
+                    fontSize: '2rem',
+                    fontWeight: '900',
+                    color: 'white',
+                    margin: 0,
+                    lineHeight: 1
+                },
+                children: value
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 118,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            subtext && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                style: {
+                    fontSize: '0.8rem',
+                    color: color,
+                    marginTop: '8px',
+                    fontWeight: '500'
+                },
+                children: subtext
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 119,
+                columnNumber: 17
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/pages/inventario.js",
+        lineNumber: 113,
+        columnNumber: 3
+    }, ("TURBOPACK compile-time value", void 0));
+_c = StatCard;
+const DetallesModal = ({ cel, onClose })=>{
+    if (!cel) return null;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        style: {
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.85)',
+            zIndex: 300,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(8px)',
+            padding: '20px'
+        },
+        onClick: onClose,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            style: {
+                ...styles.glassPanel,
+                width: '100%',
+                maxWidth: '600px',
+                padding: '0',
+                overflow: 'hidden',
+                backgroundColor: '#0f172a'
+            },
+            onClick: (e)=>e.stopPropagation(),
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    style: {
+                        height: '300px',
+                        background: '#020617',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative'
+                    },
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                            src: cel.imagen_url?.[0] || 'https://via.placeholder.com/400',
+                            style: {
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'contain',
+                                padding: '20px'
+                            }
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 129,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onClose,
+                            style: {
+                                position: 'absolute',
+                                top: 15,
+                                right: 15,
+                                background: 'rgba(0,0,0,0.5)',
+                                border: 'none',
+                                color: 'white',
+                                width: 32,
+                                height: 32,
+                                borderRadius: '50%',
+                                cursor: 'pointer'
+                            },
+                            children: "✕"
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 130,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 128,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    style: {
+                        padding: '30px',
+                        maxHeight: '50vh',
+                        overflowY: 'auto'
+                    },
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'start',
+                                marginBottom: '20px'
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            style: {
+                                                color: '#F59E0B',
+                                                fontWeight: 'bold',
+                                                fontSize: '0.9rem',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '1px'
+                                            },
+                                            children: cel.marca
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 135,
+                                            columnNumber: 15
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                            style: {
+                                                fontSize: '2rem',
+                                                fontWeight: '900',
+                                                color: 'white',
+                                                margin: 0
+                                            },
+                                            children: cel.modelo
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 136,
+                                            columnNumber: 15
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 134,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        textAlign: 'right'
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                fontSize: '1.5rem',
+                                                fontWeight: '900',
+                                                color: 'white'
+                                            },
+                                            children: [
+                                                "S/ ",
+                                                cel.precio_venta
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 139,
+                                            columnNumber: 15
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                fontSize: '0.8rem',
+                                                color: '#64748b'
+                                            },
+                                            children: [
+                                                "Costo: S/ ",
+                                                cel.precio_costo
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 140,
+                                            columnNumber: 15
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 138,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 133,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                display: 'grid',
+                                gridTemplateColumns: '1fr 1fr',
+                                gap: '15px',
+                                marginBottom: '25px',
+                                background: 'rgba(255,255,255,0.03)',
+                                padding: '20px',
+                                borderRadius: '16px'
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: '#64748b',
+                                                fontSize: '0.8rem',
+                                                display: 'block'
+                                            },
+                                            children: "IMEI / Serial"
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 145,
+                                            columnNumber: 18
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        " ",
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: 'white',
+                                                fontFamily: 'monospace'
+                                            },
+                                            children: cel.imei
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 145,
+                                            columnNumber: 110
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 145,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: '#64748b',
+                                                fontSize: '0.8rem',
+                                                display: 'block'
+                                            },
+                                            children: "Estado"
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 146,
+                                            columnNumber: 18
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        " ",
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: '#F59E0B',
+                                                fontWeight: 'bold'
+                                            },
+                                            children: cel.estado
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 146,
+                                            columnNumber: 103
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 146,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: '#64748b',
+                                                fontSize: '0.8rem',
+                                                display: 'block'
+                                            },
+                                            children: "Color"
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 147,
+                                            columnNumber: 18
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        " ",
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: 'white'
+                                            },
+                                            children: cel.color
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 147,
+                                            columnNumber: 102
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 147,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: '#64748b',
+                                                fontSize: '0.8rem',
+                                                display: 'block'
+                                            },
+                                            children: "Batería"
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 148,
+                                            columnNumber: 18
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        " ",
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: 'white'
+                                            },
+                                            children: [
+                                                cel.salud_bateria,
+                                                "%"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 148,
+                                            columnNumber: 104
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 148,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: '#64748b',
+                                                fontSize: '0.8rem',
+                                                display: 'block'
+                                            },
+                                            children: "Capacidad"
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 149,
+                                            columnNumber: 18
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        " ",
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            style: {
+                                                color: 'white'
+                                            },
+                                            children: cel.almacenamiento
+                                        }, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 149,
+                                            columnNumber: 106
+                                        }, ("TURBOPACK compile-time value", void 0))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 149,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 144,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        cel.descripcion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                marginBottom: '20px',
+                                background: 'rgba(255,255,255,0.02)',
+                                padding: '15px',
+                                borderRadius: '12px',
+                                borderLeft: '3px solid #F59E0B'
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    style: {
+                                        color: '#94a3b8',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 'bold',
+                                        textTransform: 'uppercase',
+                                        marginBottom: '5px'
+                                    },
+                                    children: "Notas / Detalles"
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 154,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    style: {
+                                        color: '#cbd5e1',
+                                        fontSize: '0.95rem',
+                                        lineHeight: '1.6',
+                                        whiteSpace: 'pre-wrap'
+                                    },
+                                    children: cel.descripcion
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 155,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 153,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onClose,
+                            style: {
+                                width: '100%',
+                                padding: '14px',
+                                background: 'rgba(255,255,255,0.1)',
+                                border: 'none',
+                                borderRadius: '12px',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                cursor: 'pointer',
+                                transition: '0.2s'
+                            },
+                            children: "Cerrar Ficha"
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 159,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 132,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 127,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    }, void 0, false, {
+        fileName: "[project]/pages/inventario.js",
+        lineNumber: 126,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0));
+};
+_c1 = DetallesModal;
+function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal }) {
+    _s();
+    const [fotoActiva, setFotoActiva] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x300/0f172a/334155?text=No+Image');
+    const vendido = Number(cel.stock) <= 0;
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        style: {
+            ...styles.glassPanel,
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            opacity: vendido ? 0.6 : 1,
+            transition: 'transform 0.3s',
+            cursor: 'default'
+        },
+        onMouseEnter: (e)=>e.currentTarget.style.transform = 'translateY(-5px)',
+        onMouseLeave: (e)=>e.currentTarget.style.transform = 'translateY(0)',
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: {
+                    height: '240px',
+                    backgroundColor: '#020617',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'relative',
+                    cursor: 'zoom-in'
+                },
+                onClick: ()=>onOpenModal(fotoActiva),
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                        src: fotoActiva,
                         style: {
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
                             width: '100%',
                             height: '100%',
-                            backgroundImage: `url(${fotoActiva})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            filter: 'blur(50px) brightness(0.4)',
-                            transform: 'scale(1.5)',
-                            zIndex: 1
+                            objectFit: 'contain',
+                            padding: '20px'
                         }
                     }, void 0, false, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 55,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        onClick: ()=>onOpenModal(fotoActiva),
-                        style: {
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            zIndex: 2,
-                            padding: '15px',
-                            cursor: 'zoom-in'
-                        },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                            src: fotoActiva,
-                            style: {
-                                width: 'auto',
-                                height: 'auto',
-                                maxWidth: '100%',
-                                maxHeight: '100%',
-                                objectFit: 'contain',
-                                filter: 'drop-shadow(0 15px 30px rgba(0,0,0,0.5))',
-                                transition: 'transform 0.2s'
-                            },
-                            alt: "Celular"
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 76,
-                            columnNumber: 11
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 68,
+                        lineNumber: 194,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -604,312 +1586,291 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
                             position: 'absolute',
                             top: '12px',
                             right: '12px',
-                            backgroundColor: colorEstado[cel.estado] || '#888',
-                            color: 'white',
-                            padding: '5px 12px',
+                            padding: '4px 10px',
                             borderRadius: '8px',
-                            fontWeight: 'bold',
-                            fontSize: '0.75rem',
-                            zIndex: 3,
-                            boxShadow: '0 4px 15px rgba(0,0,0,0.6)',
+                            fontSize: '0.65rem',
+                            fontWeight: '900',
                             textTransform: 'uppercase',
-                            letterSpacing: '0.5px'
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            color: '#F59E0B',
+                            border: '1px solid rgba(245, 158, 11, 0.2)'
                         },
                         children: cel.estado
                     }, void 0, false, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 92,
+                        lineNumber: 197,
                         columnNumber: 9
+                    }, this),
+                    !cel.publicado && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            position: 'absolute',
+                            top: '12px',
+                            left: '12px',
+                            padding: '4px 8px',
+                            borderRadius: '6px',
+                            fontSize: '0.65rem',
+                            fontWeight: 'bold',
+                            textTransform: 'uppercase',
+                            backgroundColor: 'rgba(0,0,0,0.6)',
+                            color: '#94a3b8',
+                            border: '1px solid rgba(255,255,255,0.1)'
+                        },
+                        children: "Oculto"
+                    }, void 0, false, {
+                        fileName: "[project]/pages/inventario.js",
+                        lineNumber: 202,
+                        columnNumber: 11
                     }, this),
                     vendido && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            width: '100%',
-                            height: '100%',
+                            inset: 0,
+                            backgroundColor: 'rgba(0,0,0,0.7)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            zIndex: 5,
-                            background: 'linear-gradient(135deg, rgba(0,0,0,0.60), rgba(0,0,0,0.25))',
                             backdropFilter: 'blur(2px)'
                         },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             style: {
-                                padding: '12px 22px',
-                                borderRadius: '18px',
-                                background: 'rgba(231, 76, 60, 0.18)',
-                                border: '2px solid rgba(231, 76, 60, 0.80)',
-                                color: '#fff',
+                                border: '3px solid #ef4444',
+                                color: '#ef4444',
+                                padding: '8px 20px',
+                                borderRadius: '12px',
+                                fontSize: '1.2rem',
                                 fontWeight: '900',
-                                fontSize: '1.5rem',
-                                letterSpacing: '5px',
-                                textTransform: 'uppercase',
-                                boxShadow: '0 12px 30px rgba(0,0,0,0.55)'
+                                transform: 'rotate(-12deg)',
+                                backgroundColor: '#020617'
                             },
                             children: "VENDIDO"
                         }, void 0, false, {
                             fileName: "[project]/pages/inventario.js",
-                            lineNumber: 125,
+                            lineNumber: 209,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 112,
+                        lineNumber: 208,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/inventario.js",
-                lineNumber: 53,
+                lineNumber: 185,
                 columnNumber: 7
-            }, this),
-            cel.imagen_url && cel.imagen_url.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    display: 'flex',
-                    gap: '8px',
-                    padding: '10px 20px',
-                    backgroundColor: '#0b1426',
-                    overflowX: 'auto',
-                    borderBottom: `1px solid ${theme.cyan}11`,
-                    zIndex: 4,
-                    position: 'relative',
-                    flexShrink: 0
-                },
-                children: cel.imagen_url.map((url, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                        src: url,
-                        onClick: ()=>setFotoActiva(url),
-                        style: {
-                            width: '42px',
-                            height: '42px',
-                            objectFit: 'cover',
-                            borderRadius: '8px',
-                            border: fotoActiva === url ? `2px solid ${theme.orange}` : `1px solid transparent`,
-                            cursor: 'pointer',
-                            opacity: fotoActiva === url ? 1 : 0.5,
-                            transition: 'all 0.2s'
-                        }
-                    }, index, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 161,
-                        columnNumber: 13
-                    }, this))
-            }, void 0, false, {
-                fileName: "[project]/pages/inventario.js",
-                lineNumber: 147,
-                columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
-                    padding: '20px 25px',
-                    background: theme.card,
-                    position: 'relative',
-                    zIndex: 4,
-                    flexGrow: 1,
+                    padding: '20px',
+                    flex: 1,
                     display: 'flex',
                     flexDirection: 'column'
                 },
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            marginBottom: '12px'
-                        },
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                            style: {
-                                margin: 0,
-                                fontSize: '1.4rem',
-                                color: 'white',
-                                fontWeight: '800',
-                                letterSpacing: '0.5px',
-                                lineHeight: '1.2'
-                            },
-                            children: [
-                                cel.marca,
-                                " ",
-                                cel.modelo
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 194,
-                            columnNumber: 11
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 193,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                            color: theme.cyan,
-                            fontSize: '0.9rem',
-                            fontWeight: '600',
-                            marginBottom: '15px'
+                            marginBottom: '16px'
                         },
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: [
-                                    "💾 ",
-                                    cel.almacenamiento
-                                ]
-                            }, void 0, true, {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                style: {
+                                    fontSize: '0.7rem',
+                                    fontWeight: 'bold',
+                                    color: '#F59E0B',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '1px',
+                                    marginBottom: '4px'
+                                },
+                                children: cel.marca
+                            }, void 0, false, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 201,
+                                lineNumber: 217,
                                 columnNumber: 11
                             }, this),
-                            cel.salud_bateria && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        style: {
-                                            opacity: 0.3
-                                        },
-                                        children: "|"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 202,
-                                        columnNumber: 36
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: [
-                                            "🔋 ",
-                                            cel.salud_bateria,
-                                            "%"
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 202,
-                                        columnNumber: 75
-                                    }, this)
-                                ]
-                            }, void 0, true)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 200,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            flexWrap: 'wrap',
-                            gap: '8px',
-                            marginBottom: '15px'
-                        },
-                        children: [
-                            cel.color && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                 style: {
-                                    display: 'inline-block',
-                                    padding: '5px 12px',
-                                    borderRadius: '8px',
-                                    border: `1px solid ${theme.cyan}44`,
-                                    backgroundColor: 'rgba(0, 210, 255, 0.05)',
-                                    color: '#fff',
-                                    fontSize: '0.85rem'
+                                    fontSize: '1.2rem',
+                                    fontWeight: '800',
+                                    color: 'white',
+                                    margin: 0,
+                                    lineHeight: 1.2
                                 },
-                                children: [
-                                    "🎨 ",
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        style: {
-                                            fontWeight: 'bold',
-                                            color: theme.cyan
-                                        },
-                                        children: cel.color
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 209,
-                                        columnNumber: 18
-                                    }, this)
-                                ]
-                            }, void 0, true, {
+                                children: cel.modelo
+                            }, void 0, false, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 208,
-                                columnNumber: 13
-                            }, this),
-                            cel.imei && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                style: {
-                                    fontSize: '0.75rem',
-                                    color: '#666',
-                                    fontFamily: 'monospace'
-                                },
-                                children: [
-                                    "IMEI: ",
-                                    cel.imei
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 212,
-                                columnNumber: 25
+                                lineNumber: 218,
+                                columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 206,
+                        lineNumber: 216,
                         columnNumber: 9
-                    }, this),
-                    cel.descripcion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            marginBottom: '20px',
-                            padding: '12px',
-                            backgroundColor: 'rgba(0,0,0,0.25)',
-                            borderRadius: '12px',
-                            fontSize: '0.85rem',
-                            color: '#ccc',
-                            lineHeight: '1.5',
-                            borderLeft: `3px solid ${theme.orange}`
-                        },
-                        children: cel.descripcion
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 217,
-                        columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            flexGrow: 1
-                        }
-                    }, void 0, false, {
+                            marginBottom: '16px'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    fontSize: '0.75rem',
+                                    color: '#94a3b8',
+                                    marginBottom: '4px',
+                                    borderBottom: '1px dashed rgba(255,255,255,0.1)',
+                                    paddingBottom: '4px'
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: "IMEI"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 224,
+                                        columnNumber: 13
+                                    }, this),
+                                    " ",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        style: {
+                                            fontFamily: 'monospace',
+                                            color: '#cbd5e1'
+                                        },
+                                        children: cel.imei
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 224,
+                                        columnNumber: 31
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 223,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    fontSize: '0.75rem',
+                                    color: '#94a3b8'
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: "Inversión"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 227,
+                                        columnNumber: 13
+                                    }, this),
+                                    " ",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        style: {
+                                            color: '#cbd5e1'
+                                        },
+                                        children: [
+                                            "S/ ",
+                                            cel.precio_costo
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 227,
+                                        columnNumber: 36
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 226,
+                                columnNumber: 12
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/pages/inventario.js",
                         lineNumber: 222,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: '8px',
+                            marginBottom: '20px'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    background: 'rgba(255,255,255,0.03)',
+                                    padding: '6px 10px',
+                                    borderRadius: '8px',
+                                    fontSize: '0.75rem',
+                                    color: '#cbd5e1',
+                                    border: '1px solid rgba(255,255,255,0.05)',
+                                    textAlign: 'center'
+                                },
+                                children: [
+                                    "💾 ",
+                                    cel.almacenamiento
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 232,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    background: 'rgba(255,255,255,0.03)',
+                                    padding: '6px 10px',
+                                    borderRadius: '8px',
+                                    fontSize: '0.75rem',
+                                    color: '#cbd5e1',
+                                    border: '1px solid rgba(255,255,255,0.05)',
+                                    textAlign: 'center'
+                                },
+                                children: [
+                                    "🎨 ",
+                                    cel.color
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 235,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/inventario.js",
+                        lineNumber: 231,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            marginTop: 'auto',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginTop: '10px',
-                            paddingTop: '15px',
-                            borderTop: '1px solid rgba(255,255,255,0.08)',
-                            gap: '20px'
+                            borderTop: '1px solid rgba(255,255,255,0.1)',
+                            paddingTop: '16px'
                         },
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         style: {
-                                            display: 'block',
-                                            fontSize: '0.7rem',
-                                            color: '#888',
-                                            marginBottom: '4px',
-                                            letterSpacing: '1px'
+                                            fontSize: '0.65rem',
+                                            fontWeight: 'bold',
+                                            color: '#64748b',
+                                            textTransform: 'uppercase'
                                         },
-                                        children: "PRECIO"
+                                        children: "VENTA"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 227,
+                                        lineNumber: 242,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
-                                            color: 'white',
-                                            fontSize: '1.7rem',
+                                            fontSize: '1.4rem',
                                             fontWeight: '900',
-                                            whiteSpace: 'nowrap'
+                                            color: 'white'
                                         },
                                         children: [
                                             "S/ ",
@@ -917,133 +1878,143 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 228,
+                                        lineNumber: 243,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 226,
+                                lineNumber: 241,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
                                     display: 'flex',
-                                    gap: '10px',
-                                    alignItems: 'center',
-                                    flexWrap: 'wrap'
+                                    gap: '8px'
                                 },
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: ()=>onEdit(cel),
+                                        onClick: ()=>onVerDetalle(cel),
                                         style: {
-                                            padding: '10px 20px',
-                                            background: theme.cyan,
-                                            color: '#000',
-                                            border: 'none',
-                                            borderRadius: '50px',
-                                            fontWeight: 'bold',
-                                            cursor: 'pointer',
-                                            fontSize: '0.85rem',
-                                            boxShadow: '0 5px 15px rgba(0,210,255,0.2)'
+                                            ...styles.btnIcon,
+                                            color: '#38bdf8',
+                                            borderColor: 'rgba(56, 189, 248, 0.3)'
                                         },
-                                        children: "EDITAR"
+                                        title: "Ver Detalles",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Eye, {}, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 246,
+                                            columnNumber: 164
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 233,
+                                        lineNumber: 246,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        onClick: ()=>{
-                                            if (!vendido) onSell(cel);
-                                        },
-                                        disabled: vendido,
-                                        style: {
-                                            padding: '10px 16px',
-                                            background: vendido ? 'rgba(255,255,255,0.08)' : 'rgba(231, 76, 60, 0.18)',
-                                            color: vendido ? '#ddd' : '#ff6b6b',
-                                            border: vendido ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(255,107,107,0.55)',
-                                            borderRadius: '50px',
-                                            fontWeight: 'bold',
-                                            cursor: vendido ? 'not-allowed' : 'pointer',
-                                            fontSize: '0.85rem',
-                                            letterSpacing: '1px'
-                                        },
-                                        title: vendido ? 'Este equipo ya está vendido' : 'Marcar como vendido',
-                                        children: "VENDIDO"
+                                        onClick: ()=>onEdit(cel),
+                                        style: styles.btnIcon,
+                                        title: "Editar",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Edit, {}, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 247,
+                                            columnNumber: 87
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 250,
+                                        lineNumber: 247,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>!vendido && onSell(cel),
+                                        disabled: vendido,
+                                        style: {
+                                            ...styles.btnIcon,
+                                            backgroundColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.1)',
+                                            color: vendido ? '#475569' : '#F59E0B',
+                                            borderColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.3)'
+                                        },
+                                        title: "Vender",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Dollar, {}, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 248,
+                                            columnNumber: 301
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 248,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         onClick: ()=>onDelete(cel.id),
                                         style: {
-                                            padding: '10px 14px',
-                                            background: '#2d1a1a',
-                                            color: '#ff6b6b',
-                                            border: '1px solid rgba(255,107,107,0.55)',
-                                            borderRadius: '50px',
-                                            cursor: 'pointer',
-                                            fontWeight: 'bold',
-                                            fontSize: '0.85rem',
-                                            boxShadow: '0 6px 18px rgba(255,107,107,0.15)'
+                                            ...styles.btnIcon,
+                                            color: '#ef4444',
+                                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                                            borderColor: 'rgba(239, 68, 68, 0.2)'
                                         },
-                                        title: "Eliminar del inventario",
-                                        children: "ELIMINAR 🗑️"
+                                        title: "Eliminar",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Trash, {}, void 0, false, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 249,
+                                            columnNumber: 201
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 269,
+                                        lineNumber: 249,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 232,
+                                lineNumber: 245,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 225,
+                        lineNumber: 240,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/inventario.js",
-                lineNumber: 181,
+                lineNumber: 215,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/pages/inventario.js",
-        lineNumber: 29,
+        lineNumber: 171,
         columnNumber: 5
     }, this);
 }
-_s(TarjetaEquipo, "XA4xeh7Z4PgCqkP68zgwukebfEU=");
-_c = TarjetaEquipo;
+_s(ProductCard, "bXnnnmXi/WD4ppprPRLtHAEH8/s=");
+_c2 = ProductCard;
 function Inventario() {
     _s1();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRouter"])();
+    // --- ESTADOS ---
+    const [activeTab, setActiveTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('inventory') // 'inventory', 'sales', 'register'
+    ;
     const [equipos, setEquipos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [busqueda, setBusqueda] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [subiendo, setSubiendo] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [editandoId, setEditandoId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [editandoSkuId, setEditandoSkuId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [notificacion, setNotificacion] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])({
         mensaje: '',
         visible: false,
-        color: '#00d2ff'
+        type: 'success'
     });
-    const [modalImagen, setModalImagen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null) // Estado para el Zoom
-    ;
-    // --- AUTH (Supabase email/password) ---
+    const [modalImagen, setModalImagen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [detalleModalOpen, setDetalleModalOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    // Auth & Ventas
     const [autorizado, setAutorizado] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [email, setEmail] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [password, setPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [cargandoLogin, setCargandoLogin] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    // --- LOGIN: mensaje visible ---
     const [loginError, setLoginError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
-    // --- VENTA: modal + form ---
     const [ventaModalAbierto, setVentaModalAbierto] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [ventaCel, setVentaCel] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [ventaForm, setVentaForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])({
@@ -1051,158 +2022,59 @@ function Inventario() {
         cliente_nombre: '',
         cliente_telefono: ''
     });
-    const [ventas, setVentas] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [ventasDesde, setVentasDesde] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('') // "YYYY-MM-DD"
-    ;
-    const [ventasHasta, setVentasHasta] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('') // "YYYY-MM-DD"
-    ;
-    const [cargandoVentas, setCargandoVentas] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [guardandoVenta, setGuardandoVenta] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    // --- FILTROS: básicos (luego ampliamos) ---
+    const [ventas, setVentas] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [ventasDesde, setVentasDesde] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [ventasHasta, setVentasHasta] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [cargandoVentas, setCargandoVentas] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Filtros
     const [filtroEstado, setFiltroEstado] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('TODOS');
-    const [filtroPublicado, setFiltroPublicado] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('TODOS') // TODOS | PUBLICADO | OCULTO
-    ;
-    const [filtroVendidos, setFiltroVendidos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('TODOS') // TODOS | VENDIDOS | DISPONIBLES
-    ;
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "Inventario.useEffect": ()=>{
-            __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.getSession().then({
-                "Inventario.useEffect": ({ data })=>{
-                    setAutorizado(!!data.session);
-                }
-            }["Inventario.useEffect"]);
-            const { data: sub } = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.onAuthStateChange({
-                "Inventario.useEffect": (_event, session)=>{
-                    setAutorizado(!!session);
-                }
-            }["Inventario.useEffect"]);
-            return ({
-                "Inventario.useEffect": ()=>{
-                    sub.subscription.unsubscribe();
-                }
-            })["Inventario.useEffect"];
-        }
-    }["Inventario.useEffect"], []);
-    // --- LOGIN: función ---
-    const login = async ()=>{
-        setLoginError('');
-        const emailLimpio = (email || '').trim();
-        if (!emailLimpio || !password) {
-            setLoginError('Escribe correo y contraseña.');
-            return;
-        }
-        setCargandoLogin(true);
-        const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.signInWithPassword({
-            email: emailLimpio,
-            password
-        });
-        setCargandoLogin(false);
-        if (error) setLoginError(error.message);
-    };
-    const logout = async ()=>{
-        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.signOut();
-        setAutorizado(false);
-        avisar("🔒 Sesión cerrada");
-    };
-    // Estilos
-    const theme = {
-        navy: '#0b1426',
-        card: '#162447',
-        orange: '#f39c12',
-        cyan: '#00d2ff',
-        white: '#ffffff',
-        gradient: 'linear-gradient(135deg, #050a14 0%, #162447 100%)'
-    };
-    const inputStyle = {
-        padding: '16px',
-        borderRadius: '15px',
-        border: '1px solid #25335a',
-        background: '#0b1426',
-        color: 'white',
-        outline: 'none',
-        fontSize: '1rem',
-        width: '100%',
-        boxSizing: 'border-box'
-    };
-    // --- Estado inicial (incluye publicado + stock) ---
+    const [filtroVendidos, setFiltroVendidos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('TODOS');
+    // Formulario
     const estadoInicial = {
         marca: '',
         modelo: '',
+        estado: 'Nuevo Sellado',
+        serial: '',
         color: '',
         almacenamiento: '',
-        imei: '',
-        precio_venta: '',
-        precio_costo: '',
         salud_bateria: '',
         descripcion: '',
-        estado: 'Nuevo Sellado',
-        imagen_url: [],
+        precio_venta: '',
+        precio_costo: '',
         publicado: true,
-        stock: 1
+        imagen_url: []
     };
     const [form, setForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(estadoInicial);
-    const normalizarImei = (v)=>(v || '').replace(/\D/g, '').slice(0, 15);
-    const inicioDelDiaISO = (yyyyMmDd)=>{
-        if (!yyyyMmDd) return null;
-        const d = new Date(`${yyyyMmDd}T00:00:00`);
-        return d.toISOString();
-    };
-    const finDelDiaISO = (yyyyMmDd)=>{
-        if (!yyyyMmDd) return null;
-        const d = new Date(`${yyyyMmDd}T23:59:59.999`);
-        return d.toISOString();
-    };
-    const avisar = (msg, color = theme.cyan)=>{
+    // --- HELPERS ---
+    const normalizarSerial = (v)=>String(v || '').trim().replace(/\s+/g, '').toUpperCase().slice(0, 30);
+    const avisar = (msg, type = 'success')=>{
         setNotificacion({
             mensaje: msg,
             visible: true,
-            color: color
+            type
         });
         setTimeout(()=>setNotificacion((prev)=>({
                     ...prev,
                     visible: false
                 })), 3000);
     };
-    const cargarEquipos = async ()=>{
-        const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('Celulares').select('*').order('created_at', {
-            ascending: false
-        });
-        setEquipos(data || []);
-    };
-    const cargarVentas = async ()=>{
-        setCargandoVentas(true);
-        let query = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('ventas').select(`
-        id,
-        celular_id,
-        precio_lista,
-        precio_final,
-        descuento,
-        cliente_nombre,
-        cliente_telefono,
-        vendido_en,
-        vendido_por,
-        Celulares:celular_id (
-          id,
-          marca,
-          modelo,
-          imei,
-          precio_costo
-        )
-      `).order('vendido_en', {
-            ascending: false
-        }).limit(200);
-        const desdeISO = inicioDelDiaISO(ventasDesde);
-        const hastaISO = finDelDiaISO(ventasHasta);
-        if (desdeISO) query = query.gte('vendido_en', desdeISO);
-        if (hastaISO) query = query.lte('vendido_en', hastaISO);
-        const { data, error } = await query;
-        setCargandoVentas(false);
-        if (error) {
-            avisar('❌ Error cargando ventas: ' + error.message, '#ff4b2b');
-            return;
+    const inicioDelDiaISO = (d)=>d ? new Date(`${d}T00:00:00`).toISOString() : null;
+    const finDelDiaISO = (d)=>d ? new Date(`${d}T23:59:59.999`).toISOString() : null;
+    // --- EFFECTS ---
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Inventario.useEffect": ()=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.getSession().then({
+                "Inventario.useEffect": ({ data })=>setAutorizado(!!data.session)
+            }["Inventario.useEffect"]);
+            const { data: sub } = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.onAuthStateChange({
+                "Inventario.useEffect": (_e, session)=>setAutorizado(!!session)
+            }["Inventario.useEffect"]);
+            return ({
+                "Inventario.useEffect": ()=>sub.subscription.unsubscribe()
+            })["Inventario.useEffect"];
         }
-        setVentas(data || []);
-    };
+    }["Inventario.useEffect"], []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Inventario.useEffect": ()=>{
             if (autorizado) {
@@ -1215,1980 +2087,1697 @@ function Inventario() {
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Inventario.useEffect": ()=>{
-            if (autorizado) {
-                cargarVentas();
-            }
+            if (autorizado) cargarVentas();
         }
     }["Inventario.useEffect"], [
         autorizado,
         ventasDesde,
         ventasHasta
     ]);
+    // --- LOGIC ---
+    const login = async ()=>{
+        if (!email || !password) return;
+        setCargandoLogin(true);
+        const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.signInWithPassword({
+            email,
+            password
+        });
+        setCargandoLogin(false);
+        if (error) setLoginError(error.message);
+    };
+    const logout = async ()=>{
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.signOut();
+    };
+    const cargarEquipos = async ()=>{
+        const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('items_serializados').select(`id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at, skus:sku_id ( id, sku_codigo, tracking, precio_venta, precio_costo, publicado, productos:producto_id ( id, marca, nombre, descripcion ) )`).order('created_at', {
+            ascending: false
+        });
+        if (error) return avisar('Error cargando inventario', 'error');
+        setEquipos((data || []).map((row)=>({
+                id: row.id,
+                marca: row?.skus?.productos?.marca || '',
+                modelo: row?.skus?.productos?.nombre || '',
+                estado: row.estado,
+                imei: row.serial,
+                precio_venta: row?.skus?.precio_venta || 0,
+                precio_costo: row.costo_compra ? Number(row.costo_compra) : row?.skus?.precio_costo ?? 0,
+                almacenamiento: row.almacenamiento,
+                salud_bateria: row.salud_bateria,
+                color: row.color,
+                imagen_url: row.imagen_url,
+                publicado: row?.skus?.publicado ?? false,
+                stock: row.vendido ? 0 : 1,
+                descripcion: row?.skus?.productos?.descripcion || '',
+                _raw: row
+            })));
+    };
+    const cargarVentas = async ()=>{
+        let query = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('ventas_v2').select(`id, precio_lista, precio_final, descuento, cliente_nombre, cliente_telefono, cantidad, tipo_venta, vendido_en, vendido_por, item_serializado_id, sku_id, items_serializados:item_serializado_id ( serial, costo_compra ), skus:sku_id ( id, precio_costo, productos:producto_id ( marca, nombre ) )`).order('vendido_en', {
+            ascending: false
+        }).limit(300);
+        if (ventasDesde) query = query.gte('vendido_en', inicioDelDiaISO(ventasDesde));
+        if (ventasHasta) query = query.lte('vendido_en', finDelDiaISO(ventasHasta));
+        const { data, error } = await query;
+        if (error) return avisar('Error cargando ventas', 'error');
+        setVentas(data || []);
+    };
     const manejarFotos = async (e)=>{
-        const archivos = Array.from(e.target.files);
+        const archivos = Array.from(e.target.files || []);
+        if (!archivos.length) return;
         setSubiendo(true);
-        let nuevasUrls = [
+        let nuevas = [
             ...form.imagen_url || []
         ];
-        for (const archivo of archivos){
-            const nombre = `${Date.now()}_${archivo.name}`;
-            const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].storage.from('Celulares - fotos').upload(nombre, archivo);
-            if (error) {
-                avisar("❌ Error subiendo foto: " + error.message, "#ff4b2b");
-                continue;
+        for (const file of archivos){
+            const name = `${Date.now()}_${file.name}`;
+            const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].storage.from('Celulares - fotos').upload(name, file);
+            if (!error) {
+                const { data } = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].storage.from('Celulares - fotos').getPublicUrl(name);
+                nuevas.push(data.publicUrl);
             }
-            const { data: u } = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].storage.from('Celulares - fotos').getPublicUrl(nombre);
-            nuevasUrls.push(u.publicUrl);
         }
         setForm({
             ...form,
-            imagen_url: nuevasUrls
+            imagen_url: nuevas
         });
         setSubiendo(false);
-        avisar("📸 Fotos subidas");
+        avisar('Fotos subidas con éxito');
+    };
+    const asegurarCategoriaId = async (nombre)=>{
+        const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('categorias').select('id').eq('nombre', nombre).maybeSingle();
+        if (data) return data.id;
+        const { data: neu } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('categorias').insert({
+            nombre
+        }).select('id').single();
+        return neu.id;
+    };
+    const asegurarProductoId = async ({ categoriaId, marca, modelo, descripcion })=>{
+        const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('productos').select('id').eq('categoria_id', categoriaId).eq('marca', marca).eq('nombre', modelo).maybeSingle();
+        if (data) return data.id;
+        const { data: neu } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('productos').insert({
+            categoria_id: categoriaId,
+            marca,
+            nombre: modelo,
+            descripcion,
+            activo: true
+        }).select('id').single();
+        return neu.id;
+    };
+    const crearSku = async ({ productoId, precio_venta, precio_costo, publicado })=>{
+        const { data } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('skus').insert({
+            producto_id: productoId,
+            sku_codigo: `CEL-${productoId}-${Date.now()}`,
+            tracking: 'SERIAL',
+            precio_venta,
+            precio_costo,
+            publicado: !!publicado
+        }).select('id').single();
+        return data.id;
     };
     const guardar = async ()=>{
-        const datosLimpios = {
-            ...form,
-            precio_venta: form.precio_venta === '' ? null : form.precio_venta,
-            precio_costo: form.precio_costo === '' ? null : form.precio_costo,
-            salud_bateria: form.salud_bateria === '' ? null : form.salud_bateria
-        };
-        // Normaliza IMEI (solo números, máx 15)
-        datosLimpios.imei = datosLimpios.imei ? normalizarImei(datosLimpios.imei) : '';
-        // Validación IMEI (si hay IMEI debe ser 15 dígitos)
-        if (datosLimpios.imei && datosLimpios.imei.length !== 15) {
-            avisar('⚠️ IMEI debe tener 15 dígitos', '#ff4b2b');
-            return;
-        }
-        if (editandoId) {
-            const { error: updateError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('Celulares').update(datosLimpios).eq('id', editandoId);
-            if (updateError) {
-                const msg = (updateError?.message || '').toLowerCase();
-                const code = updateError?.code;
-                if (code === '23505' || msg.includes('duplicate') || msg.includes('unique')) {
-                    avisar('⚠️ Ese IMEI ya existe en el inventario', '#ff4b2b');
-                    return;
+        try {
+            const serial = normalizarSerial(form.serial);
+            if (!form.marca || !form.modelo || !serial) return avisar('Faltan datos obligatorios', 'error');
+            if (editandoId) {
+                await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('items_serializados').update({
+                    serial,
+                    estado: form.estado,
+                    salud_bateria: form.salud_bateria,
+                    almacenamiento: form.almacenamiento,
+                    color: form.color,
+                    imagen_url: form.imagen_url,
+                    costo_compra: form.precio_costo
+                }).eq('id', editandoId);
+                if (editandoSkuId) {
+                    const { data: skuData } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('skus').select('producto_id').eq('id', editandoSkuId).single();
+                    if (skuData) await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('productos').update({
+                        descripcion: form.descripcion
+                    }).eq('id', skuData.producto_id);
+                    await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('skus').update({
+                        precio_venta: form.precio_venta,
+                        precio_costo: form.precio_costo,
+                        publicado: form.publicado
+                    }).eq('id', editandoSkuId);
                 }
-                avisar('Error: ' + updateError.message, 'red');
-                return;
+                avisar('Equipo actualizado');
+                setEditandoId(null);
+            } else {
+                const catId = await asegurarCategoriaId('Celulares');
+                const prodId = await asegurarProductoId({
+                    categoriaId: catId,
+                    marca: form.marca,
+                    modelo: form.modelo,
+                    descripcion: form.descripcion
+                });
+                const skuId = await crearSku({
+                    productoId: prodId,
+                    precio_venta: form.precio_venta,
+                    precio_costo: form.precio_costo,
+                    publicado: form.publicado
+                });
+                await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('items_serializados').insert({
+                    sku_id: sku.id,
+                    serial,
+                    estado: form.estado,
+                    salud_bateria: form.salud_bateria,
+                    almacenamiento: form.almacenamiento,
+                    color: form.color,
+                    vendido: false,
+                    imagen_url: form.imagen_url,
+                    costo_compra: form.precio_costo
+                });
+                avisar('Equipo registrado');
             }
-            setEditandoId(null);
-            avisar('✅ Actualizado');
-        } else {
-            const { error: insertError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('Celulares').insert([
-                datosLimpios
-            ]);
-            if (insertError) {
-                const msg = (insertError?.message || '').toLowerCase();
-                const code = insertError?.code;
-                if (code === '23505' || msg.includes('duplicate') || msg.includes('unique')) {
-                    avisar('⚠️ Ese IMEI ya existe en el inventario', '#ff4b2b');
-                    return;
-                }
-                avisar('Error: ' + insertError.message, 'red');
-                return;
-            }
-            avisar('🚀 Registrado');
+            setForm(estadoInicial);
+            cargarEquipos();
+        } catch (e) {
+            avisar(e.message, 'error');
         }
-        setForm(estadoInicial);
-        await cargarEquipos();
-        await cargarVentas();
-        cargarEquipos();
     };
-    // --- VENTA: abrir modal ---
-    const abrirModalVenta = (cel)=>{
-        setVentaCel(cel);
-        setVentaForm({
-            precio_final: cel?.precio_venta ?? '',
-            cliente_nombre: '',
-            cliente_telefono: ''
-        });
-        setVentaModalAbierto(true);
-    };
-    // --- VENTA: confirmar (ventas + movimientos + update celulares) ---
     const confirmarVenta = async ()=>{
         if (!ventaCel) return;
-        if (Number(ventaCel.stock) <= 0) {
-            avisar('⚠️ Este equipo ya está vendido', '#ff4b2b');
-            return;
-        }
         const precioFinal = Number(ventaForm.precio_final);
-        if (!precioFinal || precioFinal <= 0) {
-            avisar('⚠️ Ingresa el precio final', '#ff4b2b');
-            return;
-        }
+        if (!precioFinal) return avisar('Falta precio', 'error');
         setGuardandoVenta(true);
-        // usuario logueado (para vender_por y actor_id)
         const { data: sess } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].auth.getSession();
         const userId = sess?.session?.user?.id;
-        if (!userId) {
-            setGuardandoVenta(false);
-            avisar('⚠️ Sesión no válida, vuelve a iniciar sesión', '#ff4b2b');
-            return;
-        }
-        // 1) Insert venta (OBLIGATORIO: vendido_por = userId para pasar RLS self)
-        const { error: errVenta } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('ventas').insert([
-            {
-                celular_id: ventaCel.id,
-                precio_lista: ventaCel.precio_venta ?? null,
-                precio_final: precioFinal,
-                cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
-                cliente_telefono: ventaForm.cliente_telefono?.trim() || null,
-                vendido_por: userId
-            }
-        ]);
-        if (errVenta) {
-            setGuardandoVenta(false);
-            avisar('❌ Error registrando venta: ' + errVenta.message, '#ff4b2b');
-            return;
-        }
-        // 2) Update celular -> vendido
-        const { error: errUpd } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('Celulares').update({
-            stock: 0,
-            publicado: false
-        }).eq('id', ventaCel.id);
-        if (errUpd) {
-            setGuardandoVenta(false);
-            avisar('❌ Error marcando vendido: ' + errUpd.message, '#ff4b2b');
-            return;
-        }
-        // 3) Insert movimiento (OBLIGATORIO: actor_id = userId para pasar RLS self)
-        const { error: errMov } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('movimientos_inventario').insert([
-            {
-                celular_id: ventaCel.id,
-                tipo: 'VENDIDO',
-                actor_id: userId,
-                detalle: {
-                    precio_lista: ventaCel.precio_venta ?? null,
-                    precio_final: precioFinal,
-                    cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
-                    cliente_telefono: ventaForm.cliente_telefono?.trim() || null
-                }
-            }
-        ]);
-        if (errMov) {
-            // No bloquea la venta, pero avisa (ya se vendió)
-            avisar('⚠️ Vendido, pero no se registró movimiento: ' + errMov.message, '#ff4b2b');
+        if (!userId) return;
+        const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('ventas_v2').insert({
+            item_serializado_id: ventaCel.id,
+            sku_id: ventaCel._raw.skus.id,
+            precio_lista: ventaCel.precio_venta,
+            precio_final: precioFinal,
+            descuento: (ventaCel.precio_venta || 0) - precioFinal,
+            cliente_nombre: ventaForm.cliente_nombre,
+            cliente_telefono: ventaForm.cliente_telefono,
+            vendido_por: userId,
+            tipo_venta: 'SERIALIZADO',
+            cantidad: 1
+        });
+        if (!error) {
+            await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('items_serializados').update({
+                vendido: true
+            }).eq('id', ventaCel.id);
+            avisar('¡Venta registrada!');
+            setVentaModalAbierto(false);
+            setVentaCel(null);
+            setVentaForm({
+                precio_final: '',
+                cliente_nombre: '',
+                cliente_telefono: ''
+            });
+            cargarEquipos();
+            cargarVentas();
         } else {
-            avisar('✅ Venta registrada');
+            avisar(error.message, 'error');
         }
         setGuardandoVenta(false);
-        setVentaModalAbierto(false);
-        setVentaCel(null);
-        setVentaForm({
-            precio_final: '',
-            cliente_nombre: '',
-            cliente_telefono: ''
-        });
-        await cargarEquipos();
-        await cargarVentas();
     };
-    const equiposFiltrados = equipos.filter((cel)=>{
-        const texto = (busqueda || '').toLowerCase();
-        const matchBusqueda = cel.marca?.toLowerCase().includes(texto) || cel.modelo?.toLowerCase().includes(texto) || cel.estado?.toLowerCase().includes(texto) || cel.imei?.toLowerCase().includes(texto) || cel.color?.toLowerCase().includes(texto);
-        const matchEstado = filtroEstado === 'TODOS' ? true : cel.estado === filtroEstado;
-        const matchPublicado = filtroPublicado === 'TODOS' ? true : filtroPublicado === 'PUBLICADO' ? !!cel.publicado : !cel.publicado;
-        const vendido = Number(cel.stock) <= 0;
-        const matchVendidos = filtroVendidos === 'TODOS' ? true : filtroVendidos === 'VENDIDOS' ? vendido : !vendido;
-        return matchBusqueda && matchEstado && matchPublicado && matchVendidos;
-    });
-    const resumenVentas = ventas.reduce((acc, v)=>{
-        const costo = Number(v?.Celulares?.precio_costo ?? 0);
-        const final = Number(v?.precio_final ?? 0);
-        acc.totalVentas += final;
-        acc.totalCosto += costo;
-        acc.totalGanancia += final - costo;
-        acc.count += 1;
-        return acc;
-    }, {
-        totalVentas: 0,
-        totalCosto: 0,
-        totalGanancia: 0,
-        count: 0
-    });
-    // --- LOGIN ---
-    if (!autorizado) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            style: {
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                background: theme.gradient,
-                display: 'grid',
-                placeItems: 'center',
-                zIndex: 9999,
-                fontFamily: 'sans-serif'
-            },
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    backgroundColor: theme.card,
-                    padding: '50px 40px',
-                    borderRadius: '35px',
-                    textAlign: 'center',
-                    border: `2px solid ${theme.cyan}`,
-                    boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-                    width: '90%',
-                    maxWidth: '420px'
-                },
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                        style: {
-                            fontSize: '2.5rem',
-                            margin: '0 0 10px',
-                            fontWeight: '900',
-                            color: 'white'
-                        },
-                        children: [
-                            "LOS FARRUS ",
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                style: {
-                                    color: theme.orange
-                                },
-                                children: "HUB"
-                            }, void 0, false, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 686,
-                                columnNumber: 110
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 686,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        style: {
-                            color: theme.cyan,
-                            marginBottom: '25px',
-                            letterSpacing: '2px',
-                            fontSize: '0.9rem'
-                        },
-                        children: "PANEL DE GESTIÓN"
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 687,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                        type: "email",
-                        placeholder: "Correo (admin)",
-                        value: email,
-                        onChange: (e)=>setEmail(e.target.value),
-                        style: {
-                            width: '100%',
-                            padding: '18px',
-                            borderRadius: '15px',
-                            border: 'none',
-                            backgroundColor: '#0b1426',
-                            color: 'white',
-                            marginBottom: '12px',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                            outline: 'none',
-                            boxSizing: 'border-box'
-                        }
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 689,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                        type: "password",
-                        placeholder: "Contraseña",
-                        value: password,
-                        onChange: (e)=>setPassword(e.target.value),
-                        onKeyDown: (e)=>e.key === 'Enter' && login(),
-                        style: {
-                            width: '100%',
-                            padding: '18px',
-                            borderRadius: '15px',
-                            border: 'none',
-                            backgroundColor: '#0b1426',
-                            color: 'white',
-                            marginBottom: '18px',
-                            textAlign: 'center',
-                            fontSize: '1rem',
-                            outline: 'none',
-                            boxSizing: 'border-box'
-                        }
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 697,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: login,
-                        // --- BOTÓN LOGIN ---
-                        disabled: cargandoLogin,
-                        style: {
-                            width: '100%',
-                            padding: '18px',
-                            background: theme.orange,
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '15px',
-                            fontWeight: 'bold',
-                            fontSize: '1.05rem',
-                            cursor: 'pointer',
-                            opacity: cargandoLogin ? 0.7 : 1,
-                            boxShadow: '0 10px 20px rgba(243, 156, 18, 0.3)'
-                        },
-                        children: cargandoLogin ? 'CONECTANDO...' : 'ACCEDER'
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 706,
-                        columnNumber: 9
-                    }, this),
-                    loginError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            marginTop: '12px',
-                            color: '#ff4b2b',
-                            fontWeight: 'bold',
-                            fontSize: '0.9rem',
-                            textAlign: 'center'
-                        },
-                        children: [
-                            "⚠️ ",
-                            loginError
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 729,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/pages/inventario.js",
-                lineNumber: 685,
-                columnNumber: 7
-            }, this)
-        }, void 0, false, {
-            fileName: "[project]/pages/inventario.js",
-            lineNumber: 684,
-            columnNumber: 5
-        }, this);
-    }
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+    const resumenVentas = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "Inventario.useMemo[resumenVentas]": ()=>ventas.reduce({
+                "Inventario.useMemo[resumenVentas]": (acc, v)=>{
+                    const final = Number(v.precio_final || 0);
+                    let costo = v.items_serializados?.costo_compra ? Number(v.items_serializados.costo_compra) : Number(v.skus?.precio_costo || 0) * (v.cantidad || 1);
+                    return {
+                        totalVentas: acc.totalVentas + final,
+                        totalCosto: acc.totalCosto + costo,
+                        totalGanancia: acc.totalGanancia + (final - costo),
+                        count: acc.count + 1
+                    };
+                }
+            }["Inventario.useMemo[resumenVentas]"], {
+                totalVentas: 0,
+                totalCosto: 0,
+                totalGanancia: 0,
+                count: 0
+            })
+    }["Inventario.useMemo[resumenVentas]"], [
+        ventas
+    ]);
+    const equiposFiltrados = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "Inventario.useMemo[equiposFiltrados]": ()=>equipos.filter({
+                "Inventario.useMemo[equiposFiltrados]": (c)=>{
+                    const terminos = busqueda.toLowerCase().trim().split(/\s+/);
+                    const datos = `${c.marca} ${c.modelo} ${c.imei} ${c.color} ${c.almacenamiento} ${c.estado} ${c.descripcion}`.toLowerCase();
+                    const match = terminos.every({
+                        "Inventario.useMemo[equiposFiltrados].match": (t)=>datos.includes(t)
+                    }["Inventario.useMemo[equiposFiltrados].match"]);
+                    const st = filtroEstado === 'TODOS' || c.estado === filtroEstado;
+                    const vd = filtroVendidos === 'TODOS' || (filtroVendidos === 'VENDIDOS' ? Number(c.stock) <= 0 : Number(c.stock) > 0);
+                    return match && st && vd;
+                }
+            }["Inventario.useMemo[equiposFiltrados]"])
+    }["Inventario.useMemo[equiposFiltrados]"], [
+        equipos,
+        busqueda,
+        filtroEstado,
+        filtroVendidos
+    ]);
+    if (!autorizado) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         style: {
-            minHeight: '100vh',
-            background: theme.gradient,
-            padding: '50px 20px',
-            color: 'white',
-            fontFamily: 'sans-serif'
+            ...styles.container,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
         },
-        children: [
-            notificacion.visible && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    position: 'fixed',
-                    top: '20px',
-                    right: '20px',
-                    backgroundColor: theme.card,
-                    color: theme.white,
-                    padding: '15px 30px',
-                    borderRadius: '15px',
-                    borderLeft: `6px solid ${notificacion.color}`,
-                    zIndex: 10000,
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
-                },
-                children: notificacion.mensaje
-            }, void 0, false, {
-                fileName: "[project]/pages/inventario.js",
-                lineNumber: 740,
-                columnNumber: 32
-            }, this),
-            modalImagen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                onClick: ()=>setModalImagen(null),
-                style: {
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    backgroundColor: 'rgba(0,0,0,0.9)',
-                    zIndex: 99999,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'zoom-out',
-                    padding: '20px',
-                    boxSizing: 'border-box',
-                    backdropFilter: 'blur(5px)'
-                },
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                    src: modalImagen,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            style: {
+                ...styles.glassPanel,
+                padding: '40px',
+                width: '100%',
+                maxWidth: '380px',
+                textAlign: 'center'
+            },
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
-                        maxHeight: '90vh',
-                        maxWidth: '90vw',
-                        objectFit: 'contain',
-                        borderRadius: '20px',
-                        boxShadow: '0 20px 50px rgba(0,0,0,0.8)',
-                        border: `2px solid ${theme.cyan}`
-                    }
+                        marginBottom: '20px'
+                    },
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Logo, {}, void 0, false, {
+                        fileName: "[project]/pages/inventario.js",
+                        lineNumber: 459,
+                        columnNumber: 47
+                    }, this)
                 }, void 0, false, {
                     fileName: "[project]/pages/inventario.js",
-                    lineNumber: 752,
-                    columnNumber: 11
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/pages/inventario.js",
-                lineNumber: 744,
-                columnNumber: 9
-            }, this),
-            ventaModalAbierto && ventaCel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                onClick: ()=>!guardandoVenta && setVentaModalAbierto(false),
-                style: {
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100vw',
-                    height: '100vh',
-                    backgroundColor: 'rgba(0,0,0,0.75)',
-                    zIndex: 99998,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '20px',
-                    boxSizing: 'border-box'
-                },
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    onClick: (e)=>e.stopPropagation(),
+                    lineNumber: 459,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                     style: {
-                        width: '100%',
-                        maxWidth: 520,
-                        background: theme.card,
-                        borderRadius: 24,
-                        border: `1px solid ${theme.cyan}33`,
-                        padding: 22
+                        fontSize: '2rem',
+                        color: 'white',
+                        margin: '0 0 10px 0',
+                        fontWeight: '900'
                     },
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            style: {
-                                marginTop: 0
-                            },
-                            children: "Registrar venta"
+                        "FARRUS",
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            style: styles.goldText,
+                            children: "HUB"
                         }, void 0, false, {
                             fileName: "[project]/pages/inventario.js",
-                            lineNumber: 779,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                color: '#94a3b8',
-                                marginBottom: 14
-                            },
-                            children: [
-                                ventaCel.marca,
-                                " ",
-                                ventaCel.modelo,
-                                " — IMEI: ",
-                                ventaCel.imei || 'N/A'
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 780,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                            style: {
-                                display: 'block',
-                                marginBottom: 6,
-                                color: theme.cyan,
-                                fontWeight: 'bold'
-                            },
-                            children: "Precio final (con descuento)"
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 784,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                            type: "number",
-                            value: ventaForm.precio_final,
-                            onChange: (e)=>setVentaForm({
-                                    ...ventaForm,
-                                    precio_final: e.target.value
-                                }),
-                            style: inputStyle
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 787,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                height: 12
-                            }
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 794,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                            style: {
-                                display: 'block',
-                                marginBottom: 6,
-                                color: '#94a3b8'
-                            },
-                            children: "Cliente (opcional)"
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 796,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                            placeholder: "Nombre",
-                            value: ventaForm.cliente_nombre,
-                            onChange: (e)=>setVentaForm({
-                                    ...ventaForm,
-                                    cliente_nombre: e.target.value
-                                }),
-                            style: inputStyle
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 799,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                height: 10
-                            }
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 806,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                            placeholder: "Teléfono",
-                            value: ventaForm.cliente_telefono,
-                            onChange: (e)=>setVentaForm({
-                                    ...ventaForm,
-                                    cliente_telefono: e.target.value
-                                }),
-                            style: inputStyle
-                        }, void 0, false, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 808,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                display: 'flex',
-                                gap: 12,
-                                marginTop: 18
-                            },
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>setVentaModalAbierto(false),
-                                    disabled: guardandoVenta,
-                                    style: {
-                                        flex: 1,
-                                        padding: '14px 16px',
-                                        borderRadius: 14,
-                                        border: `1px solid ${theme.cyan}44`,
-                                        background: 'transparent',
-                                        color: theme.cyan,
-                                        fontWeight: 'bold',
-                                        cursor: 'pointer',
-                                        opacity: guardandoVenta ? 0.6 : 1
-                                    },
-                                    children: "Cancelar"
-                                }, void 0, false, {
-                                    fileName: "[project]/pages/inventario.js",
-                                    lineNumber: 816,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: confirmarVenta,
-                                    disabled: guardandoVenta,
-                                    style: {
-                                        flex: 1,
-                                        padding: '14px 16px',
-                                        borderRadius: 14,
-                                        border: 'none',
-                                        background: theme.orange,
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        cursor: 'pointer',
-                                        opacity: guardandoVenta ? 0.6 : 1
-                                    },
-                                    children: guardandoVenta ? 'Guardando...' : 'Confirmar venta'
-                                }, void 0, false, {
-                                    fileName: "[project]/pages/inventario.js",
-                                    lineNumber: 834,
-                                    columnNumber: 15
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/pages/inventario.js",
-                            lineNumber: 815,
-                            columnNumber: 13
+                            lineNumber: 460,
+                            columnNumber: 105
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/pages/inventario.js",
-                    lineNumber: 769,
-                    columnNumber: 11
+                    lineNumber: 460,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                    style: {
+                        color: '#94a3b8',
+                        fontSize: '0.8rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '2px',
+                        marginBottom: '30px'
+                    },
+                    children: "Acceso Administrativo"
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 461,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    style: {
+                        textAlign: 'left',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '15px'
+                    },
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            style: styles.input,
+                            placeholder: "Correo",
+                            value: email,
+                            onChange: (e)=>setEmail(e.target.value)
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 463,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            style: styles.input,
+                            type: "password",
+                            placeholder: "Contraseña",
+                            value: password,
+                            onChange: (e)=>setPassword(e.target.value)
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 464,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: login,
+                            style: {
+                                ...styles.btnPrimary,
+                                justifyContent: 'center',
+                                marginTop: '10px'
+                            },
+                            children: cargandoLogin ? 'Verificando...' : 'Iniciar Sesión'
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 465,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 462,
+                    columnNumber: 9
                 }, this)
-            }, void 0, false, {
-                fileName: "[project]/pages/inventario.js",
-                lineNumber: 760,
-                columnNumber: 9
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/inventario.js",
+            lineNumber: 458,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/pages/inventario.js",
+        lineNumber: 457,
+        columnNumber: 5
+    }, this);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        style: styles.container,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
                 style: {
-                    maxWidth: '1400px',
-                    margin: 'auto'
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 100,
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    backdropFilter: 'blur(12px)',
+                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                    padding: '16px 24px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '10px'
                 },
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            textAlign: 'center',
-                            marginBottom: '60px'
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px'
                         },
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
-                                    fontSize: '3.5rem',
+                                    padding: '8px',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    borderRadius: '12px',
+                                    border: '1px solid rgba(255,255,255,0.1)'
+                                },
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Logo, {}, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 474,
+                                    columnNumber: 212
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 474,
+                                columnNumber: 77
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                style: {
+                                    fontSize: '1.2rem',
                                     fontWeight: '900',
-                                    margin: 0
+                                    color: 'white'
                                 },
                                 children: [
-                                    "LOS FARRUS ",
+                                    "FARRUS",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        style: {
-                                            color: theme.orange
-                                        },
+                                        style: styles.goldText,
                                         children: "HUB"
                                     }, void 0, false, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 859,
-                                        columnNumber: 87
+                                        lineNumber: 474,
+                                        columnNumber: 310
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 859,
+                                lineNumber: 474,
+                                columnNumber: 232
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/inventario.js",
+                        lineNumber: 474,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            display: 'flex',
+                            gap: '8px',
+                            background: 'rgba(255,255,255,0.03)',
+                            padding: '4px',
+                            borderRadius: '16px',
+                            border: '1px solid rgba(255,255,255,0.05)',
+                            flexWrap: 'wrap'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>setActiveTab('register'),
+                                style: {
+                                    ...styles.btnIcon,
+                                    width: 'auto',
+                                    padding: '0 20px',
+                                    borderRadius: '12px',
+                                    background: activeTab === 'register' ? '#F59E0B' : 'transparent',
+                                    color: activeTab === 'register' ? 'black' : '#94a3b8',
+                                    border: 'none',
+                                    fontWeight: 'bold',
+                                    fontSize: '0.85rem'
+                                },
+                                children: "Registro"
+                            }, void 0, false, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 476,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: logout,
+                                onClick: ()=>setActiveTab('inventory'),
                                 style: {
-                                    background: 'rgba(255,255,255,0.05)',
-                                    border: `1px solid ${theme.cyan}`,
-                                    color: theme.cyan,
-                                    padding: '10px 25px',
-                                    borderRadius: '25px',
-                                    cursor: 'pointer',
-                                    marginTop: '15px',
-                                    fontWeight: 'bold'
+                                    ...styles.btnIcon,
+                                    width: 'auto',
+                                    padding: '0 20px',
+                                    borderRadius: '12px',
+                                    background: activeTab === 'inventory' ? '#F59E0B' : 'transparent',
+                                    color: activeTab === 'inventory' ? 'black' : '#94a3b8',
+                                    border: 'none',
+                                    fontWeight: 'bold',
+                                    fontSize: '0.85rem'
                                 },
-                                children: "Cerrar Sesión 🔒"
+                                children: "Inventario"
                             }, void 0, false, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 860,
+                                lineNumber: 477,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>setActiveTab('sales'),
+                                style: {
+                                    ...styles.btnIcon,
+                                    width: 'auto',
+                                    padding: '0 20px',
+                                    borderRadius: '12px',
+                                    background: activeTab === 'sales' ? '#F59E0B' : 'transparent',
+                                    color: activeTab === 'sales' ? 'black' : '#94a3b8',
+                                    border: 'none',
+                                    fontWeight: 'bold',
+                                    fontSize: '0.85rem'
+                                },
+                                children: "Finanzas"
+                            }, void 0, false, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 478,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>router.push('/accesorios'),
+                                style: {
+                                    ...styles.btnIcon,
+                                    width: 'auto',
+                                    padding: '0 20px',
+                                    borderRadius: '12px',
+                                    background: 'transparent',
+                                    color: '#94a3b8',
+                                    border: 'none',
+                                    fontWeight: 'bold',
+                                    fontSize: '0.85rem'
+                                },
+                                children: "Accesorios"
+                            }, void 0, false, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 479,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 858,
+                        lineNumber: 475,
                         columnNumber: 9
                     }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: logout,
+                        style: {
+                            ...styles.btnIcon,
+                            width: 'auto',
+                            padding: '0 16px',
+                            borderRadius: '12px',
+                            borderColor: 'rgba(239, 68, 68, 0.3)',
+                            color: '#ef4444'
+                        },
+                        children: "Salir"
+                    }, void 0, false, {
+                        fileName: "[project]/pages/inventario.js",
+                        lineNumber: 481,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 473,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: {
+                    padding: '30px',
+                    maxWidth: '1400px',
+                    margin: '0 auto'
+                },
+                children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
-                            backgroundColor: theme.card,
-                            padding: '50px',
-                            borderRadius: '40px',
-                            marginBottom: '80px',
-                            border: '1px solid rgba(0,210,255,0.15)',
-                            boxShadow: '0 40px 90px rgba(0,0,0,0.4)'
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                            gap: '20px',
+                            marginBottom: '40px'
                         },
                         children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                style: {
-                                    marginBottom: '40px',
-                                    borderLeft: `8px solid ${theme.orange}`,
-                                    paddingLeft: '20px',
-                                    fontSize: '1.8rem'
-                                },
-                                children: editandoId ? '📝 EDITAR EQUIPO' : '📦 NUEVO INGRESO'
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StatCard, {
+                                label: "Ventas Totales",
+                                value: `S/ ${resumenVentas.totalVentas.toLocaleString()}`,
+                                icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Dollar, {}, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 488,
+                                    columnNumber: 109
+                                }, void 0)
                             }, void 0, false, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 865,
-                                columnNumber: 7
+                                lineNumber: 488,
+                                columnNumber: 11
                             }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StatCard, {
+                                label: "Ganancia Neta",
+                                value: `S/ ${resumenVentas.totalGanancia.toLocaleString()}`,
+                                color: "#10b981",
+                                icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Chart, {}, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 489,
+                                    columnNumber: 126
+                                }, void 0),
+                                subtext: "Margen saludable"
+                            }, void 0, false, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 489,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StatCard, {
+                                label: "Inversión Activa",
+                                value: `S/ ${resumenVentas.totalCosto.toLocaleString()}`,
+                                color: "#94a3b8",
+                                icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Box, {}, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 490,
+                                    columnNumber: 126
+                                }, void 0)
+                            }, void 0, false, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 490,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(StatCard, {
+                                label: "Unidades Vendidas",
+                                value: resumenVentas.count,
+                                color: "#3b82f6",
+                                icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Check, {}, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 491,
+                                    columnNumber: 97
+                                }, void 0)
+                            }, void 0, false, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 491,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/inventario.js",
+                        lineNumber: 487,
+                        columnNumber: 9
+                    }, this),
+                    activeTab === 'register' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        id: "form-area",
+                        style: {
+                            ...styles.glassPanel,
+                            padding: '40px',
+                            marginBottom: '50px'
+                        },
+                        children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                                    gap: '25px'
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginBottom: '30px',
+                                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                                    paddingBottom: '20px',
+                                    flexWrap: 'wrap',
+                                    gap: '20px'
                                 },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '15px'
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    borderRadius: '14px',
+                                                    background: 'rgba(245, 158, 11, 0.1)',
+                                                    color: '#F59E0B',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    border: '1px solid rgba(245, 158, 11, 0.2)'
+                                                },
+                                                children: editandoId ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Edit, {}, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 497,
+                                                    columnNumber: 335
+                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Box, {}, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 497,
+                                                    columnNumber: 352
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 497,
+                                                columnNumber: 85
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                style: {
+                                                    fontSize: '1.5rem',
+                                                    fontWeight: 'bold',
+                                                    color: 'white',
+                                                    margin: 0
+                                                },
+                                                children: editandoId ? 'Editar Equipo' : 'Registrar Nuevo Equipo'
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 497,
+                                                columnNumber: 372
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 497,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '12px',
+                                            padding: '8px 16px',
+                                            background: 'rgba(0,0,0,0.3)',
+                                            borderRadius: '50px',
+                                            border: '1px solid rgba(255,255,255,0.05)'
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                style: {
+                                                    fontSize: '0.75rem',
+                                                    fontWeight: 'bold',
+                                                    textTransform: 'uppercase',
+                                                    letterSpacing: '1px',
+                                                    color: form.publicado ? '#10b981' : '#64748b'
+                                                },
+                                                children: form.publicado ? 'Público' : 'Borrador'
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 499,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                onClick: ()=>setForm({
+                                                        ...form,
+                                                        publicado: !form.publicado
+                                                    }),
+                                                style: {
+                                                    width: '40px',
+                                                    height: '22px',
+                                                    background: form.publicado ? '#10b981' : '#334155',
+                                                    borderRadius: '99px',
+                                                    position: 'relative',
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.3s'
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    style: {
+                                                        width: '18px',
+                                                        height: '18px',
+                                                        background: 'white',
+                                                        borderRadius: '50%',
+                                                        position: 'absolute',
+                                                        top: '2px',
+                                                        left: form.publicado ? '20px' : '2px',
+                                                        transition: 'all 0.3s',
+                                                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                                                    }
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 500,
+                                                    columnNumber: 268
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 500,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 498,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/inventario.js",
+                                lineNumber: 496,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: styles.grid,
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: theme.cyan,
-                                                    fontSize: '0.8rem',
-                                                    fontWeight: 'bold'
-                                                },
-                                                children: "ESTADO"
+                                                style: styles.label,
+                                                children: "Marca"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 871,
-                                                columnNumber: 11
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                                value: form.estado,
-                                                onChange: (e)=>setForm({
-                                                        ...form,
-                                                        estado: e.target.value
-                                                    }),
-                                                style: inputStyle,
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "Nuevo Sellado",
-                                                        children: "Nuevo Sellado"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 873,
-                                                        columnNumber: 13
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "Semi Nuevo",
-                                                        children: "Semi Nuevo"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 874,
-                                                        columnNumber: 13
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "Usado",
-                                                        children: "Usado"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 875,
-                                                        columnNumber: 13
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                        value: "Open Box",
-                                                        children: "Open Box"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 876,
-                                                        columnNumber: 13
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 872,
-                                                columnNumber: 11
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 870,
-                                        columnNumber: 9
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "STOCK"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 882,
-                                                columnNumber: 11
+                                                lineNumber: 505,
+                                                columnNumber: 22
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "number",
-                                                min: "0",
-                                                placeholder: "Ej. 1",
-                                                value: form.stock ?? 0,
-                                                style: inputStyle,
-                                                onChange: (e)=>setForm({
-                                                        ...form,
-                                                        stock: Number(e.target.value)
-                                                    })
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 883,
-                                                columnNumber: 11
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 881,
-                                        columnNumber: 9
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: theme.cyan,
-                                                    fontSize: '0.8rem',
-                                                    fontWeight: 'bold'
-                                                },
-                                                children: "PUBLICAR EN CATÁLOGO"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 895,
-                                                columnNumber: 11
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                style: {
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '10px',
-                                                    padding: '16px',
-                                                    borderRadius: '15px',
-                                                    background: '#0b1426',
-                                                    border: '1px solid #25335a',
-                                                    color: 'white'
-                                                },
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                        type: "checkbox",
-                                                        checked: !!form.publicado,
-                                                        onChange: (e)=>setForm({
-                                                                ...form,
-                                                                publicado: e.target.checked
-                                                            })
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 897,
-                                                        columnNumber: 13
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                        style: {
-                                                            fontSize: '0.9rem'
-                                                        },
-                                                        children: form.publicado ? 'Visible' : 'Oculto'
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 902,
-                                                        columnNumber: 13
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 896,
-                                                columnNumber: 11
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 894,
-                                        columnNumber: 9
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "MARCA"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 909,
-                                                columnNumber: 11
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                style: styles.input,
                                                 placeholder: "Ej. Apple",
                                                 value: form.marca,
-                                                style: inputStyle,
                                                 onChange: (e)=>setForm({
                                                         ...form,
                                                         marca: e.target.value
                                                     })
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 910,
-                                                columnNumber: 11
+                                                lineNumber: 505,
+                                                columnNumber: 63
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 908,
-                                        columnNumber: 9
+                                        lineNumber: 505,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "MODELO"
+                                                style: styles.label,
+                                                children: "Modelo"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 914,
-                                                columnNumber: 11
+                                                lineNumber: 506,
+                                                columnNumber: 22
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                style: styles.input,
                                                 placeholder: "Ej. iPhone 15",
                                                 value: form.modelo,
-                                                style: inputStyle,
                                                 onChange: (e)=>setForm({
                                                         ...form,
                                                         modelo: e.target.value
                                                     })
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 915,
-                                                columnNumber: 11
+                                                lineNumber: 506,
+                                                columnNumber: 64
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 913,
-                                        columnNumber: 9
+                                        lineNumber: 506,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "COLOR"
+                                                style: styles.label,
+                                                children: "Estado"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 919,
-                                                columnNumber: 11
+                                                lineNumber: 508,
+                                                columnNumber: 19
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                style: styles.input,
+                                                value: form.estado,
+                                                onChange: (e)=>setForm({
+                                                        ...form,
+                                                        estado: e.target.value
+                                                    }),
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        children: "Nuevo Sellado"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 510,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        children: "Semi Nuevo"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 510,
+                                                        columnNumber: 51
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        children: "Usado"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 510,
+                                                        columnNumber: 78
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                        children: "Open Box"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 510,
+                                                        columnNumber: 100
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 509,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 507,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: styles.label,
+                                                children: "Serial / IMEI"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 513,
+                                                columnNumber: 22
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                placeholder: "Ej. Azul Titanio",
+                                                style: {
+                                                    ...styles.input,
+                                                    fontFamily: 'monospace'
+                                                },
+                                                placeholder: "Escanea...",
+                                                value: form.serial,
+                                                onChange: (e)=>setForm({
+                                                        ...form,
+                                                        serial: normalizarSerial(e.target.value)
+                                                    })
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 513,
+                                                columnNumber: 71
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 513,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: styles.label,
+                                                children: "Color"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 514,
+                                                columnNumber: 22
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                style: styles.input,
+                                                placeholder: "Ej. Azul",
                                                 value: form.color,
-                                                style: inputStyle,
                                                 onChange: (e)=>setForm({
                                                         ...form,
                                                         color: e.target.value
                                                     })
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 920,
-                                                columnNumber: 11
+                                                lineNumber: 514,
+                                                columnNumber: 63
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 918,
-                                        columnNumber: 9
+                                        lineNumber: 514,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "ALMACENAMIENTO"
+                                                style: styles.label,
+                                                children: "Almacenamiento"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 924,
-                                                columnNumber: 11
+                                                lineNumber: 515,
+                                                columnNumber: 22
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                placeholder: "Ej. 256Gb",
+                                                style: styles.input,
+                                                placeholder: "Ej. 128GB",
                                                 value: form.almacenamiento,
-                                                style: inputStyle,
                                                 onChange: (e)=>setForm({
                                                         ...form,
                                                         almacenamiento: e.target.value
                                                     })
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 925,
-                                                columnNumber: 11
+                                                lineNumber: 515,
+                                                columnNumber: 72
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 923,
-                                        columnNumber: 9
+                                        lineNumber: 515,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "IMEI / SERIE"
+                                                style: styles.label,
+                                                children: "Batería %"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 929,
-                                                columnNumber: 11
+                                                lineNumber: 516,
+                                                columnNumber: 22
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                placeholder: "Escanea o escribe...",
-                                                value: form.imei,
-                                                style: {
-                                                    ...inputStyle,
-                                                    fontFamily: 'monospace'
-                                                },
-                                                onChange: (e)=>setForm({
-                                                        ...form,
-                                                        imei: normalizarImei(e.target.value)
-                                                    })
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 930,
-                                                columnNumber: 11
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 928,
-                                        columnNumber: 9
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "PRECIO VENTA"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 934,
-                                                columnNumber: 11
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                style: styles.input,
                                                 type: "number",
-                                                placeholder: "S/.",
-                                                value: form.precio_venta,
-                                                style: {
-                                                    ...inputStyle,
-                                                    borderColor: theme.orange
-                                                },
-                                                onChange: (e)=>setForm({
-                                                        ...form,
-                                                        precio_venta: e.target.value
-                                                    })
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 935,
-                                                columnNumber: 11
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 933,
-                                        columnNumber: 9
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "PRECIO COSTO"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 939,
-                                                columnNumber: 11
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "number",
-                                                placeholder: "S/.",
-                                                value: form.precio_costo,
-                                                style: inputStyle,
-                                                onChange: (e)=>setForm({
-                                                        ...form,
-                                                        precio_costo: e.target.value
-                                                    })
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 940,
-                                                columnNumber: 11
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 938,
-                                        columnNumber: 9
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
-                                                },
-                                                children: "SALUD BATERÍA (%)"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 944,
-                                                columnNumber: 11
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "number",
-                                                placeholder: "Ej. 90",
+                                                placeholder: "100",
                                                 value: form.salud_bateria,
-                                                style: inputStyle,
                                                 onChange: (e)=>setForm({
                                                         ...form,
                                                         salud_bateria: e.target.value
                                                     })
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 945,
-                                                columnNumber: 11
+                                                lineNumber: 516,
+                                                columnNumber: 67
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 943,
-                                        columnNumber: 9
+                                        lineNumber: 516,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            gridColumn: '1 / -1'
-                                        },
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                 style: {
-                                                    marginLeft: '10px',
-                                                    color: '#888',
-                                                    fontSize: '0.8rem'
+                                                    ...styles.label,
+                                                    color: '#F59E0B'
                                                 },
-                                                children: "DESCRIPCIÓN"
+                                                children: "Precio Venta"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 949,
-                                                columnNumber: 11
+                                                lineNumber: 517,
+                                                columnNumber: 22
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                style: {
+                                                    ...styles.input,
+                                                    borderColor: 'rgba(245, 158, 11, 0.4)',
+                                                    color: '#F59E0B',
+                                                    fontWeight: 'bold'
+                                                },
+                                                type: "number",
+                                                placeholder: "0.00",
+                                                value: form.precio_venta,
+                                                onChange: (e)=>setForm({
+                                                        ...form,
+                                                        precio_venta: e.target.value
+                                                    })
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 517,
+                                                columnNumber: 93
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 517,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: styles.label,
+                                                children: "Costo Compra"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 518,
+                                                columnNumber: 22
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                style: styles.input,
+                                                type: "number",
+                                                placeholder: "0.00",
+                                                value: form.precio_costo,
+                                                onChange: (e)=>setForm({
+                                                        ...form,
+                                                        precio_costo: e.target.value
+                                                    })
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 518,
+                                                columnNumber: 70
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 518,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            gridColumn: '1/-1'
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: styles.label,
+                                                children: "Detalles / Descripción"
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 519,
+                                                columnNumber: 53
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                                placeholder: "Detalles...",
-                                                value: form.descripcion,
                                                 style: {
-                                                    ...inputStyle,
-                                                    minHeight: '100px',
+                                                    ...styles.input,
+                                                    height: '100px',
                                                     resize: 'vertical'
                                                 },
+                                                placeholder: "Detalles adicionales...",
+                                                value: form.descripcion,
                                                 onChange: (e)=>setForm({
                                                         ...form,
                                                         descripcion: e.target.value
                                                     })
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 950,
-                                                columnNumber: 11
+                                                lineNumber: 519,
+                                                columnNumber: 111
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 948,
-                                        columnNumber: 9
+                                        lineNumber: 519,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
-                                            gridColumn: '1 / -1',
-                                            marginTop: '10px'
+                                            gridColumn: '1/-1',
+                                            border: '2px dashed rgba(255,255,255,0.1)',
+                                            borderRadius: '16px',
+                                            padding: '20px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            background: 'rgba(0,0,0,0.2)'
                                         },
-                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            style: {
-                                                display: 'flex',
-                                                gap: '20px',
-                                                flexWrap: 'wrap',
-                                                backgroundColor: 'rgba(0,0,0,0.25)',
-                                                padding: '20px',
-                                                borderRadius: '20px',
-                                                border: '2px dashed #25335a'
-                                            },
-                                            children: [
-                                                form.imagen_url?.map((url, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        style: {
-                                                            position: 'relative'
-                                                        },
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                                                src: url,
-                                                                style: {
-                                                                    width: '100px',
-                                                                    height: '100px',
-                                                                    objectFit: 'cover',
-                                                                    borderRadius: '15px',
-                                                                    border: `2px solid ${theme.cyan}`
-                                                                }
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/pages/inventario.js",
-                                                                lineNumber: 957,
-                                                                columnNumber: 17
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                onClick: ()=>setForm({
-                                                                        ...form,
-                                                                        imagen_url: form.imagen_url.filter((_, idx)=>idx !== i)
-                                                                    }),
-                                                                style: {
-                                                                    position: 'absolute',
-                                                                    top: '-10px',
-                                                                    right: '-10px',
-                                                                    background: '#ff4b2b',
-                                                                    color: 'white',
-                                                                    border: 'none',
-                                                                    borderRadius: '50%',
-                                                                    width: '25px',
-                                                                    height: '25px',
-                                                                    cursor: 'pointer'
-                                                                },
-                                                                children: "✕"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/pages/inventario.js",
-                                                                lineNumber: 958,
-                                                                columnNumber: 17
-                                                            }, this)
-                                                        ]
-                                                    }, i, true, {
+                                        onClick: ()=>document.getElementById('file-input').click(),
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    color: '#94a3b8',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '8px',
+                                                    fontSize: '0.9rem',
+                                                    fontWeight: 'bold'
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Upload, {}, void 0, false, {
                                                         fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 956,
-                                                        columnNumber: 15
-                                                    }, this)),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                    style: {
-                                                        width: '100px',
-                                                        height: '100px',
-                                                        border: `3px dashed ${theme.cyan}`,
-                                                        borderRadius: '15px',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        cursor: 'pointer',
-                                                        fontSize: '2rem',
-                                                        color: theme.cyan
-                                                    },
-                                                    children: [
-                                                        subiendo ? '⏳' : '+',
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                            type: "file",
-                                                            multiple: true,
-                                                            hidden: true,
-                                                            onChange: manejarFotos
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/pages/inventario.js",
-                                                            lineNumber: 969,
-                                                            columnNumber: 15
-                                                        }, this)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/pages/inventario.js",
-                                                    lineNumber: 967,
-                                                    columnNumber: 13
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/pages/inventario.js",
-                                            lineNumber: 954,
-                                            columnNumber: 11
-                                        }, this)
-                                    }, void 0, false, {
+                                                        lineNumber: 520,
+                                                        columnNumber: 461
+                                                    }, this),
+                                                    " ",
+                                                    subiendo ? 'Subiendo...' : 'Click para subir fotos'
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 520,
+                                                columnNumber: 336
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                id: "file-input",
+                                                type: "file",
+                                                hidden: true,
+                                                multiple: true,
+                                                onChange: manejarFotos
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 520,
+                                                columnNumber: 537
+                                            }, this),
+                                            form.imagen_url.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    display: 'flex',
+                                                    gap: '10px',
+                                                    marginTop: '15px'
+                                                },
+                                                children: form.imagen_url.map((u, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                                        src: u,
+                                                        style: {
+                                                            width: '50px',
+                                                            height: '50px',
+                                                            borderRadius: '8px',
+                                                            objectFit: 'cover',
+                                                            border: '1px solid rgba(255,255,255,0.2)'
+                                                        }
+                                                    }, i, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 520,
+                                                        columnNumber: 741
+                                                    }, this))
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 520,
+                                                columnNumber: 645
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 953,
-                                        columnNumber: 9
+                                        lineNumber: 520,
+                                        columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 869,
-                                columnNumber: 7
+                                lineNumber: 504,
+                                columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: guardar,
                                 style: {
+                                    ...styles.btnPrimary,
                                     width: '100%',
-                                    padding: '25px',
-                                    background: theme.orange,
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '25px',
-                                    fontWeight: '900',
-                                    fontSize: '1.2rem',
-                                    marginTop: '40px',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 10px 30px rgba(243, 156, 18, 0.3)'
+                                    justifyContent: 'center',
+                                    marginTop: '30px',
+                                    fontSize: '1.1rem',
+                                    padding: '16px'
                                 },
-                                children: editandoId ? 'CONFIRMAR CAMBIOS' : 'GUARDAR EQUIPO'
+                                children: editandoId ? 'Guardar Cambios' : 'Registrar en Inventario'
                             }, void 0, false, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 975,
-                                columnNumber: 7
+                                lineNumber: 522,
+                                columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 864,
-                        columnNumber: 5
+                        lineNumber: 495,
+                        columnNumber: 12
                     }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        style: {
-                            marginBottom: '20px',
-                            paddingLeft: '20px',
-                            borderLeft: `8px solid ${theme.cyan}`,
-                            fontSize: '2rem'
-                        },
+                    activeTab === 'inventory' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
                         children: [
-                            "INVENTARIO (",
-                            equipos.length,
-                            ")"
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 981,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: 'flex',
-                            gap: 12,
-                            flexWrap: 'wrap',
-                            marginBottom: 18
-                        },
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                value: filtroEstado,
-                                onChange: (e)=>setFiltroEstado(e.target.value),
-                                style: inputStyle,
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "TODOS",
-                                        children: "Estado: Todos"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 984,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Nuevo Sellado",
-                                        children: "Nuevo Sellado"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 985,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Semi Nuevo",
-                                        children: "Semi Nuevo"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 986,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Usado",
-                                        children: "Usado"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 987,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Open Box",
-                                        children: "Open Box"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 988,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 983,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                value: filtroPublicado,
-                                onChange: (e)=>setFiltroPublicado(e.target.value),
-                                style: inputStyle,
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "TODOS",
-                                        children: "Publicación: Todos"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 992,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "PUBLICADO",
-                                        children: "Solo publicados"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 993,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "OCULTO",
-                                        children: "Solo ocultos"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 994,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 991,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                value: filtroVendidos,
-                                onChange: (e)=>setFiltroVendidos(e.target.value),
-                                style: inputStyle,
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "TODOS",
-                                        children: "Stock: Todos"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 998,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "DISPONIBLES",
-                                        children: "Disponibles"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 999,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "VENDIDOS",
-                                        children: "Vendidos"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1000,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 997,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 982,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                        type: "text",
-                        placeholder: "🔍 Buscar por IMEI, Marca, Modelo, Color...",
-                        value: busqueda,
-                        onChange: (e)=>setBusqueda(e.target.value),
-                        style: {
-                            width: '100%',
-                            padding: '22px',
-                            fontSize: '1.2rem',
-                            borderRadius: '20px',
-                            border: 'none',
-                            background: '#162447',
-                            color: 'white',
-                            marginBottom: '40px',
-                            boxShadow: '0 10px 20px rgba(0,0,0,0.3)',
-                            outline: 'none'
-                        }
-                    }, void 0, false, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 1003,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-                            gap: '40px'
-                        },
-                        children: [
-                            equiposFiltrados.map((cel)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(TarjetaEquipo, {
-                                    cel: cel,
-                                    theme: theme,
-                                    onOpenModal: setModalImagen,
-                                    onEdit: (equipo)=>{
-                                        setForm({
-                                            ...estadoInicial,
-                                            ...equipo,
-                                            publicado: !!equipo.publicado
-                                        });
-                                        setEditandoId(equipo.id);
-                                        window.scrollTo({
-                                            top: 0,
-                                            behavior: 'smooth'
-                                        });
-                                    },
-                                    onDelete: async (id)=>{
-                                        if (confirm('¿Eliminar definitivamente?')) {
-                                            await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('Celulares').delete().eq('id', id);
-                                            cargarEquipos();
-                                        }
-                                    },
-                                    onSell: (cel)=>abrirModalVenta(cel)
-                                }, cel.id, false, {
-                                    fileName: "[project]/pages/inventario.js",
-                                    lineNumber: 1006,
-                                    columnNumber: 13
-                                }, this)),
-                            equiposFiltrados.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                style: {
-                                    gridColumn: '1 / -1',
-                                    textAlign: 'center',
-                                    color: '#888',
-                                    fontSize: '1.5rem'
-                                },
-                                children: "No se encontraron resultados 🕵️‍♂️"
-                            }, void 0, false, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 1018,
-                                columnNumber: 45
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/pages/inventario.js",
-                        lineNumber: 1004,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            marginTop: 60,
-                            backgroundColor: theme.card,
-                            padding: 30,
-                            borderRadius: 24
-                        },
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                style: {
-                                    marginTop: 0,
-                                    borderLeft: `8px solid ${theme.orange}`,
-                                    paddingLeft: 16
-                                },
-                                children: "Ventas (últimas 100)"
-                            }, void 0, false, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 1022,
-                                columnNumber: 11
-                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "header-actions",
                                 style: {
                                     display: 'flex',
-                                    gap: 12,
-                                    flexWrap: 'wrap',
-                                    marginBottom: 12
+                                    justifyContent: 'space-between',
+                                    alignItems: 'flex-end',
+                                    marginBottom: '40px'
                                 },
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            flex: 1,
-                                            minWidth: 180
-                                        },
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                                                 style: {
-                                                    display: 'block',
-                                                    marginBottom: 6,
-                                                    color: '#94a3b8'
+                                                    fontSize: '2.5rem',
+                                                    fontWeight: '900',
+                                                    color: 'white',
+                                                    margin: '0 0 5px 0'
                                                 },
-                                                children: "Desde"
+                                                children: "Control de Inventario"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1027,
-                                                columnNumber: 13
+                                                lineNumber: 529,
+                                                columnNumber: 20
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "date",
-                                                value: ventasDesde,
-                                                onChange: (e)=>setVentasDesde(e.target.value),
-                                                style: inputStyle
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                style: {
+                                                    color: '#64748b'
+                                                },
+                                                children: "Vista general de tu negocio"
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1028,
-                                                columnNumber: 13
+                                                lineNumber: 529,
+                                                columnNumber: 137
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1026,
-                                        columnNumber: 11
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            flex: 1,
-                                            minWidth: 180
-                                        },
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                style: {
-                                                    display: 'block',
-                                                    marginBottom: 6,
-                                                    color: '#94a3b8'
-                                                },
-                                                children: "Hasta"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1037,
-                                                columnNumber: 13
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "date",
-                                                value: ventasHasta,
-                                                onChange: (e)=>setVentasHasta(e.target.value),
-                                                style: inputStyle
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1038,
-                                                columnNumber: 13
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1036,
-                                        columnNumber: 11
+                                        lineNumber: 529,
+                                        columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
                                             display: 'flex',
-                                            gap: 10,
-                                            alignItems: 'flex-end'
+                                            gap: '20px'
                                         },
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                onClick: cargarVentas,
-                                                style: {
-                                                    padding: '14px 16px',
-                                                    borderRadius: 14,
-                                                    border: 'none',
-                                                    background: theme.cyan,
-                                                    color: '#000',
-                                                    fontWeight: 'bold',
-                                                    cursor: 'pointer'
-                                                },
-                                                children: "Aplicar"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1047,
-                                                columnNumber: 13
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                onClick: ()=>{
-                                                    setVentasDesde('');
-                                                    setVentasHasta('');
-                                                    cargarVentas();
-                                                },
-                                                style: {
-                                                    padding: '14px 16px',
-                                                    borderRadius: 14,
-                                                    border: `1px solid ${theme.cyan}44`,
-                                                    background: 'transparent',
-                                                    color: theme.cyan,
-                                                    fontWeight: 'bold',
-                                                    cursor: 'pointer'
-                                                },
-                                                children: "Limpiar"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1054,
-                                                columnNumber: 13
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                textAlign: 'right'
+                                            },
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    style: {
+                                                        fontSize: '0.7rem',
+                                                        color: '#64748b',
+                                                        fontWeight: 'bold'
+                                                    },
+                                                    children: "TOTAL ITEMS"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 532,
+                                                    columnNumber: 24
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    style: {
+                                                        fontSize: '1.5rem',
+                                                        fontWeight: 'bold',
+                                                        color: 'white'
+                                                    },
+                                                    children: equipos.length
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 533,
+                                                    columnNumber: 24
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 531,
+                                            columnNumber: 20
+                                        }, this)
+                                    }, void 0, false, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1046,
-                                        columnNumber: 11
+                                        lineNumber: 530,
+                                        columnNumber: 16
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 1025,
-                                columnNumber: 9
+                                lineNumber: 528,
+                                columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                style: {
-                                    display: 'flex',
-                                    gap: 16,
-                                    flexWrap: 'wrap',
-                                    marginBottom: 12
-                                },
+                                className: "filters-container",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            flex: '2',
+                                            minWidth: '280px',
+                                            position: 'relative'
+                                        },
                                         children: [
-                                            "Total ventas: ",
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
-                                                children: [
-                                                    "S/ ",
-                                                    resumenVentas.totalVentas.toFixed(2)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1069,
-                                                columnNumber: 32
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1069,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            "Total costo: ",
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
-                                                children: [
-                                                    "S/ ",
-                                                    resumenVentas.totalCosto.toFixed(2)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1070,
-                                                columnNumber: 31
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1070,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            "Ganancia: ",
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
-                                                children: [
-                                                    "S/ ",
-                                                    resumenVentas.totalGanancia.toFixed(2)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1071,
-                                                columnNumber: 28
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1071,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        children: [
-                                            "# ventas: ",
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
-                                                children: resumenVentas.count
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    position: 'absolute',
+                                                    top: '14px',
+                                                    left: '14px',
+                                                    color: '#94a3b8'
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Search, {}, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 540,
+                                                    columnNumber: 100
+                                                }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1072,
-                                                columnNumber: 28
+                                                lineNumber: 540,
+                                                columnNumber: 17
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                style: {
+                                                    ...styles.input,
+                                                    paddingLeft: '45px'
+                                                },
+                                                placeholder: "Buscar (IMEI, Modelo, Color...)",
+                                                value: busqueda,
+                                                onChange: (e)=>setBusqueda(e.target.value)
+                                            }, void 0, false, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 541,
+                                                columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/pages/inventario.js",
-                                        lineNumber: 1072,
-                                        columnNumber: 13
+                                        lineNumber: 539,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            flex: '1',
+                                            minWidth: '180px'
+                                        },
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                            style: {
+                                                ...styles.input,
+                                                cursor: 'pointer'
+                                            },
+                                            value: filtroEstado,
+                                            onChange: (e)=>setFiltroEstado(e.target.value),
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "TODOS",
+                                                    children: "Todos los Estados"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 546,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "Nuevo Sellado",
+                                                    children: "Nuevo Sellado"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 547,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "Semi Nuevo",
+                                                    children: "Semi Nuevo"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 548,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "Usado",
+                                                    children: "Usado"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 549,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "Open Box",
+                                                    children: "Open Box"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 550,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 545,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 544,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            flex: '1',
+                                            minWidth: '180px'
+                                        },
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                            style: {
+                                                ...styles.input,
+                                                cursor: 'pointer'
+                                            },
+                                            value: filtroVendidos,
+                                            onChange: (e)=>setFiltroVendidos(e.target.value),
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "TODOS",
+                                                    children: "Todo el Inventario"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 556,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "DISPONIBLES",
+                                                    children: "En Stock"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 557,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                    value: "VENDIDOS",
+                                                    children: "Vendidos"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 557,
+                                                    columnNumber: 64
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/pages/inventario.js",
+                                            lineNumber: 555,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 554,
+                                        columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 1068,
-                                columnNumber: 11
+                                lineNumber: 538,
+                                columnNumber: 13
                             }, this),
-                            cargandoVentas ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                children: "Cargando ventas..."
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: styles.grid,
+                                children: equiposFiltrados.map((cel)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ProductCard, {
+                                        cel: cel,
+                                        onEdit: (c)=>{
+                                            setForm({
+                                                ...estadoInicial,
+                                                ...c,
+                                                serial: c.imei
+                                            });
+                                            setEditandoId(c.id);
+                                            setEditandoSkuId(c._raw.skus.id);
+                                            setActiveTab('register');
+                                            window.scrollTo({
+                                                top: 0,
+                                                behavior: 'smooth'
+                                            });
+                                        },
+                                        onDelete: async (id)=>{
+                                            if (confirm('¿Eliminar?')) {
+                                                await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('items_serializados').delete().eq('id', id);
+                                                cargarEquipos();
+                                            }
+                                        },
+                                        onSell: (c)=>{
+                                            setVentaCel(c);
+                                            setVentaForm({
+                                                precio_final: c.precio_venta,
+                                                cliente_nombre: '',
+                                                cliente_telefono: ''
+                                            });
+                                            setVentaModalAbierto(true);
+                                        },
+                                        onOpenModal: setModalImagen,
+                                        onVerDetalle: setDetalleModalOpen
+                                    }, cel.id, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 564,
+                                        columnNumber: 17
+                                    }, this))
                             }, void 0, false, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 1077,
+                                lineNumber: 562,
                                 columnNumber: 13
-                            }, this) : ventas.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            }, this)
+                        ]
+                    }, void 0, true),
+                    activeTab === 'sales' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            ...styles.glassPanel,
+                            padding: '0',
+                            overflow: 'hidden'
+                        },
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "table-container",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
                                 style: {
-                                    color: '#94a3b8'
+                                    width: '100%',
+                                    borderCollapse: 'collapse',
+                                    color: '#cbd5e1'
                                 },
-                                children: "Aún no hay ventas registradas."
-                            }, void 0, false, {
-                                fileName: "[project]/pages/inventario.js",
-                                lineNumber: 1079,
-                                columnNumber: 13
-                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                style: {
-                                    overflowX: 'auto'
-                                },
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
-                                    style: {
-                                        width: '100%',
-                                        borderCollapse: 'collapse'
-                                    },
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                                style: {
-                                                    textAlign: 'left',
-                                                    borderBottom: '1px solid rgba(255,255,255,0.15)'
-                                                },
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                        style: {
-                                                            padding: 10
-                                                        },
-                                                        children: "Fecha"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 1085,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                        style: {
-                                                            padding: 10
-                                                        },
-                                                        children: "Equipo"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 1086,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                        style: {
-                                                            padding: 10
-                                                        },
-                                                        children: "IMEI"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 1087,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                        style: {
-                                                            padding: 10
-                                                        },
-                                                        children: "Final"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 1088,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                        style: {
-                                                            padding: 10
-                                                        },
-                                                        children: "Costo"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 1089,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                                        style: {
-                                                            padding: 10
-                                                        },
-                                                        children: "Ganancia"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/pages/inventario.js",
-                                                        lineNumber: 1090,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/pages/inventario.js",
-                                                lineNumber: 1084,
-                                                columnNumber: 19
-                                            }, this)
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                            style: {
+                                                background: 'rgba(0,0,0,0.3)',
+                                                borderBottom: '1px solid rgba(255,255,255,0.05)'
+                                            },
+                                            children: [
+                                                'Fecha',
+                                                'Producto',
+                                                'Detalle',
+                                                'Venta',
+                                                'Costo',
+                                                'Ganancia'
+                                            ].map((h)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                                    style: {
+                                                        padding: '16px',
+                                                        textAlign: h === 'Producto' || h === 'Fecha' ? 'left' : 'right',
+                                                        fontSize: '0.75rem',
+                                                        textTransform: 'uppercase',
+                                                        letterSpacing: '1px',
+                                                        color: '#64748b',
+                                                        whiteSpace: 'nowrap'
+                                                    },
+                                                    children: h
+                                                }, h, false, {
+                                                    fileName: "[project]/pages/inventario.js",
+                                                    lineNumber: 574,
+                                                    columnNumber: 194
+                                                }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/pages/inventario.js",
-                                            lineNumber: 1083,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                                            children: ventas.map((v)=>{
-                                                const costo = Number(v?.Celulares?.precio_costo ?? 0);
-                                                const final = Number(v?.precio_final ?? 0);
-                                                const ganancia = final - costo;
-                                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                                    style: {
-                                                        borderBottom: '1px solid rgba(255,255,255,0.08)'
-                                                    },
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                            lineNumber: 574,
+                                            columnNumber: 24
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 574,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
+                                        children: ventas.map((v)=>{
+                                            const final = Number(v.precio_final);
+                                            const costo = v.items_serializados?.costo_compra ? Number(v.items_serializados.costo_compra) : Number(v.skus?.precio_costo) * (v.cantidad || 1);
+                                            const ganancia = final - costo;
+                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                                                style: {
+                                                    borderBottom: '1px solid rgba(255,255,255,0.02)'
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                        style: {
+                                                            padding: '16px',
+                                                            whiteSpace: 'nowrap'
+                                                        },
+                                                        children: new Date(v.vendido_en).toLocaleDateString()
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 580,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                        style: {
+                                                            padding: '16px'
+                                                        },
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
+                                                                style: {
+                                                                    color: 'white'
+                                                                },
+                                                                children: v.skus?.productos?.marca
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/pages/inventario.js",
+                                                                lineNumber: 581,
+                                                                columnNumber: 57
+                                                            }, this),
+                                                            " ",
+                                                            v.skus?.productos?.nombre
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 581,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                        style: {
+                                                            padding: '16px',
+                                                            textAlign: 'right',
+                                                            fontFamily: 'monospace',
+                                                            fontSize: '0.85rem'
+                                                        },
+                                                        children: v.items_serializados?.serial || 'Bulk'
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 582,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                        style: {
+                                                            padding: '16px',
+                                                            textAlign: 'right',
+                                                            fontWeight: 'bold',
+                                                            color: 'white'
+                                                        },
+                                                        children: [
+                                                            "S/ ",
+                                                            final.toFixed(2)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 583,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                        style: {
+                                                            padding: '16px',
+                                                            textAlign: 'right',
+                                                            color: '#64748b'
+                                                        },
+                                                        children: [
+                                                            "S/ ",
+                                                            costo.toFixed(2)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 584,
+                                                        columnNumber: 25
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
+                                                        style: {
+                                                            padding: '16px',
+                                                            textAlign: 'right'
+                                                        },
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             style: {
-                                                                padding: 10
-                                                            },
-                                                            children: v.vendido_en ? new Date(v.vendido_en).toLocaleString() : '—'
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/pages/inventario.js",
-                                                            lineNumber: 1100,
-                                                            columnNumber: 25
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                            style: {
-                                                                padding: 10
-                                                            },
-                                                            children: [
-                                                                v?.Celulares?.marca,
-                                                                " ",
-                                                                v?.Celulares?.modelo
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/pages/inventario.js",
-                                                            lineNumber: 1101,
-                                                            columnNumber: 25
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                            style: {
-                                                                padding: 10,
-                                                                fontFamily: 'monospace',
-                                                                color: '#94a3b8'
-                                                            },
-                                                            children: v?.Celulares?.imei || 'N/A'
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/pages/inventario.js",
-                                                            lineNumber: 1102,
-                                                            columnNumber: 25
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                            style: {
-                                                                padding: 10
-                                                            },
-                                                            children: [
-                                                                "S/ ",
-                                                                final.toFixed(2)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/pages/inventario.js",
-                                                            lineNumber: 1103,
-                                                            columnNumber: 25
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                            style: {
-                                                                padding: 10
-                                                            },
-                                                            children: [
-                                                                "S/ ",
-                                                                costo.toFixed(2)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/pages/inventario.js",
-                                                            lineNumber: 1104,
-                                                            columnNumber: 25
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                                            style: {
-                                                                padding: 10,
-                                                                color: ganancia >= 0 ? '#7CFC98' : '#ff6b6b'
+                                                                color: ganancia >= 0 ? '#10b981' : '#ef4444',
+                                                                fontWeight: 'bold',
+                                                                background: ganancia >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                                                padding: '4px 10px',
+                                                                borderRadius: '50px',
+                                                                fontSize: '0.85rem',
+                                                                border: `1px solid ${ganancia >= 0 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`
                                                             },
                                                             children: [
                                                                 "S/ ",
@@ -3196,56 +3785,311 @@ function Inventario() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/pages/inventario.js",
-                                                            lineNumber: 1105,
-                                                            columnNumber: 25
+                                                            lineNumber: 585,
+                                                            columnNumber: 77
                                                         }, this)
-                                                    ]
-                                                }, v.id, true, {
-                                                    fileName: "[project]/pages/inventario.js",
-                                                    lineNumber: 1099,
-                                                    columnNumber: 23
-                                                }, this);
-                                            })
-                                        }, void 0, false, {
-                                            fileName: "[project]/pages/inventario.js",
-                                            lineNumber: 1093,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/pages/inventario.js",
-                                    lineNumber: 1082,
-                                    columnNumber: 15
-                                }, this)
-                            }, void 0, false, {
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/pages/inventario.js",
+                                                        lineNumber: 585,
+                                                        columnNumber: 25
+                                                    }, this)
+                                                ]
+                                            }, v.id, true, {
+                                                fileName: "[project]/pages/inventario.js",
+                                                lineNumber: 579,
+                                                columnNumber: 25
+                                            }, this);
+                                        })
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/inventario.js",
+                                        lineNumber: 575,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/pages/inventario.js",
-                                lineNumber: 1081,
-                                columnNumber: 13
+                                lineNumber: 573,
+                                columnNumber: 17
                             }, this)
-                        ]
-                    }, void 0, true, {
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 572,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
                         fileName: "[project]/pages/inventario.js",
-                        lineNumber: 1021,
-                        columnNumber: 9
+                        lineNumber: 571,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/inventario.js",
-                lineNumber: 857,
+                lineNumber: 484,
                 columnNumber: 7
+            }, this),
+            modalImagen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: {
+                    position: 'fixed',
+                    inset: 0,
+                    backgroundColor: 'rgba(0,0,0,0.9)',
+                    zIndex: 200,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backdropFilter: 'blur(5px)'
+                },
+                onClick: ()=>setModalImagen(null),
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                    src: modalImagen,
+                    style: {
+                        maxHeight: '90vh',
+                        maxWidth: '90vw',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        boxShadow: '0 0 50px rgba(0,0,0,0.5)'
+                    }
+                }, void 0, false, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 598,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 597,
+                columnNumber: 9
+            }, this),
+            detalleModalOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(DetallesModal, {
+                cel: detalleModalOpen,
+                onClose: ()=>setDetalleModalOpen(null)
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 602,
+                columnNumber: 28
+            }, this),
+            ventaModalAbierto && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: {
+                    position: 'fixed',
+                    inset: 0,
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    zIndex: 150,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backdropFilter: 'blur(8px)'
+                },
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    style: {
+                        ...styles.glassPanel,
+                        width: '100%',
+                        maxWidth: '450px',
+                        padding: '30px',
+                        backgroundColor: '#0f172a'
+                    },
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                            style: {
+                                margin: '0 0 10px 0',
+                                fontSize: '1.8rem',
+                                color: 'white'
+                            },
+                            children: "Confirmar Venta"
+                        }, void 0, false, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 607,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            style: {
+                                color: '#94a3b8',
+                                marginBottom: '25px'
+                            },
+                            children: [
+                                "Vendiendo: ",
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
+                                    style: {
+                                        color: '#F59E0B'
+                                    },
+                                    children: [
+                                        ventaCel?.marca,
+                                        " ",
+                                        ventaCel?.modelo
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 608,
+                                    columnNumber: 78
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 608,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                marginBottom: '20px'
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                    style: styles.label,
+                                    children: "Precio Final Real"
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 609,
+                                    columnNumber: 51
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    type: "number",
+                                    autoFocus: true,
+                                    style: {
+                                        ...styles.input,
+                                        fontSize: '1.5rem',
+                                        fontWeight: 'bold',
+                                        color: '#F59E0B',
+                                        borderColor: '#F59E0B'
+                                    },
+                                    value: ventaForm.precio_final,
+                                    onChange: (e)=>setVentaForm({
+                                            ...ventaForm,
+                                            precio_final: e.target.value
+                                        })
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 609,
+                                    columnNumber: 104
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 609,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                marginBottom: '30px'
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                    style: styles.label,
+                                    children: "Cliente (Opcional)"
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 610,
+                                    columnNumber: 51
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    style: styles.input,
+                                    placeholder: "Nombre del cliente",
+                                    value: ventaForm.cliente_nombre,
+                                    onChange: (e)=>setVentaForm({
+                                            ...ventaForm,
+                                            cliente_nombre: e.target.value
+                                        })
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 610,
+                                    columnNumber: 105
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 610,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            style: {
+                                display: 'flex',
+                                gap: '15px'
+                            },
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>setVentaModalAbierto(false),
+                                    style: {
+                                        flex: 1,
+                                        padding: '14px',
+                                        borderRadius: '14px',
+                                        background: 'transparent',
+                                        border: '1px solid #475569',
+                                        color: '#94a3b8',
+                                        cursor: 'pointer',
+                                        fontWeight: 'bold'
+                                    },
+                                    children: "Cancelar"
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 612,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: confirmarVenta,
+                                    disabled: guardandoVenta,
+                                    style: {
+                                        ...styles.btnPrimary,
+                                        flex: 1,
+                                        justifyContent: 'center'
+                                    },
+                                    children: guardandoVenta ? '...' : 'Confirmar'
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/inventario.js",
+                                    lineNumber: 613,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/pages/inventario.js",
+                            lineNumber: 611,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/pages/inventario.js",
+                    lineNumber: 606,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 605,
+                columnNumber: 9
+            }, this),
+            notificacion.visible && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: {
+                    position: 'fixed',
+                    top: '80px',
+                    right: '20px',
+                    padding: '15px 25px',
+                    borderRadius: '12px',
+                    background: '#0f172a',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderLeft: `5px solid ${notificacion.type === 'error' ? '#ef4444' : '#10b981'}`,
+                    color: 'white',
+                    fontWeight: 'bold',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+                    zIndex: 300
+                },
+                children: notificacion.mensaje
+            }, void 0, false, {
+                fileName: "[project]/pages/inventario.js",
+                lineNumber: 619,
+                columnNumber: 32
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/pages/inventario.js",
-        lineNumber: 739,
+        lineNumber: 472,
         columnNumber: 5
     }, this);
 }
-_s1(Inventario, "/Dz0uy0bmOQxUWafm5YNhIIcpwo=");
-_c1 = Inventario;
-var _c, _c1;
-__turbopack_context__.k.register(_c, "TarjetaEquipo");
-__turbopack_context__.k.register(_c1, "Inventario");
+_s1(Inventario, "SPiWqvg53RkRS5vkODrXw+QgaWk=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRouter"]
+    ];
+});
+_c3 = Inventario;
+var _c, _c1, _c2, _c3;
+__turbopack_context__.k.register(_c, "StatCard");
+__turbopack_context__.k.register(_c1, "DetallesModal");
+__turbopack_context__.k.register(_c2, "ProductCard");
+__turbopack_context__.k.register(_c3, "Inventario");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

@@ -2,6 +2,9 @@ self.__BUILD_MANIFEST = {
   "/": [
     "static/chunks/pages/index.js"
   ],
+  "/accesorios": [
+    "static/chunks/pages/accesorios.js"
+  ],
   "/inventario": [
     "static/chunks/pages/inventario.js"
   ],
@@ -14,7 +17,9 @@ self.__BUILD_MANIFEST = {
     "/",
     "/_app",
     "/_error",
+    "/accesorios",
     "/detalles/[id]",
-    "/inventario"
+    "/inventario",
+    "/servicios_tecnicos"
   ]
 };self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

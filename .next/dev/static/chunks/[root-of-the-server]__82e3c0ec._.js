@@ -473,8 +473,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/@supabase/supabase-js/dist/index.mjs [client] (ecmascript) <locals>");
 ;
 const supabaseUrl = ("TURBOPACK compile-time value", "https://lptiwrdmvxyisaixnuel.supabase.co");
-const supabaseAnonKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwdGl3cmRtdnh5aXNhaXhudWVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMDI0MDIsImV4cCI6MjA4MzY3ODQwMn0.iotGFhBfo2Fjvj9LhEk-z1CpCaM7wrZINrfDn0uGzD8");
-const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createClient"])(supabaseUrl, supabaseAnonKey);
+const supabaseKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwdGl3cmRtdnh5aXNhaXhudWVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMDI0MDIsImV4cCI6MjA4MzY3ODQwMn0.iotGFhBfo2Fjvj9LhEk-z1CpCaM7wrZINrfDn0uGzD8");
+const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createClient"])(supabaseUrl, supabaseKey);
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -484,800 +484,918 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 __turbopack_context__.s([
     "default",
-    ()=>CatalogoPublico
+    ()=>Catalogo
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/jsx-dev-runtime.js [client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/styled-jsx/style.js [client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react/index.js [client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/supabase.js [client] (ecmascript)");
-// --- PASO 2A: Import Link (Next.js) ---
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/link.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/router.js [client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/supabase.js [client] (ecmascript)");
 ;
-var _s = __turbopack_context__.k.signature();
+var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.signature();
 ;
 ;
 ;
 ;
-function CatalogoPublico() {
-    _s();
-    const [equipos, setEquipos] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    // ====== V2: Listas separadas (celulares serializados + perfumes bulk) ======
-    const [celulares, setCelulares] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [perfumes, setPerfumes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [busqueda, setBusqueda] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const whatsappPropio = '51992571579';
-    const theme = {
-        navy: '#0b1426',
-        card: '#162447',
-        orange: '#f39c12',
-        cyan: '#00d2ff',
-        white: '#ffffff',
-        muted: '#94a3b8',
-        cardGlow: '0 0 20px rgba(0, 210, 255, 0.4)',
-        buttonGradient: 'linear-gradient(to right, #00d2ff, #f39c12)'
-    };
-    // ====== CARGA V2: Celulares (por unidad) + Perfumes (por stock) ======
-    const cargarEquipos = async ()=>{
-        // 1) Celulares: 1 tarjeta por unidad (IMEI/serial)
-        const { data: celData, error: celError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('items_serializados').select(`
-        id,
-        serial,
-        estado,
-        salud_bateria,
-        almacenamiento,
-        color,
-        imagen_url,
-        created_at,
-        skus!inner(
-          id,
-          precio_venta,
-          publicado,
-          productos(
-            marca,
-            nombre
-          )
-        )
-      `).eq('skus.publicado', true).eq('vendido', false).order('created_at', {
-            ascending: false
-        });
-        if (celError) {
-            console.error('Error cargando celulares (items_serializados)', celError);
-        } else {
-            setCelulares(celData || []);
-        }
-        // 2) Perfumes: 1 tarjeta por SKU (cantidad)
-        const { data: perfData, error: perfError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('skus').select(`
-        id,
-        sku_codigo,
-        precio_venta,
-        tracking,
-        publicado,
-        created_at,
-        productos(marca, nombre),
-        stock_bulk(stock)
-      `).eq('publicado', true).eq('tracking', 'BULK').order('created_at', {
-            ascending: false
-        });
-        if (perfError) {
-            console.error('Error cargando perfumes (skus + stock_bulk)', perfError);
-        } else {
-            setPerfumes(perfData || []);
-        }
-    };
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "CatalogoPublico.useEffect": ()=>{
-            cargarEquipos();
-        }
-    }["CatalogoPublico.useEffect"], []);
-    // ====== FILTROS V2 (busca en celulares + perfumes) ======
-    const celularesFiltrados = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useMemo"])({
-        "CatalogoPublico.useMemo[celularesFiltrados]": ()=>{
-            const q = busqueda.toLowerCase().trim();
-            if (!q) return celulares;
-            return celulares.filter({
-                "CatalogoPublico.useMemo[celularesFiltrados]": (item)=>{
-                    const marca = item?.skus?.productos?.marca?.toLowerCase() || '';
-                    const nombre = item?.skus?.productos?.nombre?.toLowerCase() || '';
-                    const estado = item?.estado?.toLowerCase() || '';
-                    return marca.includes(q) || nombre.includes(q) || estado.includes(q);
-                }
-            }["CatalogoPublico.useMemo[celularesFiltrados]"]);
-        }
-    }["CatalogoPublico.useMemo[celularesFiltrados]"], [
-        celulares,
-        busqueda
-    ]);
-    const perfumesFiltrados = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useMemo"])({
-        "CatalogoPublico.useMemo[perfumesFiltrados]": ()=>{
-            const q = busqueda.toLowerCase().trim();
-            if (!q) return perfumes;
-            return perfumes.filter({
-                "CatalogoPublico.useMemo[perfumesFiltrados]": (sku)=>{
-                    const marca = sku?.productos?.marca?.toLowerCase() || '';
-                    const nombre = sku?.productos?.nombre?.toLowerCase() || '';
-                    return marca.includes(q) || nombre.includes(q);
-                }
-            }["CatalogoPublico.useMemo[perfumesFiltrados]"]);
-        }
-    }["CatalogoPublico.useMemo[perfumesFiltrados]"], [
-        perfumes,
-        busqueda
-    ]);
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        style: {
-            padding: '20px',
-            backgroundColor: theme.navy,
-            minHeight: '100vh',
-            color: theme.white,
-            fontFamily: "'Inter', sans-serif",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23162447' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        },
-        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-            [
-                "83efe2e5b9e8c490",
-                [
-                    theme.cyan,
-                    theme.cyan
-                ]
+// ==========================================
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
+// ==========================================
+const styles = {
+    container: {
+        minHeight: '100vh',
+        backgroundColor: '#020617',
+        color: '#e2e8f0',
+        fontFamily: "'Inter', sans-serif",
+        backgroundImage: `radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 100%)`,
+        backgroundAttachment: 'fixed',
+        overflowX: 'hidden'
+    },
+    heroSection: {
+        padding: '80px 20px 60px',
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+    },
+    glassHeader: {
+        backgroundColor: 'rgba(15, 23, 42, 0.8)',
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        padding: '16px 24px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    goldText: {
+        background: 'linear-gradient(to right, #F59E0B, #D97706)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        fontWeight: '900'
+    },
+    input: {
+        width: '100%',
+        maxWidth: '500px',
+        padding: '16px 24px',
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: '99px',
+        color: 'white',
+        outline: 'none',
+        fontSize: '1.1rem',
+        transition: 'all 0.3s ease',
+        textAlign: 'center'
+    },
+    sectionTitle: {
+        fontSize: '1.8rem',
+        fontWeight: '800',
+        color: 'white',
+        marginBottom: '30px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px'
+    },
+    grid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '30px',
+        padding: '0 20px 60px',
+        maxWidth: '1400px',
+        margin: '0 auto'
+    },
+    // Tarjetas
+    card: {
+        backgroundColor: 'rgba(30, 41, 59, 0.6)',
+        backdropFilter: 'blur(16px)',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        borderRadius: '24px',
+        overflow: 'hidden',
+        transition: 'transform 0.3s, box-shadow 0.3s',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        cursor: 'pointer'
+    },
+    cardImageArea: {
+        height: '260px',
+        backgroundColor: '#020617',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative'
+    },
+    badge: {
+        position: 'absolute',
+        top: '12px',
+        right: '12px',
+        padding: '6px 12px',
+        borderRadius: '8px',
+        fontSize: '0.7rem',
+        fontWeight: '900',
+        textTransform: 'uppercase',
+        letterSpacing: '1px',
+        zIndex: 10
+    },
+    btnAction: {
+        background: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
+        color: 'white',
+        border: 'none',
+        padding: '12px 24px',
+        borderRadius: '14px',
+        fontWeight: 'bold',
+        cursor: 'pointer',
+        width: '100%',
+        marginTop: 'auto',
+        textTransform: 'uppercase',
+        letterSpacing: '1px',
+        fontSize: '0.85rem'
+    },
+    adminBtn: {
+        padding: '8px 20px',
+        borderRadius: '12px',
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        background: 'transparent',
+        color: '#94a3b8',
+        fontWeight: 'bold',
+        fontSize: '0.8rem',
+        cursor: 'pointer',
+        textDecoration: 'none'
+    }
+};
+// ==========================================
+// 🎨 ICONOS SVG
+// ==========================================
+const Icons = {
+    Logo: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 2L2 7L12 12L22 7L12 2Z",
+                    stroke: "#F59E0B",
+                    strokeWidth: "2",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 137,
+                    columnNumber: 75
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M2 17L12 22L22 17",
+                    stroke: "#F59E0B",
+                    strokeWidth: "2",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 137,
+                    columnNumber: 168
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M2 12L12 17L22 12",
+                    stroke: "#F59E0B",
+                    strokeWidth: "2",
+                    strokeLinecap: "round"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 137,
+                    columnNumber: 252
+                }, ("TURBOPACK compile-time value", void 0))
             ]
-        ]),
+        }, void 0, true, {
+            fileName: "[project]/pages/index.js",
+            lineNumber: 137,
+            columnNumber: 15
+        }, ("TURBOPACK compile-time value", void 0)),
+    Smartphone: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "#F59E0B",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                    x: "5",
+                    y: "2",
+                    width: "14",
+                    height: "20",
+                    rx: "2"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 138,
+                    columnNumber: 114
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M12 18h.01"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 138,
+                    columnNumber: 163
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/index.js",
+            lineNumber: 138,
+            columnNumber: 21
+        }, ("TURBOPACK compile-time value", void 0)),
+    Headphones: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "24",
+            height: "24",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "#F59E0B",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 139,
+                    columnNumber: 114
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 139,
+                    columnNumber: 166
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 139,
+                    columnNumber: 219
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/index.js",
+            lineNumber: 139,
+            columnNumber: 21
+        }, ("TURBOPACK compile-time value", void 0)),
+    Search: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+            width: "20",
+            height: "20",
+            viewBox: "0 0 24 24",
+            fill: "none",
+            stroke: "currentColor",
+            strokeWidth: "2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                    cx: "11",
+                    cy: "11",
+                    r: "8"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 140,
+                    columnNumber: 115
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                    d: "m21 21-4.3-4.3"
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 140,
+                    columnNumber: 146
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/pages/index.js",
+            lineNumber: 140,
+            columnNumber: 17
+        }, ("TURBOPACK compile-time value", void 0))
+};
+// ==========================================
+// COMPONENTE TARJETA
+// ==========================================
+function PublicCard({ item, tipo }) {
+    _s();
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRouter"])();
+    // Normalizar datos entre celular y accesorio
+    const titulo = tipo === 'celular' ? `${item.skus?.productos?.marca} ${item.skus?.productos?.nombre}` : `${item.productos?.marca} ${item.productos?.nombre}`;
+    const precio = tipo === 'celular' ? item.skus?.precio_venta : item.precio_venta;
+    const imagen = item.imagen_url?.[0] || 'https://via.placeholder.com/400x400/0f172a/334155?text=Sin+Foto';
+    const estado = tipo === 'celular' ? item.estado : 'Nuevo';
+    // Badges colores
+    const badgeStyle = estado === 'Nuevo Sellado' || estado === 'Nuevo' ? {
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        color: '#10b981',
+        border: '1px solid rgba(16, 185, 129, 0.2)'
+    } : {
+        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+        color: '#F59E0B',
+        border: '1px solid rgba(245, 158, 11, 0.2)'
+    };
+    const handleClick = ()=>{
+        router.push(`/detalles/${item.id}?tipo=${tipo === 'celular' ? 'serial' : 'bulk'}`);
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        style: styles.card,
+        onMouseEnter: (e)=>{
+            e.currentTarget.style.transform = 'translateY(-10px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px -10px rgba(245, 158, 11, 0.15)';
+        },
+        onMouseLeave: (e)=>{
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
+        },
+        onClick: handleClick,
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                id: "83efe2e5b9e8c490",
-                dynamic: [
-                    theme.cyan,
-                    theme.cyan
-                ],
-                children: `@import "https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap";.galeria-scroll{scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:${theme.cyan} transparent;display:flex;overflow-x:auto}.galeria-scroll::-webkit-scrollbar{height:6px}.galeria-scroll::-webkit-scrollbar-thumb{background:${theme.cyan};border-radius:10px}.foto-item{scroll-snap-align:start;object-fit:cover;flex:0 0 100%;height:300px}.grid-catalogo{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px;max-width:1400px;margin:auto;display:grid}@media (width<=600px){.titulo-hub{font-size:2.5rem!important}.foto-item{height:250px}.grid-catalogo{grid-template-columns:1fr}}`
-            }, void 0, false, void 0, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    textAlign: 'center',
-                    margin: '40px 0'
-                },
-                className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                    [
-                        "83efe2e5b9e8c490",
-                        [
-                            theme.cyan,
-                            theme.cyan
-                        ]
-                    ]
-                ]),
+                style: styles.cardImageArea,
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                        src: imagen,
                         style: {
-                            fontSize: '4rem',
-                            fontWeight: '900',
-                            margin: 0
-                        },
-                        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                            [
-                                "83efe2e5b9e8c490",
-                                [
-                                    theme.cyan,
-                                    theme.cyan
-                                ]
-                            ]
-                        ]) + " " + "titulo-hub",
-                        children: [
-                            "LOS FARRUS ",
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                style: {
-                                    color: theme.orange
-                                },
-                                className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                    [
-                                        "83efe2e5b9e8c490",
-                                        [
-                                            theme.cyan,
-                                            theme.cyan
-                                        ]
-                                    ]
-                                ]),
-                                children: "HUB"
-                            }, void 0, false, {
-                                fileName: "[project]/pages/index.js",
-                                lineNumber: 178,
-                                columnNumber: 22
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/pages/index.js",
-                        lineNumber: 177,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        style: {
-                            color: theme.cyan,
-                            letterSpacing: '4px',
-                            fontWeight: 'bold',
-                            fontSize: '0.9rem'
-                        },
-                        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                            [
-                                "83efe2e5b9e8c490",
-                                [
-                                    theme.cyan,
-                                    theme.cyan
-                                ]
-                            ]
-                        ]),
-                        children: "CATÁLOGO OFICIAL"
+                            width: '80%',
+                            height: '80%',
+                            objectFit: 'contain',
+                            filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))'
+                        }
                     }, void 0, false, {
                         fileName: "[project]/pages/index.js",
                         lineNumber: 180,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            ...styles.badge,
+                            ...badgeStyle
+                        },
+                        children: estado
+                    }, void 0, false, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 181,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/index.js",
-                lineNumber: 176,
+                lineNumber: 179,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
-                    marginBottom: '50px',
+                    padding: '24px',
+                    flex: 1,
                     display: 'flex',
-                    justifyContent: 'center'
+                    flexDirection: 'column'
                 },
-                className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                    [
-                        "83efe2e5b9e8c490",
-                        [
-                            theme.cyan,
-                            theme.cyan
-                        ]
-                    ]
-                ]),
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                    placeholder: "🔍 ¿Qué celular buscas?",
-                    value: busqueda,
-                    onChange: (e)=>setBusqueda(e.target.value),
-                    style: {
-                        width: '90%',
-                        maxWidth: '600px',
-                        padding: '18px 25px',
-                        borderRadius: '50px',
-                        backgroundColor: theme.card,
-                        border: `2px solid ${theme.cyan}`,
-                        color: theme.white,
-                        fontSize: '1.1rem',
-                        outline: 'none',
-                        boxShadow: `0 0 15px ${theme.cyan}30`
-                    },
-                    className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                        [
-                            "83efe2e5b9e8c490",
-                            [
-                                theme.cyan,
-                                theme.cyan
-                            ]
-                        ]
-                    ])
-                }, void 0, false, {
-                    fileName: "[project]/pages/index.js",
-                    lineNumber: 187,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/pages/index.js",
-                lineNumber: 186,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                    [
-                        "83efe2e5b9e8c490",
-                        [
-                            theme.cyan,
-                            theme.cyan
-                        ]
-                    ]
-                ]) + " " + "grid-catalogo",
                 children: [
-                    celularesFiltrados.map((item)=>{
-                        const marca = item?.skus?.productos?.marca || '';
-                        const nombre = item?.skus?.productos?.nombre || '';
-                        const precio = item?.skus?.precio_venta ?? '';
-                        const titulo = `${marca} ${nombre}`.trim();
-                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                backgroundColor: theme.card,
-                                borderRadius: '30px',
-                                overflow: 'hidden',
-                                border: `1px solid ${theme.cyan}60`,
-                                boxShadow: theme.cardGlow,
-                                position: 'relative',
-                                display: 'flex',
-                                flexDirection: 'column'
-                            },
-                            className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                [
-                                    "83efe2e5b9e8c490",
-                                    [
-                                        theme.cyan,
-                                        theme.cyan
-                                    ]
-                                ]
-                            ]),
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                        [
-                                            "83efe2e5b9e8c490",
-                                            [
-                                                theme.cyan,
-                                                theme.cyan
-                                            ]
-                                        ]
-                                    ]) + " " + "galeria-scroll",
-                                    children: Array.isArray(item.imagen_url) && item.imagen_url.length > 0 ? item.imagen_url.map((url, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                            src: url,
-                                            alt: `${titulo} foto ${i + 1}`,
-                                            className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                [
-                                                    "83efe2e5b9e8c490",
-                                                    [
-                                                        theme.cyan,
-                                                        theme.cyan
-                                                    ]
-                                                ]
-                                            ]) + " " + "foto-item"
-                                        }, i, false, {
-                                            fileName: "[project]/pages/index.js",
-                                            lineNumber: 233,
-                                            columnNumber: 21
-                                        }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                        src: "https://via.placeholder.com/400x300/0b1426/ffffff?text=FARRUS+HUB",
-                                        alt: "Sin foto",
-                                        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                            [
-                                                "83efe2e5b9e8c490",
-                                                [
-                                                    theme.cyan,
-                                                    theme.cyan
-                                                ]
-                                            ]
-                                        ]) + " " + "foto-item"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/index.js",
-                                        lineNumber: 236,
-                                        columnNumber: 19
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/pages/index.js",
-                                    lineNumber: 230,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        padding: '25px',
-                                        flex: 1,
-                                        display: 'flex',
-                                        flexDirection: 'column'
-                                    },
-                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                        [
-                                            "83efe2e5b9e8c490",
-                                            [
-                                                theme.cyan,
-                                                theme.cyan
-                                            ]
-                                        ]
-                                    ]),
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            style: {
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'flex-start'
-                                            },
-                                            className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                [
-                                                    "83efe2e5b9e8c490",
-                                                    [
-                                                        theme.cyan,
-                                                        theme.cyan
-                                                    ]
-                                                ]
-                                            ]),
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                    style: {
-                                                        margin: 0,
-                                                        fontSize: '1.5rem'
-                                                    },
-                                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                        [
-                                                            "83efe2e5b9e8c490",
-                                                            [
-                                                                theme.cyan,
-                                                                theme.cyan
-                                                            ]
-                                                        ]
-                                                    ]),
-                                                    children: titulo
-                                                }, void 0, false, {
-                                                    fileName: "[project]/pages/index.js",
-                                                    lineNumber: 246,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    style: {
-                                                        backgroundColor: theme.orange,
-                                                        padding: '4px 10px',
-                                                        borderRadius: '10px',
-                                                        fontSize: '0.7rem',
-                                                        fontWeight: 'bold'
-                                                    },
-                                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                        [
-                                                            "83efe2e5b9e8c490",
-                                                            [
-                                                                theme.cyan,
-                                                                theme.cyan
-                                                            ]
-                                                        ]
-                                                    ]),
-                                                    children: item.estado || 'Equipo'
-                                                }, void 0, false, {
-                                                    fileName: "[project]/pages/index.js",
-                                                    lineNumber: 247,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/pages/index.js",
-                                            lineNumber: 245,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            style: {
-                                                color: theme.cyan,
-                                                fontWeight: 'bold',
-                                                margin: '10px 0'
-                                            },
-                                            className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                [
-                                                    "83efe2e5b9e8c490",
-                                                    [
-                                                        theme.cyan,
-                                                        theme.cyan
-                                                    ]
-                                                ]
-                                            ]),
-                                            children: [
-                                                "💾 ",
-                                                item.almacenamiento || '—',
-                                                item.salud_bateria ? ` | 🔋 ${item.salud_bateria}%` : ''
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/pages/index.js",
-                                            lineNumber: 260,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            style: {
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                marginTop: 'auto'
-                                            },
-                                            className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                [
-                                                    "83efe2e5b9e8c490",
-                                                    [
-                                                        theme.cyan,
-                                                        theme.cyan
-                                                    ]
-                                                ]
-                                            ]),
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    style: {
-                                                        fontSize: '1.8rem',
-                                                        fontWeight: '900'
-                                                    },
-                                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                        [
-                                                            "83efe2e5b9e8c490",
-                                                            [
-                                                                theme.cyan,
-                                                                theme.cyan
-                                                            ]
-                                                        ]
-                                                    ]),
-                                                    children: [
-                                                        "S/ ",
-                                                        precio
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/pages/index.js",
-                                                    lineNumber: 266,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                                    href: `/detalles/${item.id}?tipo=serial`,
-                                                    style: {
-                                                        padding: '12px 20px',
-                                                        background: theme.buttonGradient,
-                                                        color: 'white',
-                                                        textDecoration: 'none',
-                                                        borderRadius: '50px',
-                                                        fontWeight: 'bold',
-                                                        fontSize: '0.9rem',
-                                                        boxShadow: '0 4px 15px rgba(0, 210, 255, 0.3)'
-                                                    },
-                                                    children: "Ver Detalles 📱"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/pages/index.js",
-                                                    lineNumber: 268,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/pages/index.js",
-                                            lineNumber: 265,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/pages/index.js",
-                                    lineNumber: 244,
-                                    columnNumber: 15
-                                }, this),
-                                Array.isArray(item.imagen_url) && item.imagen_url.length > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    style: {
-                                        position: 'absolute',
-                                        top: '260px',
-                                        width: '100%',
-                                        textAlign: 'center',
-                                        pointerEvents: 'none'
-                                    },
-                                    className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                        [
-                                            "83efe2e5b9e8c490",
-                                            [
-                                                theme.cyan,
-                                                theme.cyan
-                                            ]
-                                        ]
-                                    ]),
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        style: {
-                                            background: 'rgba(0,0,0,0.6)',
-                                            padding: '4px 12px',
-                                            borderRadius: '20px',
-                                            fontSize: '0.6rem'
-                                        },
-                                        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                            [
-                                                "83efe2e5b9e8c490",
-                                                [
-                                                    theme.cyan,
-                                                    theme.cyan
-                                                ]
-                                            ]
-                                        ]),
-                                        children: "Desliza para ver más ↔️"
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/index.js",
-                                        lineNumber: 297,
-                                        columnNumber: 19
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/pages/index.js",
-                                    lineNumber: 288,
-                                    columnNumber: 17
-                                }, this)
-                            ]
-                        }, `cel-${item.id}`, true, {
-                            fileName: "[project]/pages/index.js",
-                            lineNumber: 216,
-                            columnNumber: 13
-                        }, this);
-                    }),
-                    perfumesFiltrados.map((sku)=>{
-                        const marca = sku?.productos?.marca || '';
-                        const nombre = sku?.productos?.nombre || '';
-                        const stock = sku?.stock_bulk?.stock ?? 0;
-                        const titulo = `${marca} ${nombre}`.trim();
-                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                backgroundColor: theme.card,
-                                borderRadius: '30px',
-                                overflow: 'hidden',
-                                border: `1px solid ${theme.cyan}60`,
-                                boxShadow: theme.cardGlow,
-                                display: 'flex',
-                                flexDirection: 'column'
-                            },
-                            className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                [
-                                    "83efe2e5b9e8c490",
-                                    [
-                                        theme.cyan,
-                                        theme.cyan
-                                    ]
-                                ]
-                            ]),
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                        style: {
+                            fontSize: '1.1rem',
+                            fontWeight: '800',
+                            color: 'white',
+                            margin: '0 0 10px 0',
+                            lineHeight: 1.3
+                        },
+                        children: titulo
+                    }, void 0, false, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 185,
+                        columnNumber: 9
+                    }, this),
+                    tipo === 'celular' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            display: 'flex',
+                            gap: '8px',
+                            fontSize: '0.8rem',
+                            color: '#94a3b8',
+                            marginBottom: '20px'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 style: {
-                                    padding: '25px',
-                                    flex: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column'
+                                    background: 'rgba(255,255,255,0.05)',
+                                    padding: '4px 8px',
+                                    borderRadius: '6px'
                                 },
-                                className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                    [
-                                        "83efe2e5b9e8c490",
-                                        [
-                                            theme.cyan,
-                                            theme.cyan
-                                        ]
-                                    ]
-                                ]),
+                                children: item.almacenamiento
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 189,
+                                columnNumber: 14
+                            }, this),
+                            item.salud_bateria && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                style: {
+                                    background: 'rgba(255,255,255,0.05)',
+                                    padding: '4px 8px',
+                                    borderRadius: '6px'
+                                },
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        style: {
-                                            margin: 0,
-                                            fontSize: '1.5rem'
-                                        },
-                                        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                            [
-                                                "83efe2e5b9e8c490",
-                                                [
-                                                    theme.cyan,
-                                                    theme.cyan
-                                                ]
-                                            ]
-                                        ]),
-                                        children: titulo
-                                    }, void 0, false, {
-                                        fileName: "[project]/pages/index.js",
-                                        lineNumber: 334,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        style: {
-                                            color: theme.muted,
-                                            fontSize: '0.9rem',
-                                            margin: '12px 0 18px'
-                                        },
-                                        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                            [
-                                                "83efe2e5b9e8c490",
-                                                [
-                                                    theme.cyan,
-                                                    theme.cyan
-                                                ]
-                                            ]
-                                        ]),
-                                        children: [
-                                            "Stock: ",
-                                            stock
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/index.js",
-                                        lineNumber: 336,
-                                        columnNumber: 17
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            marginTop: 'auto'
-                                        },
-                                        className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                            [
-                                                "83efe2e5b9e8c490",
-                                                [
-                                                    theme.cyan,
-                                                    theme.cyan
-                                                ]
-                                            ]
-                                        ]),
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                style: {
-                                                    fontSize: '1.8rem',
-                                                    fontWeight: '900'
-                                                },
-                                                className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                                                    [
-                                                        "83efe2e5b9e8c490",
-                                                        [
-                                                            theme.cyan,
-                                                            theme.cyan
-                                                        ]
-                                                    ]
-                                                ]),
-                                                children: [
-                                                    "S/ ",
-                                                    sku.precio_venta
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/pages/index.js",
-                                                lineNumber: 341,
-                                                columnNumber: 19
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
-                                                href: `/detalles/${sku.id}?tipo=bulk`,
-                                                style: {
-                                                    padding: '12px 20px',
-                                                    background: theme.buttonGradient,
-                                                    color: 'white',
-                                                    textDecoration: 'none',
-                                                    borderRadius: '50px',
-                                                    fontWeight: 'bold',
-                                                    fontSize: '0.9rem',
-                                                    boxShadow: '0 4px 15px rgba(0, 210, 255, 0.3)'
-                                                },
-                                                children: "Ver Detalles 🧴"
-                                            }, void 0, false, {
-                                                fileName: "[project]/pages/index.js",
-                                                lineNumber: 343,
-                                                columnNumber: 19
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/pages/index.js",
-                                        lineNumber: 340,
-                                        columnNumber: 17
-                                    }, this)
+                                    "🔋 ",
+                                    item.salud_bateria,
+                                    "%"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/pages/index.js",
-                                lineNumber: 333,
-                                columnNumber: 15
+                                lineNumber: 190,
+                                columnNumber: 37
                             }, this)
-                        }, `perf-${sku.id}`, false, {
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 188,
+                        columnNumber: 11
+                    }, this),
+                    tipo === 'accesorio' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            fontSize: '0.8rem',
+                            color: '#94a3b8',
+                            marginBottom: '20px'
+                        },
+                        children: "Stock disponible"
+                    }, void 0, false, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 195,
+                        columnNumber: 12
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            marginTop: 'auto',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        },
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    style: {
+                                        fontSize: '0.7rem',
+                                        fontWeight: 'bold',
+                                        color: '#64748b'
+                                    },
+                                    children: "PRECIO"
+                                }, void 0, false, {
+                                    fileName: "[project]/pages/index.js",
+                                    lineNumber: 202,
+                                    columnNumber: 14
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    style: {
+                                        fontSize: '1.5rem',
+                                        fontWeight: '900',
+                                        color: 'white'
+                                    },
+                                    children: [
+                                        "S/ ",
+                                        precio
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/pages/index.js",
+                                    lineNumber: 203,
+                                    columnNumber: 14
+                                }, this)
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/pages/index.js",
-                            lineNumber: 321,
-                            columnNumber: 13
-                        }, this);
-                    })
+                            lineNumber: 201,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 200,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        style: styles.btnAction,
+                        children: "Ver Detalles"
+                    }, void 0, false, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 207,
+                        columnNumber: 9
+                    }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/pages/index.js",
-                lineNumber: 207,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
-                style: {
-                    textAlign: 'center',
-                    padding: '60px 20px',
-                    color: theme.muted,
-                    fontSize: '0.8rem'
-                },
-                className: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$styled$2d$jsx$2f$style$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"].dynamic([
-                    [
-                        "83efe2e5b9e8c490",
-                        [
-                            theme.cyan,
-                            theme.cyan
-                        ]
-                    ]
-                ]),
-                children: "© 2026 LOS FARRUS HUB | TECNOLOGÍA PREMIUM EN PERÚ"
-            }, void 0, false, {
-                fileName: "[project]/pages/index.js",
-                lineNumber: 365,
+                lineNumber: 184,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/pages/index.js",
-        lineNumber: 113,
+        lineNumber: 167,
         columnNumber: 5
     }, this);
 }
-_s(CatalogoPublico, "6aSkYt+PdP7cxaoaeVmXWerpQZw=");
-_c = CatalogoPublico;
-var _c;
-__turbopack_context__.k.register(_c, "CatalogoPublico");
+_s(PublicCard, "fN7XvhJ+p5oE6+Xlo0NJmXpxjC8=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$router$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useRouter"]
+    ];
+});
+_c = PublicCard;
+function Catalogo() {
+    _s1();
+    const [celulares, setCelulares] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [accesorios, setAccesorios] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [busqueda, setBusqueda] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "Catalogo.useEffect": ()=>{
+            const cargarTodo = {
+                "Catalogo.useEffect.cargarTodo": async ()=>{
+                    setLoading(true);
+                    // 1. Cargar Celulares
+                    const { data: cels } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('items_serializados').select(`
+          id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, 
+          skus!inner( id, precio_venta, publicado, productos(marca, nombre) )
+        `).eq('skus.publicado', true).eq('vendido', false).order('created_at', {
+                        ascending: false
+                    });
+                    if (cels) setCelulares(cels);
+                    // 2. Cargar Accesorios (Bulk)
+                    const { data: accs } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$client$5d$__$28$ecmascript$29$__["supabase"].from('skus').select(`
+          id, precio_venta, tracking, publicado,
+          productos(marca, nombre),
+          stock_bulk(stock)
+        `).eq('publicado', true).eq('tracking', 'BULK');
+                    if (accs) {
+                        // Filtrar solo los que tienen stock
+                        const disponibles = accs.filter({
+                            "Catalogo.useEffect.cargarTodo.disponibles": (a)=>(a.stock_bulk?.[0]?.stock || 0) > 0
+                        }["Catalogo.useEffect.cargarTodo.disponibles"]);
+                        setAccesorios(disponibles);
+                    }
+                    setLoading(false);
+                }
+            }["Catalogo.useEffect.cargarTodo"];
+            cargarTodo();
+        }
+    }["Catalogo.useEffect"], []);
+    // Filtrado
+    const filtrados = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$index$2e$js__$5b$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "Catalogo.useMemo[filtrados]": ()=>{
+            const q = busqueda.toLowerCase();
+            const celsFiltrados = celulares.filter({
+                "Catalogo.useMemo[filtrados].celsFiltrados": (c)=>{
+                    const txt = `${c.skus?.productos?.marca} ${c.skus?.productos?.nombre} ${c.color} ${c.almacenamiento}`.toLowerCase();
+                    return txt.includes(q);
+                }
+            }["Catalogo.useMemo[filtrados].celsFiltrados"]);
+            const accsFiltrados = accesorios.filter({
+                "Catalogo.useMemo[filtrados].accsFiltrados": (a)=>{
+                    const txt = `${a.productos?.marca} ${a.productos?.nombre}`.toLowerCase();
+                    return txt.includes(q);
+                }
+            }["Catalogo.useMemo[filtrados].accsFiltrados"]);
+            return {
+                cels: celsFiltrados,
+                accs: accsFiltrados
+            };
+        }
+    }["Catalogo.useMemo[filtrados]"], [
+        busqueda,
+        celulares,
+        accesorios
+    ]);
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        style: styles.container,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+                style: styles.glassHeader,
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    padding: '8px',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    borderRadius: '12px'
+                                },
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Logo, {}, void 0, false, {
+                                    fileName: "[project]/pages/index.js",
+                                    lineNumber: 285,
+                                    columnNumber: 103
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 285,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                style: {
+                                    fontSize: '1.2rem',
+                                    fontWeight: '900',
+                                    color: 'white'
+                                },
+                                children: [
+                                    "FARRUS",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        style: styles.goldText,
+                                        children: "HUB"
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/index.js",
+                                        lineNumber: 286,
+                                        columnNumber: 89
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 286,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 284,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$link$2e$js__$5b$client$5d$__$28$ecmascript$29$__["default"], {
+                        href: "/inventario",
+                        style: styles.adminBtn,
+                        children: "🔒 Admin"
+                    }, void 0, false, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 288,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/pages/index.js",
+                lineNumber: 283,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: styles.heroSection,
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        style: {
+                            fontSize: '3.5rem',
+                            fontWeight: '900',
+                            color: 'white',
+                            marginBottom: '10px',
+                            letterSpacing: '-2px'
+                        },
+                        children: [
+                            "Tecnología ",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                style: styles.goldText,
+                                children: "Premium"
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 296,
+                                columnNumber: 22
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 295,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        style: {
+                            color: '#94a3b8',
+                            fontSize: '1.1rem',
+                            marginBottom: '40px',
+                            maxWidth: '600px',
+                            margin: '0 auto 40px'
+                        },
+                        children: "Encuentra los mejores equipos y accesorios con garantía y confianza."
+                    }, void 0, false, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 298,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            position: 'relative',
+                            maxWidth: '500px',
+                            margin: '0 auto'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    position: 'absolute',
+                                    top: '18px',
+                                    left: '20px',
+                                    color: '#94a3b8'
+                                },
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Search, {}, void 0, false, {
+                                    fileName: "[project]/pages/index.js",
+                                    lineNumber: 303,
+                                    columnNumber: 94
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 303,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                style: styles.input,
+                                placeholder: "¿Qué estás buscando hoy?",
+                                value: busqueda,
+                                onChange: (e)=>setBusqueda(e.target.value)
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 304,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 302,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/pages/index.js",
+                lineNumber: 294,
+                columnNumber: 7
+            }, this),
+            loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                style: {
+                    textAlign: 'center',
+                    padding: '60px',
+                    color: '#F59E0B'
+                },
+                children: "Cargando inventario..."
+            }, void 0, false, {
+                fileName: "[project]/pages/index.js",
+                lineNumber: 315,
+                columnNumber: 9
+            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                children: [
+                    filtrados.cels.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: styles.grid,
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    gridColumn: '1 / -1',
+                                    ...styles.sectionTitle
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Smartphone, {}, void 0, false, {
+                                        fileName: "[project]/pages/index.js",
+                                        lineNumber: 322,
+                                        columnNumber: 17
+                                    }, this),
+                                    " Celulares Disponibles",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            flex: 1,
+                                            height: '1px',
+                                            background: 'linear-gradient(90deg, #F59E0B 0%, transparent 100%)',
+                                            marginLeft: '20px',
+                                            opacity: 0.3
+                                        }
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/index.js",
+                                        lineNumber: 323,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 321,
+                                columnNumber: 15
+                            }, this),
+                            filtrados.cels.map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PublicCard, {
+                                    item: item,
+                                    tipo: "celular"
+                                }, item.id, false, {
+                                    fileName: "[project]/pages/index.js",
+                                    lineNumber: 326,
+                                    columnNumber: 17
+                                }, this))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 320,
+                        columnNumber: 13
+                    }, this),
+                    filtrados.accs.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: styles.grid,
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    gridColumn: '1 / -1',
+                                    ...styles.sectionTitle,
+                                    marginTop: '40px'
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Icons.Headphones, {}, void 0, false, {
+                                        fileName: "[project]/pages/index.js",
+                                        lineNumber: 335,
+                                        columnNumber: 17
+                                    }, this),
+                                    " Accesorios & Gadgets",
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            flex: 1,
+                                            height: '1px',
+                                            background: 'linear-gradient(90deg, #F59E0B 0%, transparent 100%)',
+                                            marginLeft: '20px',
+                                            opacity: 0.3
+                                        }
+                                    }, void 0, false, {
+                                        fileName: "[project]/pages/index.js",
+                                        lineNumber: 336,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 334,
+                                columnNumber: 15
+                            }, this),
+                            filtrados.accs.map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])(PublicCard, {
+                                    item: item,
+                                    tipo: "accesorio"
+                                }, item.id, false, {
+                                    fileName: "[project]/pages/index.js",
+                                    lineNumber: 339,
+                                    columnNumber: 17
+                                }, this))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 333,
+                        columnNumber: 13
+                    }, this),
+                    filtrados.cels.length === 0 && filtrados.accs.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            textAlign: 'center',
+                            padding: '100px 20px',
+                            color: '#64748b'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    fontSize: '4rem',
+                                    marginBottom: '20px',
+                                    opacity: 0.5
+                                },
+                                children: "🔍"
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 347,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                style: {
+                                    color: 'white'
+                                },
+                                children: "No encontramos resultados"
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 348,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                children: "Intenta con otra búsqueda o regresa más tarde."
+                            }, void 0, false, {
+                                fileName: "[project]/pages/index.js",
+                                lineNumber: 349,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/pages/index.js",
+                        lineNumber: 346,
+                        columnNumber: 13
+                    }, this)
+                ]
+            }, void 0, true),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
+                style: {
+                    borderTop: '1px solid rgba(255,255,255,0.05)',
+                    padding: '40px 20px',
+                    textAlign: 'center',
+                    color: '#64748b',
+                    fontSize: '0.9rem'
+                },
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                    children: "© 2026 LOS FARRUS HUB. Todos los derechos reservados."
+                }, void 0, false, {
+                    fileName: "[project]/pages/index.js",
+                    lineNumber: 357,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/pages/index.js",
+                lineNumber: 356,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/pages/index.js",
+        lineNumber: 280,
+        columnNumber: 5
+    }, this);
+}
+_s1(Catalogo, "U7z4lJoKbbiNd6Bh1c+PhtPT2ho=");
+_c1 = Catalogo;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "PublicCard");
+__turbopack_context__.k.register(_c1, "Catalogo");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
