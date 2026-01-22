@@ -17,11 +17,10 @@ import { supabase } from '../../lib/supabase'
 export default function DetallesProducto() {
   /* -----------------------------
      ROUTER: ID dinámico
-     URL ejemplo: /detalles/123
+     URL ejemplo: /detalles/123?tipo=serial
   ------------------------------ */
   const router = useRouter()
   const { id, tipo } = router.query
-
 
   /* -----------------------------
      ESTADOS
@@ -59,115 +58,122 @@ export default function DetallesProducto() {
 
   /* -----------------------------
      CARGA DE DATOS (Supabase)
-     - Solo publicados
-     - Solo stock disponible
   ------------------------------ */
   useEffect(() => {
-  if (!id || !tipo) return
+    if (!id || !tipo) return
 
-  const cargar = async () => {
-    setCargando(true)
+    const cargar = async () => {
+      setCargando(true)
 
-    // SERIAL = celulares por unidad
-    if (tipo === 'serial') {
-      const { data, error } = await supabase
-        .from('items_serializados')
-        .select(`
-          id,
-          serial,
-          estado,
-          salud_bateria,
-          almacenamiento,
-          color,
-          imagen_url,
-          vendido,
-          skus!inner(
+      // === CASO 1: CELULAR (Unidad única) ===
+      if (tipo === 'serial') {
+        const { data, error } = await supabase
+          .from('items_serializados')
+          .select(`
+            id,
+            serial,
+            estado,
+            salud_bateria,
+            almacenamiento,
+            color,
+            imagen_url,
+            vendido,
+            skus!inner(
+              id,
+              precio_venta,
+              publicado,
+              productos(marca, nombre, descripcion)
+            )
+          `)
+          .eq('id', id)
+          .eq('skus.publicado', true) // Solo si el modelo está publicado
+          .eq('vendido', false)       // Solo si no se ha vendido
+          .maybeSingle()
+
+        if (error || !data) {
+          setCel(null)
+          setCargando(false)
+          return
+        }
+
+        const adaptado = {
+          id: data.id,
+          marca: data?.skus?.productos?.marca || '',
+          modelo: data?.skus?.productos?.nombre || '',
+          estado: data?.estado || '',
+          precio_venta: data?.skus?.precio_venta ?? null,
+          almacenamiento: data?.almacenamiento || '',
+          salud_bateria: data?.salud_bateria ?? null,
+          descripcion: data?.skus?.productos?.descripcion || '',
+          color: data?.color || '',
+          imagen_url: data?.imagen_url || [],
+        }
+
+        setCel(adaptado)
+        setFotoActiva(Array.isArray(adaptado.imagen_url) && adaptado.imagen_url.length > 0 ? adaptado.imagen_url[0] : null)
+        setCargando(false)
+        return
+      }
+
+      // === CASO 2: ACCESORIO / BULK (Stock múltiple) ===
+      if (tipo === 'bulk') {
+        // Buscamos el SKU y vemos si tiene stock en stock_bulk
+        const { data, error } = await supabase
+          .from('skus')
+          .select(`
             id,
             precio_venta,
+            tracking,
             publicado,
-            productos(marca, nombre)
-          )
-        `)
-        .eq('id', id)
-        .eq('skus.publicado', true)
-        .eq('vendido', false)
-        .single()
+            productos(marca, nombre, descripcion),
+            stock_bulk(stock)
+          `)
+          .eq('id', id)
+          .eq('publicado', true)
+          .eq('tracking', 'BULK')
+          .maybeSingle()
 
-      if (error) {
-        setCel(null)
+        if (error || !data) {
+          setCel(null)
+          setCargando(false)
+          return
+        }
+
+        // Verificamos si hay stock real
+        const stockDisponible = data?.stock_bulk?.[0]?.stock ?? 0 // Nota: stock_bulk suele venir como array si es relación 1:N, o objeto si es 1:1. Ajustamos a array seguro.
+
+        if (stockDisponible <= 0) {
+            setCel(null) // O podrías mostrarlo como "Agotado"
+            setCargando(false)
+            return
+        }
+
+        const adaptado = {
+          id: data.id,
+          marca: data?.productos?.marca || '',
+          modelo: data?.productos?.nombre || '',
+          estado: 'Nuevo', // Accesorios siempre son nuevos usualmente
+          precio_venta: data?.precio_venta ?? null,
+          almacenamiento: `Disponible: ${stockDisponible}`, // Usamos este campo para mostrar stock
+          salud_bateria: null,
+          descripcion: data?.productos?.descripcion || '',
+          color: '',
+          imagen_url: [], // Si agregas fotos a productos/skus en el futuro, ponlas aquí
+        }
+
+        setCel(adaptado)
+        setFotoActiva(null)
         setCargando(false)
         return
       }
 
-      // Adaptar a tu UI actual (cel.marca, cel.modelo, cel.precio_venta, etc.)
-      const adaptado = {
-        id: data.id,
-        marca: data?.skus?.productos?.marca || '',
-        modelo: data?.skus?.productos?.nombre || '',
-        estado: data?.estado || '',
-        precio_venta: data?.skus?.precio_venta ?? null,
-        almacenamiento: data?.almacenamiento || '',
-        salud_bateria: data?.salud_bateria ?? null,
-        descripcion: '',
-        color: data?.color || '',
-        imagen_url: data?.imagen_url || [],
-      }
-
-      setCel(adaptado)
-      setFotoActiva(Array.isArray(adaptado.imagen_url) ? adaptado.imagen_url[0] : null)
+      // Tipo inválido
+      setCel(null)
       setCargando(false)
-      return
     }
 
-    // BULK = perfumes por stock
-    if (tipo === 'bulk') {
-      const { data, error } = await supabase
-        .from('skus')
-        .select(`
-          id,
-          precio_venta,
-          tracking,
-          publicado,
-          productos(marca, nombre),
-          stock_bulk(stock)
-        `)
-        .eq('id', id)
-        .eq('publicado', true)
-        .eq('tracking', 'BULK')
-        .single()
-
-      if (error) {
-        setCel(null)
-        setCargando(false)
-        return
-      }
-
-      const adaptado = {
-        id: data.id,
-        marca: data?.productos?.marca || '',
-        modelo: data?.productos?.nombre || '',
-        estado: 'Perfume',
-        precio_venta: data?.precio_venta ?? null,
-        almacenamiento: `Stock: ${data?.stock_bulk?.stock ?? 0}`,
-        salud_bateria: null,
-        descripcion: '',
-        color: '',
-        imagen_url: [],
-      }
-
-      setCel(adaptado)
-      setFotoActiva(null)
-      setCargando(false)
-      return
-    }
-
-    // Tipo inválido
-    setCel(null)
-    setCargando(false)
-  }
-
-  cargar()
-}, [id, tipo])
+    cargar()
+  }, [id, tipo])
 
   /* -----------------------------
      UI: Estado Cargando
@@ -187,12 +193,11 @@ export default function DetallesProducto() {
     return (
       <div style={{ minHeight: '100vh', background: theme.gradient, color: 'white', fontFamily: 'sans-serif', padding: '40px 20px' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', background: theme.card, borderRadius: 24, padding: 24, border: `1px solid ${theme.cyan}33` }}>
-          <h1 style={{ marginTop: 0 }}>No disponible</h1>
+          <h1 style={{ marginTop: 0 }}>No disponible 😔</h1>
           <p style={{ color: theme.muted }}>
             Este producto no existe, no está publicado o ya se vendió.
           </p>
 
-          {/* VOLVER AL CATÁLOGO */}
           <Link href="/" style={{ color: theme.cyan, fontWeight: 'bold', textDecoration: 'none' }}>
             ← Volver al catálogo
           </Link>
@@ -227,7 +232,9 @@ export default function DetallesProducto() {
                   style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                 />
               ) : (
-                <div style={{ color: theme.muted }}>Sin foto</div>
+                <div style={{ color: theme.muted, fontSize: '1.2rem' }}>
+                    {cel.imagen_url && cel.imagen_url.length > 0 ? 'Cargando...' : '📷 Sin foto'}
+                </div>
               )}
             </div>
 
@@ -257,25 +264,26 @@ export default function DetallesProducto() {
 
           {/* INFO */}
           <div style={{ background: theme.card, borderRadius: 24, padding: 22, border: `1px solid ${theme.cyan}33` }}>
-            <h1 style={{ marginTop: 0, marginBottom: 8 }}>
+            <h1 style={{ marginTop: 0, marginBottom: 8, fontSize: '2rem' }}>
               {cel.marca} {cel.modelo}
             </h1>
 
-            <div style={{ color: theme.cyan, fontWeight: 'bold', marginBottom: 14 }}>
-              💾 {cel.almacenamiento}
-              {cel.salud_bateria ? ` | 🔋 ${cel.salud_bateria}%` : ''}
-              {cel.color ? ` | 🎨 ${cel.color}` : ''}
+            <div style={{ color: theme.cyan, fontWeight: 'bold', marginBottom: 14, fontSize: '1.1rem' }}>
+              {cel.almacenamiento && <span>💾 {cel.almacenamiento}</span>}
+              {cel.salud_bateria && <span> | 🔋 {cel.salud_bateria}%</span>}
+              {cel.color && <span> | 🎨 {cel.color}</span>}
+              {cel.estado && <span> | ✨ {cel.estado}</span>}
             </div>
 
-            <div style={{ color: theme.muted, lineHeight: 1.6, marginBottom: 18 }}>
-              {cel.descripcion || 'Calidad garantizada en LOS FARRUS HUB.'}
+            <div style={{ color: theme.muted, lineHeight: 1.6, marginBottom: 25, fontSize: '1rem', borderLeft: `3px solid ${theme.orange}`, paddingLeft: 15 }}>
+              {cel.descripcion || 'Equipo garantizado por LOS FARRUS HUB.'}
             </div>
 
             {/* PRECIO + WHATSAPP */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20, marginTop: 'auto' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', color: theme.muted, letterSpacing: 1 }}>PRECIO</div>
-                <div style={{ fontSize: '2rem', fontWeight: 900 }}>S/ {cel.precio_venta}</div>
+                <div style={{ fontSize: '0.8rem', color: theme.muted, letterSpacing: 1, textTransform: 'uppercase' }}>PRECIO FINAL</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white' }}>S/ {cel.precio_venta}</div>
               </div>
 
               <a
@@ -283,15 +291,18 @@ export default function DetallesProducto() {
                 target="_blank"
                 rel="noreferrer"
                 style={{
-                  padding: '14px 18px',
+                  padding: '18px 30px',
                   background: `linear-gradient(to right, ${theme.cyan}, ${theme.orange})`,
                   color: 'white',
                   textDecoration: 'none',
                   borderRadius: 999,
-                  fontWeight: 'bold',
+                  fontWeight: '900',
+                  fontSize: '1.1rem',
+                  boxShadow: '0 10px 25px rgba(0, 210, 255, 0.3)',
+                  transition: 'transform 0.2s'
                 }}
               >
-                Consultar por WhatsApp
+                Comprar por WhatsApp 💬
               </a>
             </div>
           </div>
