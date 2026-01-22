@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM (CSS-IN-JS GARANTIZADO)
+// 🎨 ESTILOS PREMIUM
 // ==========================================
 const styles = {
   container: {
@@ -57,6 +57,7 @@ const styles = {
     cursor: 'pointer',
     boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)',
     display: 'flex', alignItems: 'center', gap: '8px',
+    justifyContent: 'center',
     transition: 'transform 0.2s',
   },
   btnIcon: {
@@ -110,16 +111,13 @@ const Icons = {
 
 const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
   <div style={styles.statCard}>
-    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.1, color: color }}>
-      {icon}
-    </div>
+    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.1, color: color }}>{icon}</div>
     <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{label}</p>
     <h3 style={{ fontSize: '2rem', fontWeight: '900', color: 'white', margin: 0, lineHeight: 1 }}>{value}</h3>
     {subtext && <p style={{ fontSize: '0.8rem', color: color, marginTop: '8px', fontWeight: '500' }}>{subtext}</p>}
   </div>
 )
 
-// Modal de Detalles Completos
 const DetallesModal = ({ cel, onClose }) => {
   if (!cel) return null
   return (
@@ -140,7 +138,6 @@ const DetallesModal = ({ cel, onClose }) => {
               <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Costo: S/ {cel.precio_costo}</div>
             </div>
           </div>
-
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px', background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '16px' }}>
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>IMEI / Serial</span> <span style={{color: 'white', fontFamily: 'monospace'}}>{cel.imei}</span></div>
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Estado</span> <span style={{color: '#F59E0B', fontWeight: 'bold'}}>{cel.estado}</span></div>
@@ -148,14 +145,12 @@ const DetallesModal = ({ cel, onClose }) => {
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Batería</span> <span style={{color: 'white'}}>{cel.salud_bateria}%</span></div>
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Capacidad</span> <span style={{color: 'white'}}>{cel.almacenamiento}</span></div>
           </div>
-
           {cel.descripcion && (
             <div style={{ marginBottom: '20px' }}>
               <p style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '5px' }}>Notas / Detalles</p>
               <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6' }}>{cel.descripcion}</p>
             </div>
           )}
-
           <button onClick={onClose} style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Cerrar Ficha</button>
         </div>
       </div>
@@ -168,57 +163,23 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
   const vendido = Number(cel.stock) <= 0
 
   return (
-    <div style={{ 
-      ...styles.glassPanel, 
-      overflow: 'hidden', 
-      display: 'flex', 
-      flexDirection: 'column',
-      position: 'relative',
-      opacity: vendido ? 0.6 : 1,
-      transition: 'transform 0.3s',
-      cursor: 'default'
-    }}
-    onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-    onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+    <div style={{ ...styles.glassPanel, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative', opacity: vendido ? 0.6 : 1, transition: 'transform 0.3s', cursor: 'default' }}
+      onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+      onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
     >
-      {/* IMAGEN HERO */}
-      <div style={{ 
-        height: '240px', 
-        backgroundColor: '#020617', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        position: 'relative',
-        cursor: 'zoom-in'
-      }} onClick={() => onOpenModal(fotoActiva)}>
+      <div style={{ height: '240px', backgroundColor: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'zoom-in' }} onClick={() => onOpenModal(fotoActiva)}>
         <img src={fotoActiva} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} />
-        
-        {/* Badges */}
-        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
-          {cel.estado}
-        </div>
-
-        {!cel.publicado && (
-          <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>
-            Oculto
-          </div>
-        )}
-
-        {vendido && (
-          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}>
-            <span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span>
-          </div>
-        )}
+        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>{cel.estado}</div>
+        {!cel.publicado && <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>Oculto</div>}
+        {vendido && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}><span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span></div>}
       </div>
 
-      {/* CUERPO */}
       <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ marginBottom: '16px' }}>
           <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{cel.marca}</p>
           <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.2 }}>{cel.modelo}</h3>
         </div>
 
-        {/* INFO CLAVE VISIBLE SIEMPRE */}
         <div style={{ marginBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '4px', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '4px' }}>
             <span>IMEI</span> <span style={{ fontFamily: 'monospace', color: '#cbd5e1' }}>{cel.imei}</span>
@@ -257,7 +218,7 @@ export default function Inventario() {
   const router = useRouter()
   
   // --- ESTADOS ---
-  const [activeTab, setActiveTab] = useState('inventory')
+  const [activeTab, setActiveTab] = useState('inventory') // 'inventory', 'sales', 'register'
   const [equipos, setEquipos] = useState([])
   const [busqueda, setBusqueda] = useState('')
   const [subiendo, setSubiendo] = useState(false)
@@ -294,12 +255,10 @@ export default function Inventario() {
 
   // --- HELPERS ---
   const normalizarSerial = (v) => String(v || '').trim().replace(/\s+/g, '').toUpperCase().slice(0, 30)
-  
   const avisar = (msg, type = 'success') => {
     setNotificacion({ mensaje: msg, visible: true, type })
     setTimeout(() => setNotificacion((prev) => ({ ...prev, visible: false })), 3000)
   }
-  
   const inicioDelDiaISO = (d) => d ? new Date(`${d}T00:00:00`).toISOString() : null
   const finDelDiaISO = (d) => d ? new Date(`${d}T23:59:59.999`).toISOString() : null
 
@@ -319,7 +278,7 @@ export default function Inventario() {
 
   useEffect(() => { if (autorizado) cargarVentas() }, [autorizado, ventasDesde, ventasHasta])
 
-  // --- LOGIC (REAL) ---
+  // --- LOGIC ---
   const login = async () => {
     if (!email || !password) return
     setCargandoLogin(true)
@@ -327,24 +286,20 @@ export default function Inventario() {
     setCargandoLogin(false)
     if (error) setLoginError(error.message)
   }
-  
   const logout = async () => { await supabase.auth.signOut() }
   
   const cargarEquipos = async () => {
     const { data, error } = await supabase.from('items_serializados')
       .select(`id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at, skus:sku_id ( id, sku_codigo, tracking, precio_venta, precio_costo, publicado, productos:producto_id ( id, marca, nombre, descripcion ) )`)
       .order('created_at', { ascending: false })
-      
     if (error) return avisar('Error cargando inventario', 'error')
-    
     setEquipos((data || []).map(row => ({
       id: row.id, marca: row?.skus?.productos?.marca || '', modelo: row?.skus?.productos?.nombre || '', 
       estado: row.estado, imei: row.serial, precio_venta: row?.skus?.precio_venta || 0, 
       precio_costo: row.costo_compra ? Number(row.costo_compra) : (row?.skus?.precio_costo ?? 0), 
       almacenamiento: row.almacenamiento, salud_bateria: row.salud_bateria, color: row.color, 
       imagen_url: row.imagen_url, publicado: row?.skus?.publicado ?? false, stock: row.vendido ? 0 : 1, 
-      descripcion: row?.skus?.productos?.descripcion || '', // Traemos la descripción
-      _raw: row
+      descripcion: row?.skus?.productos?.descripcion || '', _raw: row
     })))
   }
   
@@ -412,7 +367,6 @@ export default function Inventario() {
         setEditandoId(null)
       } else {
         const catId = await asegurarCategoriaId('Celulares')
-        // Pasamos la descripción al crear el producto
         const prodId = await asegurarProductoId({ categoriaId: catId, marca: form.marca, modelo: form.modelo, descripcion: form.descripcion })
         const skuId = await crearSku({ productoId: prodId, precio_venta: form.precio_venta, precio_costo: form.precio_costo, publicado: form.publicado })
         await supabase.from('items_serializados').insert({ sku_id: skuId, serial, estado: form.estado, salud_bateria: form.salud_bateria, almacenamiento: form.almacenamiento, color: form.color, vendido: false, imagen_url: form.imagen_url, costo_compra: form.precio_costo })
@@ -444,15 +398,12 @@ export default function Inventario() {
   }, { totalVentas: 0, totalCosto: 0, totalGanancia: 0, count: 0 }), [ventas])
 
   const equiposFiltrados = useMemo(() => equipos.filter(c => {
-    const terminos = busqueda.toLowerCase().trim().split(/\s+/) // Dividir por espacios
-    const datosEquipo = `${c.marca} ${c.modelo} ${c.imei} ${c.color} ${c.almacenamiento} ${c.estado}`.toLowerCase()
-    
-    // Todas las palabras deben coincidir
-    const matchBusqueda = terminos.every(t => datosEquipo.includes(t))
-
+    const terminos = busqueda.toLowerCase().trim().split(/\s+/)
+    const datos = `${c.marca} ${c.modelo} ${c.imei} ${c.color} ${c.almacenamiento} ${c.estado}`.toLowerCase()
+    const match = terminos.every(t => datos.includes(t))
     const st = filtroEstado === 'TODOS' || c.estado === filtroEstado
     const vd = filtroVendidos === 'TODOS' || (filtroVendidos === 'VENDIDOS' ? Number(c.stock) <= 0 : Number(c.stock) > 0)
-    return matchBusqueda && st && vd
+    return match && st && vd
   }), [equipos, busqueda, filtroEstado, filtroVendidos])
 
   if (!autorizado) return (
@@ -475,6 +426,7 @@ export default function Inventario() {
       <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(2, 6, 23, 0.8)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span></div>
         <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <button onClick={() => setActiveTab('register')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'register' ? '#F59E0B' : 'transparent', color: activeTab === 'register' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Registro</button>
           <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
           <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Finanzas</button>
           <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
@@ -483,21 +435,9 @@ export default function Inventario() {
       </nav>
 
       <div style={{ padding: '30px', maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
-          <div><h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'white', margin: '0 0 5px 0' }}>{activeTab === 'inventory' ? 'Control de Inventario' : 'Reporte Financiero'}</h1><p style={{ color: '#64748b' }}>Vista general de tu negocio</p></div>
-          {activeTab === 'inventory' && <button onClick={() => { setEditandoId(null); setForm(estadoInicial); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}); }} style={styles.btnPrimary}><Icons.Plus /> Nuevo Ingreso</button>}
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-          <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} icon={<Icons.Dollar />} />
-          <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} color="#10b981" icon={<Icons.Chart />} subtext="Margen saludable" />
-          <StatCard label="Inversión Activa" value={`S/ ${resumenVentas.totalCosto.toLocaleString()}`} color="#94a3b8" icon={<Icons.Box />} />
-          <StatCard label="Unidades Vendidas" value={resumenVentas.count} color="#3b82f6" icon={<Icons.Check />} />
-        </div>
-
-        {activeTab === 'inventory' ? (
-          <>
-            <div id="form-area" style={{ ...styles.glassPanel, padding: '40px', marginBottom: '50px' }}>
+        
+        {activeTab === 'register' && (
+           <div id="form-area" style={{ ...styles.glassPanel, padding: '40px', marginBottom: '50px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>{editandoId ? <Icons.Edit /> : <Icons.Box />}</div><h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>{editandoId ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}</h2></div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 16px', background: 'rgba(0,0,0,0.3)', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -509,12 +449,7 @@ export default function Inventario() {
               <div style={styles.grid}>
                 <div><label style={styles.label}>Marca</label><input style={styles.input} placeholder="Ej. Apple" value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} /></div>
                 <div><label style={styles.label}>Modelo</label><input style={styles.input} placeholder="Ej. iPhone 15" value={form.modelo} onChange={e=>setForm({...form, modelo:e.target.value})} /></div>
-                <div>
-                  <label style={styles.label}>Estado</label>
-                  <select style={styles.input} value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}>
-                    <option>Nuevo Sellado</option><option>Semi Nuevo</option><option>Usado</option><option>Open Box</option>
-                  </select>
-                </div>
+                <div><label style={styles.label}>Estado</label><select style={styles.input} value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}><option>Nuevo Sellado</option><option>Semi Nuevo</option><option>Usado</option><option>Open Box</option></select></div>
                 <div><label style={styles.label}>Serial / IMEI</label><input style={{...styles.input, fontFamily: 'monospace'}} placeholder="Escanea..." value={form.serial} onChange={e=>setForm({...form, serial:normalizarSerial(e.target.value)})} /></div>
                 <div><label style={styles.label}>Color</label><input style={styles.input} placeholder="Ej. Azul" value={form.color} onChange={e=>setForm({...form, color:e.target.value})} /></div>
                 <div><label style={styles.label}>Almacenamiento</label><input style={styles.input} placeholder="Ej. 128GB" value={form.almacenamiento} onChange={e=>setForm({...form, almacenamiento:e.target.value})} /></div>
@@ -526,49 +461,78 @@ export default function Inventario() {
               </div>
               <button onClick={guardar} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>{editandoId ? 'Guardar Cambios' : 'Registrar en Inventario'}</button>
             </div>
+        )}
+
+        {activeTab === 'inventory' && (
+          <>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
+              <div><h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'white', margin: '0 0 5px 0' }}>Control de Inventario</h1><p style={{ color: '#64748b' }}>Vista general de tu negocio</p></div>
+               {/* Métricas Resumen Rápido en Inventario */}
+               <div style={{ display: 'flex', gap: '20px' }}>
+                   <div style={{ textAlign: 'right' }}>
+                       <p style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold' }}>TOTAL ITEMS</p>
+                       <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white' }}>{equipos.length}</p>
+                   </div>
+               </div>
+            </div>
 
             <div style={{ display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
               <input style={{ ...styles.input, width: 'auto', minWidth: '300px' }} placeholder="🔍 Buscar por IMEI, modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
-              
-              {/* FILTRO DE ESTADO COMPLETO */}
-              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}>
-                <option value="TODOS">Todos los Estados</option>
-                <option value="Nuevo Sellado">Nuevo Sellado</option>
-                <option value="Semi Nuevo">Semi Nuevo</option>
-                <option value="Usado">Usado</option>
-                <option value="Open Box">Open Box</option>
-              </select>
-
+              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}><option value="TODOS">Todos los Estados</option><option value="Nuevo Sellado">Nuevo Sellado</option><option value="Semi Nuevo">Semi Nuevo</option><option value="Usado">Usado</option><option value="Open Box">Open Box</option></select>
               <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroVendidos} onChange={e=>setFiltroVendidos(e.target.value)}><option value="TODOS">Todo el Inventario</option><option value="DISPONIBLES">En Stock</option><option value="VENDIDOS">Vendidos</option></select>
             </div>
 
             <div style={styles.grid}>
               {equiposFiltrados.map(cel => (
-                <ProductCard key={cel.id} cel={cel} onEdit={(c) => { setForm({...estadoInicial, ...c, serial: c.imei}); setEditandoId(c.id); setEditandoSkuId(c._raw.skus.id); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}) }} onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} onOpenModal={setModalImagen} onVerDetalle={setDetalleModalOpen} />
+                <ProductCard 
+                  key={cel.id} cel={cel} 
+                  onEdit={(c) => { 
+                      setForm({...estadoInicial, ...c, serial: c.imei}); 
+                      setEditandoId(c.id); 
+                      setEditandoSkuId(c._raw.skus.id); 
+                      setActiveTab('register'); // CAMBIO AUTOMATICO DE PESTAÑA AL EDITAR
+                      window.scrollTo({top:0, behavior:'smooth'}) 
+                  }} 
+                  onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} 
+                  onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} 
+                  onOpenModal={setModalImagen} 
+                  onVerDetalle={setDetalleModalOpen} 
+                />
               ))}
             </div>
           </>
-        ) : (
-          <div style={{ ...styles.glassPanel, padding: '0', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', color: '#cbd5e1' }}>
-              <thead><tr style={{ background: 'rgba(0,0,0,0.3)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>{['Fecha', 'Producto', 'Detalle', 'Venta', 'Costo', 'Ganancia'].map(h => (<th key={h} style={{ padding: '16px', textAlign: h === 'Producto' || h === 'Fecha' ? 'left' : 'right', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>{h}</th>))}</tr></thead>
-              <tbody>
-                {ventas.map(v => {
-                  const final = Number(v.precio_final); const costo = v.items_serializados?.costo_compra ? Number(v.items_serializados.costo_compra) : (Number(v.skus?.precio_costo) * (v.cantidad || 1)); const ganancia = final - costo
-                  return (
-                    <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)' }}>
-                      <td style={{ padding: '16px' }}>{new Date(v.vendido_en).toLocaleDateString()}</td>
-                      <td style={{ padding: '16px' }}><b style={{ color: 'white' }}>{v.skus?.productos?.marca}</b> {v.skus?.productos?.nombre}</td>
-                      <td style={{ padding: '16px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.85rem' }}>{v.items_serializados?.serial || 'Bulk'}</td>
-                      <td style={{ padding: '16px', textAlign: 'right', fontWeight: 'bold', color: 'white' }}>S/ {final.toFixed(2)}</td>
-                      <td style={{ padding: '16px', textAlign: 'right', color: '#64748b' }}>S/ {costo.toFixed(2)}</td>
-                      <td style={{ padding: '16px', textAlign: 'right' }}><span style={{ color: ganancia >= 0 ? '#10b981' : '#ef4444', fontWeight: 'bold', background: ganancia >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', padding: '4px 10px', borderRadius: '50px', fontSize: '0.85rem', border: `1px solid ${ganancia >= 0 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}` }}>S/ {ganancia.toFixed(2)}</span></td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+        )}
+
+        {activeTab === 'sales' && (
+          <>
+             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+              <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} icon={<Icons.Dollar />} />
+              <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} color="#10b981" icon={<Icons.Chart />} subtext="Margen saludable" />
+              <StatCard label="Inversión Activa" value={`S/ ${resumenVentas.totalCosto.toLocaleString()}`} color="#94a3b8" icon={<Icons.Box />} />
+              <StatCard label="Unidades Vendidas" value={resumenVentas.count} color="#3b82f6" icon={<Icons.Check />} />
+            </div>
+
+            <div style={{ ...styles.glassPanel, padding: '0', overflow: 'hidden' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', color: '#cbd5e1' }}>
+                <thead><tr style={{ background: 'rgba(0,0,0,0.3)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>{['Fecha', 'Producto', 'Detalle', 'Venta', 'Costo', 'Ganancia'].map(h => (<th key={h} style={{ padding: '16px', textAlign: h === 'Producto' || h === 'Fecha' ? 'left' : 'right', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>{h}</th>))}</tr></thead>
+                <tbody>
+                    {ventas.map(v => {
+                    const final = Number(v.precio_final); const costo = v.items_serializados?.costo_compra ? Number(v.items_serializados.costo_compra) : (Number(v.skus?.precio_costo) * (v.cantidad || 1)); const ganancia = final - costo
+                    return (
+                        <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)' }}>
+                        <td style={{ padding: '16px' }}>{new Date(v.vendido_en).toLocaleDateString()}</td>
+                        <td style={{ padding: '16px' }}><b style={{ color: 'white' }}>{v.skus?.productos?.marca}</b> {v.skus?.productos?.nombre}</td>
+                        <td style={{ padding: '16px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.85rem' }}>{v.items_serializados?.serial || 'Bulk'}</td>
+                        <td style={{ padding: '16px', textAlign: 'right', fontWeight: 'bold', color: 'white' }}>S/ {final.toFixed(2)}</td>
+                        <td style={{ padding: '16px', textAlign: 'right', color: '#64748b' }}>S/ {costo.toFixed(2)}</td>
+                        <td style={{ padding: '16px', textAlign: 'right' }}><span style={{ color: ganancia >= 0 ? '#10b981' : '#ef4444', fontWeight: 'bold', background: ganancia >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', padding: '4px 10px', borderRadius: '50px', fontSize: '0.85rem', border: `1px solid ${ganancia >= 0 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}` }}>S/ {ganancia.toFixed(2)}</span></td>
+                        </tr>
+                    )
+                    })}
+                </tbody>
+                </table>
+            </div>
+          </>
         )}
       </div>
 
