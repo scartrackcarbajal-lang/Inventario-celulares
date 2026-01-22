@@ -3,26 +3,27 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
 // ==========================================
+// Estos estilos aseguran que el diseño de lujo se vea idéntico en cualquier navegador
 const styles = {
   container: {
     minHeight: '100vh',
-    backgroundColor: '#020617',
-    color: '#e2e8f0',
+    backgroundColor: '#020617', // Slate 950
+    color: '#e2e8f0', // Slate 200
     fontFamily: "'Inter', sans-serif",
     backgroundImage: `radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 20%)`,
     backgroundAttachment: 'fixed',
   },
   glassPanel: {
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)', // Slate 900 con transparencia
     backdropFilter: 'blur(16px)',
     border: '1px solid rgba(255, 255, 255, 0.08)',
     borderRadius: '24px',
     boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
   },
   goldText: {
-    background: 'linear-gradient(to right, #F59E0B, #D97706)',
+    background: 'linear-gradient(to right, #F59E0B, #D97706)', // Amber 500 -> 700
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     fontWeight: '900',
@@ -44,7 +45,7 @@ const styles = {
     textTransform: 'uppercase',
     letterSpacing: '1px',
     fontWeight: 'bold',
-    color: '#94a3b8',
+    color: '#94a3b8', // Slate 400
     marginBottom: '6px',
   },
   btnPrimary: {
@@ -86,7 +87,7 @@ const styles = {
 }
 
 // ==========================================
-// 🎨 ICONOS SVG
+// 🎨 ICONOS SVG (Inline para evitar dependencias)
 // ==========================================
 const Icons = {
   Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
@@ -106,28 +107,34 @@ const Icons = {
 }
 
 // ==========================================
-// COMPONENTES UI
+// COMPONENTES DE INTERFAZ (WIDGETS, TARJETAS, MODALES)
 // ==========================================
 
 const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
   <div style={styles.statCard}>
-    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.1, color: color }}>{icon}</div>
+    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.1, color: color }}>
+      {icon}
+    </div>
     <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{label}</p>
     <h3 style={{ fontSize: '2rem', fontWeight: '900', color: 'white', margin: 0, lineHeight: 1 }}>{value}</h3>
     {subtext && <p style={{ fontSize: '0.8rem', color: color, marginTop: '8px', fontWeight: '500' }}>{subtext}</p>}
   </div>
 )
 
+// Modal de Detalles Completos
 const DetallesModal = ({ cel, onClose }) => {
   if (!cel) return null
   return (
     <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)', padding: '20px' }} onClick={onClose}>
       <div style={{ ...styles.glassPanel, width: '100%', maxWidth: '600px', padding: '0', overflow: 'hidden', backgroundColor: '#0f172a' }} onClick={e => e.stopPropagation()}>
+        {/* Imagen en grande */}
         <div style={{ height: '300px', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
           <img src={cel.imagen_url?.[0] || 'https://via.placeholder.com/400'} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} />
           <button onClick={onClose} style={{ position: 'absolute', top: 15, right: 15, background: 'rgba(0,0,0,0.5)', border: 'none', color: 'white', width: 32, height: 32, borderRadius: '50%', cursor: 'pointer' }}>✕</button>
         </div>
-        <div style={{ padding: '30px' }}>
+        
+        {/* Información Detallada */}
+        <div style={{ padding: '30px', maxHeight: '50vh', overflowY: 'auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '20px' }}>
             <div>
               <p style={{ color: '#F59E0B', fontWeight: 'bold', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{cel.marca}</p>
@@ -138,6 +145,7 @@ const DetallesModal = ({ cel, onClose }) => {
               <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Costo: S/ {cel.precio_costo}</div>
             </div>
           </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px', background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '16px' }}>
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>IMEI / Serial</span> <span style={{color: 'white', fontFamily: 'monospace'}}>{cel.imei}</span></div>
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Estado</span> <span style={{color: '#F59E0B', fontWeight: 'bold'}}>{cel.estado}</span></div>
@@ -145,12 +153,14 @@ const DetallesModal = ({ cel, onClose }) => {
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Batería</span> <span style={{color: 'white'}}>{cel.salud_bateria}%</span></div>
             <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Capacidad</span> <span style={{color: 'white'}}>{cel.almacenamiento}</span></div>
           </div>
+
           {cel.descripcion && (
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: '20px', background: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: '12px' }}>
               <p style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '5px' }}>Notas / Detalles</p>
-              <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6' }}>{cel.descripcion}</p>
+              <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>{cel.descripcion}</p>
             </div>
           )}
+
           <button onClick={onClose} style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Cerrar Ficha</button>
         </div>
       </div>
@@ -163,23 +173,57 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
   const vendido = Number(cel.stock) <= 0
 
   return (
-    <div style={{ ...styles.glassPanel, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative', opacity: vendido ? 0.6 : 1, transition: 'transform 0.3s', cursor: 'default' }}
-      onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-      onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+    <div style={{ 
+      ...styles.glassPanel, 
+      overflow: 'hidden', 
+      display: 'flex', 
+      flexDirection: 'column',
+      position: 'relative',
+      opacity: vendido ? 0.6 : 1,
+      transition: 'transform 0.3s',
+      cursor: 'default'
+    }}
+    onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+    onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
     >
-      <div style={{ height: '240px', backgroundColor: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'zoom-in' }} onClick={() => onOpenModal(fotoActiva)}>
+      {/* IMAGEN HERO */}
+      <div style={{ 
+        height: '240px', 
+        backgroundColor: '#020617', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        position: 'relative',
+        cursor: 'zoom-in'
+      }} onClick={() => onOpenModal(fotoActiva)}>
         <img src={fotoActiva} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} />
-        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>{cel.estado}</div>
-        {!cel.publicado && <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>Oculto</div>}
-        {vendido && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}><span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span></div>}
+        
+        {/* Badges */}
+        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+          {cel.estado}
+        </div>
+
+        {!cel.publicado && (
+          <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>
+            Oculto
+          </div>
+        )}
+
+        {vendido && (
+          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}>
+            <span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span>
+          </div>
+        )}
       </div>
 
+      {/* CUERPO */}
       <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ marginBottom: '16px' }}>
           <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{cel.marca}</p>
           <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.2 }}>{cel.modelo}</h3>
         </div>
 
+        {/* INFO CLAVE */}
         <div style={{ marginBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '4px', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '4px' }}>
             <span>IMEI</span> <span style={{ fontFamily: 'monospace', color: '#cbd5e1' }}>{cel.imei}</span>
@@ -190,8 +234,12 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '20px' }}>
-          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>💾 {cel.almacenamiento}</div>
-          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>🎨 {cel.color}</div>
+          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
+            💾 {cel.almacenamiento}
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
+            🎨 {cel.color}
+          </div>
         </div>
 
         <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
@@ -212,7 +260,7 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
 }
 
 // ==========================================
-// PÁGINA PRINCIPAL
+// PÁGINA PRINCIPAL (Lógica & Render)
 // ==========================================
 export default function Inventario() {
   const router = useRouter()
@@ -250,15 +298,21 @@ export default function Inventario() {
   const [filtroVendidos, setFiltroVendidos] = useState('TODOS')
 
   // Formulario
-  const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
+  const estadoInicial = { 
+    marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', 
+    color: '', almacenamiento: '', salud_bateria: '', 
+    descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] 
+  }
   const [form, setForm] = useState(estadoInicial)
 
   // --- HELPERS ---
   const normalizarSerial = (v) => String(v || '').trim().replace(/\s+/g, '').toUpperCase().slice(0, 30)
+  
   const avisar = (msg, type = 'success') => {
     setNotificacion({ mensaje: msg, visible: true, type })
     setTimeout(() => setNotificacion((prev) => ({ ...prev, visible: false })), 3000)
   }
+  
   const inicioDelDiaISO = (d) => d ? new Date(`${d}T00:00:00`).toISOString() : null
   const finDelDiaISO = (d) => d ? new Date(`${d}T23:59:59.999`).toISOString() : null
 
@@ -278,7 +332,7 @@ export default function Inventario() {
 
   useEffect(() => { if (autorizado) cargarVentas() }, [autorizado, ventasDesde, ventasHasta])
 
-  // --- LOGIC ---
+  // --- LOGIC (REAL) ---
   const login = async () => {
     if (!email || !password) return
     setCargandoLogin(true)
@@ -286,20 +340,24 @@ export default function Inventario() {
     setCargandoLogin(false)
     if (error) setLoginError(error.message)
   }
+  
   const logout = async () => { await supabase.auth.signOut() }
   
   const cargarEquipos = async () => {
     const { data, error } = await supabase.from('items_serializados')
       .select(`id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at, skus:sku_id ( id, sku_codigo, tracking, precio_venta, precio_costo, publicado, productos:producto_id ( id, marca, nombre, descripcion ) )`)
       .order('created_at', { ascending: false })
+      
     if (error) return avisar('Error cargando inventario', 'error')
+    
     setEquipos((data || []).map(row => ({
       id: row.id, marca: row?.skus?.productos?.marca || '', modelo: row?.skus?.productos?.nombre || '', 
       estado: row.estado, imei: row.serial, precio_venta: row?.skus?.precio_venta || 0, 
       precio_costo: row.costo_compra ? Number(row.costo_compra) : (row?.skus?.precio_costo ?? 0), 
       almacenamiento: row.almacenamiento, salud_bateria: row.salud_bateria, color: row.color, 
       imagen_url: row.imagen_url, publicado: row?.skus?.publicado ?? false, stock: row.vendido ? 0 : 1, 
-      descripcion: row?.skus?.productos?.descripcion || '', _raw: row
+      descripcion: row?.skus?.productos?.descripcion || '', 
+      _raw: row
     })))
   }
   
@@ -478,26 +536,22 @@ export default function Inventario() {
 
             <div style={{ display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
               <input style={{ ...styles.input, width: 'auto', minWidth: '300px' }} placeholder="🔍 Buscar por IMEI, modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
-              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}><option value="TODOS">Todos los Estados</option><option value="Nuevo Sellado">Nuevo Sellado</option><option value="Semi Nuevo">Semi Nuevo</option><option value="Usado">Usado</option><option value="Open Box">Open Box</option></select>
+              
+              {/* FILTRO DE ESTADO COMPLETO */}
+              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}>
+                <option value="TODOS">Todos los Estados</option>
+                <option value="Nuevo Sellado">Nuevo Sellado</option>
+                <option value="Semi Nuevo">Semi Nuevo</option>
+                <option value="Usado">Usado</option>
+                <option value="Open Box">Open Box</option>
+              </select>
+
               <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroVendidos} onChange={e=>setFiltroVendidos(e.target.value)}><option value="TODOS">Todo el Inventario</option><option value="DISPONIBLES">En Stock</option><option value="VENDIDOS">Vendidos</option></select>
             </div>
 
             <div style={styles.grid}>
               {equiposFiltrados.map(cel => (
-                <ProductCard 
-                  key={cel.id} cel={cel} 
-                  onEdit={(c) => { 
-                      setForm({...estadoInicial, ...c, serial: c.imei}); 
-                      setEditandoId(c.id); 
-                      setEditandoSkuId(c._raw.skus.id); 
-                      setActiveTab('register'); // CAMBIO AUTOMATICO DE PESTAÑA AL EDITAR
-                      window.scrollTo({top:0, behavior:'smooth'}) 
-                  }} 
-                  onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} 
-                  onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} 
-                  onOpenModal={setModalImagen} 
-                  onVerDetalle={setDetalleModalOpen} 
-                />
+                <ProductCard key={cel.id} cel={cel} onEdit={(c) => { setForm({...estadoInicial, ...c, serial: c.imei}); setEditandoId(c.id); setEditandoSkuId(c._raw.skus.id); setActiveTab('register'); window.scrollTo({top:0, behavior:'smooth'}) }} onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} onOpenModal={setModalImagen} onVerDetalle={setDetalleModalOpen} />
               ))}
             </div>
           </>
