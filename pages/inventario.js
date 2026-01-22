@@ -1,7 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/router'
-import { supabase } from '../lib/supabase'
-
 // ==========================================
 // 🎨 ESTILOS PREMIUM (CSS-IN-JS)
 // ==========================================
@@ -11,12 +7,12 @@ const styles = {
     backgroundColor: '#020617',
     color: '#e2e8f0',
     fontFamily: "'Inter', sans-serif",
-    backgroundImage: `radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 20%)`,
+    backgroundImage: `radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 100%)`,
     backgroundAttachment: 'fixed',
   },
   glassPanel: {
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
-    backdropFilter: 'blur(16px)',
+    backgroundColor: 'rgba(30, 41, 59, 0.7)',
+    backdropFilter: 'blur(20px)',
     border: '1px solid rgba(255, 255, 255, 0.08)',
     borderRadius: '24px',
     boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
@@ -30,7 +26,7 @@ const styles = {
   input: {
     width: '100%',
     padding: '14px 16px',
-    backgroundColor: 'rgba(2, 6, 23, 0.5)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '12px',
     color: 'white',
@@ -104,7 +100,8 @@ const Icons = {
   Eye: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
   Info: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>,
   Wrench: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
-  Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+  User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
 }
 
 // ==========================================
@@ -183,19 +180,44 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
     onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
     onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
     >
-      <div style={{ height: '240px', backgroundColor: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', cursor: 'zoom-in' }} onClick={() => onOpenModal(fotoActiva)}>
+      {/* IMAGEN HERO */}
+      <div style={{ 
+        height: '240px', 
+        backgroundColor: '#020617', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        position: 'relative',
+        cursor: 'zoom-in'
+      }} onClick={() => onOpenModal(fotoActiva)}>
         <img src={fotoActiva} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} />
-        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>{cel.estado}</div>
-        {!cel.publicado && <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>Oculto</div>}
-        {vendido && <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}><span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span></div>}
+        
+        {/* Badges */}
+        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+          {cel.estado}
+        </div>
+
+        {!cel.publicado && (
+          <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>
+            Oculto
+          </div>
+        )}
+
+        {vendido && (
+          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}>
+            <span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span>
+          </div>
+        )}
       </div>
 
+      {/* CUERPO */}
       <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div style={{ marginBottom: '16px' }}>
           <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{cel.marca}</p>
           <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.2 }}>{cel.modelo}</h3>
         </div>
 
+        {/* INFO CLAVE VISIBLE SIEMPRE */}
         <div style={{ marginBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '4px', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '4px' }}>
             <span>IMEI</span> <span style={{ fontFamily: 'monospace', color: '#cbd5e1' }}>{cel.imei}</span>
@@ -219,7 +241,7 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
             <span style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>VENTA</span>
             <div style={{ fontSize: '1.4rem', fontWeight: '900', color: 'white' }}>S/ {cel.precio_venta}</div>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '6px' }}>
             <button onClick={() => onVerDetalle(cel)} style={{ ...styles.btnIcon, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }} title="Ver Detalles"><Icons.Eye /></button>
             <button onClick={() => onEdit(cel)} style={styles.btnIcon} title="Editar"><Icons.Edit /></button>
             <button onClick={() => !vendido && onSell(cel)} disabled={vendido} style={{ ...styles.btnIcon, backgroundColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.1)', color: vendido ? '#475569' : '#F59E0B', borderColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.3)' }} title="Vender"><Icons.Dollar /></button>
@@ -232,30 +254,13 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
 }
 
 function RepairCard({ rep, onCambiarEstado }) {
-  // Colores por estado (ajusta si quieres)
   const estadoColor = {
-    RECEIVED: "#94a3b8",
-    DIAGNOSIS: "#f59e0b",
-    IN_REPAIR: "#f59e0b",
-    WAITING_PARTS: "#f43f5e",
-    READY: "#10b981",
-    DELIVERED: "#3b82f6",
-    CANCELLED: "#ef4444",
+    'Recibido': '#94a3b8',
+    'En Revisión': '#F59E0B',
+    'Esperando Repuesto': '#f43f5e',
+    'Listo': '#10b981',
+    'Entregado': '#3b82f6'
   }
-
-  const estadoLabel = {
-    RECEIVED: "Recibido",
-    DIAGNOSIS: "Diagnóstico",
-    IN_REPAIR: "En reparación",
-    WAITING_PARTS: "Esperando repuestos",
-    READY: "Listo",
-    DELIVERED: "Entregado",
-    CANCELLED: "Cancelado",
-  }
-
-  // En tu badge/píldora:
-  const color = estadoColor[rep.estado] ?? "#94a3b8"
-  const label = estadoLabel[rep.estado] ?? rep.estado
 
   return (
     <div style={{ ...styles.glassPanel, padding: '20px', position: 'relative' }}>
@@ -263,7 +268,7 @@ function RepairCard({ rep, onCambiarEstado }) {
         <div>
           <p style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>ORDEN #{rep.id}</p>
           <h3 style={{ fontSize: '1.2rem', color: 'white', fontWeight: 'bold', margin: '4px 0' }}>{rep.equipo_modelo}</h3>
-          <p style={{ color: '#F59E0B', fontSize: '0.9rem' }}>{rep.falla_reportada}</p>
+          <p style={{ color: '#F59E0B', fontSize: '0.9rem' }}>{rep.falla}</p>
         </div>
         <div style={{ padding: '4px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: `${estadoColor[rep.estado]}22`, color: estadoColor[rep.estado], border: `1px solid ${estadoColor[rep.estado]}44` }}>
           {rep.estado}
@@ -273,25 +278,23 @@ function RepairCard({ rep, onCambiarEstado }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Eye /><span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{rep.cliente_nombre}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Smartphone /><span>{rep.cliente_telefono}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_mano_obra}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Check /><span>total S/ {Number(rep.total ?? 0)}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {rep.fecha_ingreso}</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_estimado}</span></div>
+        {/* Eliminamos ABONO si no existe en la BD */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {new Date(rep.fecha_ingreso).toLocaleDateString()}</span></div>
       </div>
 
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px' }}>
         <label style={{ ...styles.label, marginBottom: '8px' }}>Cambiar Estado:</label>
-        <select
-          style={{ ...styles.input, padding: 8, cursor: "pointer" }}
-          value={rep.estado}
+        <select 
+          style={{ ...styles.input, padding: '8px', cursor: 'pointer' }} 
+          value={rep.estado} 
           onChange={(e) => onCambiarEstado(rep.id, e.target.value)}
         >
-          <option value="RECEIVED">Recibido</option>
-          <option value="DIAGNOSIS">Diagnóstico</option>
-          <option value="IN_REPAIR">En reparación</option>
-          <option value="WAITING_PARTS">Esperando repuestos</option>
-          <option value="READY">Listo</option>
-          <option value="DELIVERED">Entregado</option>
-          <option value="CANCELLED">Cancelado</option>
+          <option value="Recibido">Recibido</option>
+          <option value="En Revisión">En Revisión</option>
+          <option value="Esperando Repuesto">Esperando Repuesto</option>
+          <option value="Listo">Listo</option>
+          <option value="Entregado">Entregado</option>
         </select>
       </div>
     </div>
@@ -341,18 +344,8 @@ export default function Inventario() {
   const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
   const [form, setForm] = useState(estadoInicial)
 
-  const estadoReparacionInicial = {
-  cliente_nombre: "",
-  cliente_telefono: "",
-  equipo_marca: "",
-  equipo_modelo: "",
-  imei: "",
-  falla_reportada: "",
-  diagnostico: "",
-  estado: "RECEIVED",
-  costo_mano_obra: 0,
-  costo_repuestos: 0,
-}
+  // Reparaciones (SIN ABONO)
+  const estadoReparacionInicial = { cliente_nombre: '', cliente_telefono: '', equipo_modelo: '', falla: '', costo_estimado: '', estado: 'Recibido', fecha_ingreso: new Date().toISOString().split('T')[0] }
   const [formReparacion, setFormReparacion] = useState(estadoReparacionInicial)
 
   // --- HELPERS ---
@@ -406,16 +399,10 @@ export default function Inventario() {
     setVentas(data || [])
   }
 
-    const cargarReparaciones = async () => {
-  const { data, error } = await supabase
-    .from("reparaciones")
-    .select("*")
-    .order("created_at", { ascending: false })
-
-  if (error) return avisar(error.message, "error")
-  setReparaciones(data || [])
+  const cargarReparaciones = async () => {
+    const { data, error } = await supabase.from('reparaciones').select('*').order('fecha_ingreso', { ascending: false })
+    if (!error) setReparaciones(data || [])
   }
-
   
   const manejarFotos = async (e) => {
     const archivos = Array.from(e.target.files || [])
@@ -480,39 +467,25 @@ export default function Inventario() {
     } catch (e) { avisar(e.message, 'error') }
   }
 
-        const guardarReparacion = async () => {
-      if (!formReparacion.cliente_nombre?.trim() || !formReparacion.equipo_modelo?.trim()) {
-        return avisar("Nombre y Equipo son obligatorios", "error")
-      }
-
-      const { data: sess } = await supabase.auth.getSession()
-      const userId = sess?.session?.user?.id
-      if (!userId) return avisar("Sesión no válida, vuelve a iniciar sesión", "error")
-
-      const mano = Number(formReparacion.costo_mano_obra || 0)
-      const rep = Number(formReparacion.costo_repuestos || 0)
-
-      const payload = {
-        cliente_nombre: formReparacion.cliente_nombre.trim(),
-        cliente_telefono: formReparacion.cliente_telefono?.trim() || null,
-        equipo_marca: formReparacion.equipo_marca?.trim() || null,
-        equipo_modelo: formReparacion.equipo_modelo.trim(),
-        imei: formReparacion.imei?.trim() || null,
-        falla_reportada: formReparacion.falla_reportada?.trim() || null,
-        diagnostico: formReparacion.diagnostico?.trim() || null,
+  const guardarReparacion = async () => {
+    if (!formReparacion.cliente_nombre || !formReparacion.equipo_modelo) return avisar('Nombre y Equipo son obligatorios', 'error')
+    
+    // Sin Abono (según tu indicación)
+    const { error } = await supabase.from('reparaciones').insert({
+        cliente_nombre: formReparacion.cliente_nombre,
+        cliente_telefono: formReparacion.cliente_telefono,
+        equipo_modelo: formReparacion.equipo_modelo,
+        falla: formReparacion.falla,
+        costo_estimado: formReparacion.costo_estimado,
         estado: formReparacion.estado,
-        costo_mano_obra: mano,
-        costo_repuestos: rep,
-        creado_por: userId,
-      }
+        fecha_ingreso: formReparacion.fecha_ingreso
+    })
 
-      const { error } = await supabase.from("reparaciones").insert(payload)
-      if (error) return avisar(error.message, "error")
-
-      avisar("Ticket de reparación creado", "success")
-      setFormReparacion(estadoReparacionInicial)
-      cargarReparaciones()
-    }
+    if(error) return avisar(error.message, 'error')
+    avisar('Ticket de reparación creado')
+    setFormReparacion(estadoReparacionInicial)
+    cargarReparaciones()
+  }
 
   const cambiarEstadoReparacion = async (id, nuevoEstado) => {
     const { error } = await supabase.from('reparaciones').update({ estado: nuevoEstado }).eq('id', id)
@@ -566,42 +539,19 @@ export default function Inventario() {
 
   return (
     <div style={styles.container}>
-      {/* ⚠️ ESTILOS CSS RESPONSIVOS GLOBALES */}
-      <style>{`
-        .page-wrapper { padding: 30px; max-width: 1400px; margin: 0 auto; }
-        .filters-container { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; align-items: center; }
-        .cards-grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-        .form-grid { display: grid; gap: 20px; grid-template-columns: repeat(4, 1fr); }
-        @media (max-width: 1024px) { .form-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px) {
-           .page-wrapper { padding: 15px; }
-           .form-grid { grid-template-columns: 1fr; }
-           .cards-grid { grid-template-columns: 1fr; }
-           .header-actions { flex-direction: column; align-items: stretch !important; gap: 20px; }
-           .filters-container { flex-direction: column; align-items: stretch; }
-           .filters-container input, .filters-container select { width: 100% !important; min-width: 0 !important; }
-           .navbar-content { flex-direction: column; gap: 15px; }
-           .nav-menu { width: 100%; justify-content: space-between; overflow-x: auto; }
-        }
-      `}</style>
-
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px' }}>
-        <div className="navbar-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span></div>
-          
-          <div className="nav-menu" style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-            <button onClick={() => setActiveTab('register')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'register' ? '#F59E0B' : 'transparent', color: activeTab === 'register' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Registro</button>
-            <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
-            <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Finanzas</button>
-            <button onClick={() => setActiveTab('service')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'service' ? '#F59E0B' : 'transparent', color: activeTab === 'service' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
-            <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
-          </div>
-          
-          <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>Salir</button>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span></div>
+        <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', flexWrap: 'wrap' }}>
+          <button onClick={() => setActiveTab('register')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'register' ? '#F59E0B' : 'transparent', color: activeTab === 'register' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Registro</button>
+          <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
+          <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Finanzas</button>
+          <button onClick={() => setActiveTab('service')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'service' ? '#F59E0B' : 'transparent', color: activeTab === 'service' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
+          <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
         </div>
+        <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>Salir</button>
       </nav>
 
-      <div className="page-wrapper">
+      <div style={{ padding: '30px', maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* METRICS WIDGETS */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' }}>
@@ -621,7 +571,7 @@ export default function Inventario() {
                 </div>
               </div>
 
-              <div className="form-grid">
+              <div style={styles.grid}>
                 <div><label style={styles.label}>Marca</label><input style={styles.input} placeholder="Ej. Apple" value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} /></div>
                 <div><label style={styles.label}>Modelo</label><input style={styles.input} placeholder="Ej. iPhone 15" value={form.modelo} onChange={e=>setForm({...form, modelo:e.target.value})} /></div>
                 <div>
@@ -679,7 +629,7 @@ export default function Inventario() {
               </div>
             </div>
 
-            <div className="cards-grid">
+            <div style={styles.grid}>
               {equiposFiltrados.map(cel => (
                 <ProductCard key={cel.id} cel={cel} onEdit={(c) => { setForm({...estadoInicial, ...c, serial: c.imei}); setEditandoId(c.id); setEditandoSkuId(c._raw.skus.id); setActiveTab('register'); window.scrollTo({top:0, behavior:'smooth'}) }} onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} onOpenModal={setModalImagen} onVerDetalle={setDetalleModalOpen} />
               ))}
@@ -719,44 +669,19 @@ export default function Inventario() {
             <div style={{ ...styles.glassPanel, padding: '30px', marginBottom: '30px' }}>
               <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white', marginBottom: '20px' }}>⚡ Ingreso Rápido de Servicio</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                <input
-                  style={styles.input}
-                  placeholder="Cliente"
-                  value={formReparacion.cliente_nombre}
-                  onChange={(e) => setFormReparacion({ ...formReparacion, cliente_nombre: e.target.value })}
-                />
-                <input
-                  style={styles.input}
-                  placeholder="Equipo Marca"
-                  value={formReparacion.equipo_marca}
-                  onChange={(e) => setFormReparacion({ ...formReparacion, equipo_marca: e.target.value })}
-                />
-                <input
-                  style={styles.input}
-                  placeholder="Equipo Modelo"
-                  value={formReparacion.equipo_modelo}
-                  onChange={(e) => setFormReparacion({ ...formReparacion, equipo_modelo: e.target.value })}
-                />
-                <input
-                  type="number"
-                  style={styles.input}
-                  placeholder="Mano de obra"
-                  value={formReparacion.costo_mano_obra}
-                  onChange={(e) => setFormReparacion({ ...formReparacion, costo_mano_obra: e.target.value })}
-                />
-                <input
-                  type="number"
-                  style={styles.input}
-                  placeholder="Repuestos"
-                  value={formReparacion.costo_repuestos}
-                  onChange={(e) => setFormReparacion({ ...formReparacion, costo_repuestos: e.target.value })}
-                />
+                <input style={styles.input} placeholder="Cliente" value={formReparacion.cliente_nombre} onChange={e=>setFormReparacion({...formReparacion, cliente_nombre:e.target.value})} />
+                <input style={styles.input} placeholder="Teléfono" value={formReparacion.cliente_telefono} onChange={e=>setFormReparacion({...formReparacion, cliente_telefono:e.target.value})} />
+                <input style={styles.input} placeholder="Equipo/Modelo" value={formReparacion.equipo_modelo} onChange={e=>setFormReparacion({...formReparacion, equipo_modelo:e.target.value})} />
+                <input style={styles.input} placeholder="Falla Reportada" value={formReparacion.falla} onChange={e=>setFormReparacion({...formReparacion, falla:e.target.value})} />
+                <input type="number" style={styles.input} placeholder="Costo Estimado" value={formReparacion.costo_estimado} onChange={e=>setFormReparacion({...formReparacion, costo_estimado:e.target.value})} />
+                {/* SIN ABONO */}
+                <input type="date" style={styles.input} placeholder="Fecha Ingreso" value={formReparacion.fecha_ingreso} onChange={e=>setFormReparacion({...formReparacion, fecha_ingreso:e.target.value})} />
                 <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, height: '100%' }}>Crear Ticket</button>
               </div>
             </div>
 
             {/* Listado de Reparaciones */}
-            <div className="cards-grid">
+            <div style={styles.grid}>
               {reparaciones.map(rep => (
                 <RepairCard key={rep.id} rep={rep} onCambiarEstado={cambiarEstadoReparacion} />
               ))}
