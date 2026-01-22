@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
 // ==========================================
 const styles = {
   container: {
@@ -102,10 +102,7 @@ const Icons = {
   Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
   Upload: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>,
   Eye: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
-  Info: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>,
-  Wrench: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
-  Clock: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-  User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  Info: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
 }
 
 // ==========================================
@@ -123,7 +120,6 @@ const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
   </div>
 )
 
-// Modal de Detalles Completos
 const DetallesModal = ({ cel, onClose }) => {
   if (!cel) return null
   return (
@@ -246,61 +242,13 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal 
             <span style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>VENTA</span>
             <div style={{ fontSize: '1.4rem', fontWeight: '900', color: 'white' }}>S/ {cel.precio_venta}</div>
           </div>
-          <div style={{ display: 'flex', gap: '6px' }}>
+          <div style={{ display: 'flex', gap: '8px' }}>
             <button onClick={() => onVerDetalle(cel)} style={{ ...styles.btnIcon, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }} title="Ver Detalles"><Icons.Eye /></button>
             <button onClick={() => onEdit(cel)} style={styles.btnIcon} title="Editar"><Icons.Edit /></button>
             <button onClick={() => !vendido && onSell(cel)} disabled={vendido} style={{ ...styles.btnIcon, backgroundColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.1)', color: vendido ? '#475569' : '#F59E0B', borderColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.3)' }} title="Vender"><Icons.Dollar /></button>
             <button onClick={() => onDelete(cel.id)} style={{ ...styles.btnIcon, color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)' }} title="Eliminar"><Icons.Trash /></button>
           </div>
         </div>
-      </div>
-    </div>
-  )
-}
-
-function RepairCard({ rep, onCambiarEstado }) {
-  const estadoColor = {
-    'Recibido': '#94a3b8',
-    'En Revisión': '#F59E0B',
-    'Esperando Repuesto': '#f43f5e',
-    'Listo': '#10b981',
-    'Entregado': '#3b82f6'
-  }
-
-  return (
-    <div style={{ ...styles.glassPanel, padding: '20px', position: 'relative' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '15px' }}>
-        <div>
-          <p style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase' }}>ORDEN #{rep.id}</p>
-          <h3 style={{ fontSize: '1.2rem', color: 'white', fontWeight: 'bold', margin: '4px 0' }}>{rep.equipo_modelo}</h3>
-          <p style={{ color: '#F59E0B', fontSize: '0.9rem' }}>{rep.falla}</p>
-        </div>
-        <div style={{ padding: '4px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: `${estadoColor[rep.estado]}22`, color: estadoColor[rep.estado], border: `1px solid ${estadoColor[rep.estado]}44` }}>
-          {rep.estado}
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Eye /><span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{rep.cliente_nombre}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Smartphone /><span>{rep.cliente_telefono}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_estimado}</span></div>
-        {/* Usamos fecha_ingreso que ahora es un campo real */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {rep.fecha_ingreso ? new Date(rep.fecha_ingreso).toLocaleDateString() : '-'}</span></div>
-      </div>
-
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px' }}>
-        <label style={{ ...styles.label, marginBottom: '8px' }}>Cambiar Estado:</label>
-        <select 
-          style={{ ...styles.input, padding: '8px', cursor: 'pointer' }} 
-          value={rep.estado} 
-          onChange={(e) => onCambiarEstado(rep.id, e.target.value)}
-        >
-          <option value="Recibido">Recibido</option>
-          <option value="En Revisión">En Revisión</option>
-          <option value="Esperando Repuesto">Esperando Repuesto</option>
-          <option value="Listo">Listo</option>
-          <option value="Entregado">Entregado</option>
-        </select>
       </div>
     </div>
   )
@@ -313,9 +261,8 @@ export default function Inventario() {
   const router = useRouter()
   
   // --- ESTADOS ---
-  const [activeTab, setActiveTab] = useState('inventory')
+  const [activeTab, setActiveTab] = useState('inventory') // 'inventory', 'sales', 'register'
   const [equipos, setEquipos] = useState([])
-  const [reparaciones, setReparaciones] = useState([])
   const [busqueda, setBusqueda] = useState('')
   const [subiendo, setSubiendo] = useState(false)
   const [editandoId, setEditandoId] = useState(null)
@@ -345,25 +292,13 @@ export default function Inventario() {
   const [filtroEstado, setFiltroEstado] = useState('TODOS')
   const [filtroVendidos, setFiltroVendidos] = useState('TODOS')
 
-  // Formularios
-  const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
-  const [form, setForm] = useState(estadoInicial)
-
-  // Reparaciones Corregido (Marca, Modelo, Contraseña, Accesorios)
-  // NOTA: 'falla' agrupará la descripción completa si no hay columnas específicas.
-  const estadoReparacionInicial = { 
-    cliente_nombre: '', 
-    cliente_telefono: '', 
-    marca: '', // Nuevo campo local
-    modelo: '', // Nuevo campo local
-    falla_desc: '', // Nuevo campo local
-    contrasena: '', // Nuevo campo local
-    accesorios: '', // Nuevo campo local
-    costo_estimado: '', 
-    estado: 'Recibido', 
-    fecha_ingreso: new Date().toISOString().split('T')[0] 
+  // Formulario
+  const estadoInicial = { 
+    marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', 
+    color: '', almacenamiento: '', salud_bateria: '', 
+    descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] 
   }
-  const [formReparacion, setFormReparacion] = useState(estadoReparacionInicial)
+  const [form, setForm] = useState(estadoInicial)
 
   // --- HELPERS ---
   const normalizarSerial = (v) => String(v || '').trim().replace(/\s+/g, '').toUpperCase().slice(0, 30)
@@ -385,7 +320,6 @@ export default function Inventario() {
     if (autorizado) {
       cargarEquipos()
       cargarVentas()
-      cargarReparaciones()
     }
   }, [autorizado])
 
@@ -402,9 +336,21 @@ export default function Inventario() {
   const logout = async () => { await supabase.auth.signOut() }
   
   const cargarEquipos = async () => {
-    const { data, error } = await supabase.from('items_serializados').select(`id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at, skus:sku_id ( id, sku_codigo, tracking, precio_venta, precio_costo, publicado, productos:producto_id ( id, marca, nombre, descripcion ) )`).order('created_at', { ascending: false })
+    const { data, error } = await supabase.from('items_serializados')
+      .select(`id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at, skus:sku_id ( id, sku_codigo, tracking, precio_venta, precio_costo, publicado, productos:producto_id ( id, marca, nombre, descripcion ) )`)
+      .order('created_at', { ascending: false })
+      
     if (error) return avisar('Error cargando inventario', 'error')
-    setEquipos((data || []).map(row => ({ id: row.id, marca: row?.skus?.productos?.marca || '', modelo: row?.skus?.productos?.nombre || '', estado: row.estado, imei: row.serial, precio_venta: row?.skus?.precio_venta || 0, precio_costo: row.costo_compra ? Number(row.costo_compra) : (row?.skus?.precio_costo ?? 0), almacenamiento: row.almacenamiento, salud_bateria: row.salud_bateria, color: row.color, imagen_url: row.imagen_url, publicado: row?.skus?.publicado ?? false, stock: row.vendido ? 0 : 1, descripcion: row?.skus?.productos?.descripcion || '', _raw: row })))
+    
+    setEquipos((data || []).map(row => ({
+      id: row.id, marca: row?.skus?.productos?.marca || '', modelo: row?.skus?.productos?.nombre || '', 
+      estado: row.estado, imei: row.serial, precio_venta: row?.skus?.precio_venta || 0, 
+      precio_costo: row.costo_compra ? Number(row.costo_compra) : (row?.skus?.precio_costo ?? 0), 
+      almacenamiento: row.almacenamiento, salud_bateria: row.salud_bateria, color: row.color, 
+      imagen_url: row.imagen_url, publicado: row?.skus?.publicado ?? false, stock: row.vendido ? 0 : 1, 
+      descripcion: row?.skus?.productos?.descripcion || '', 
+      _raw: row
+    })))
   }
   
   const cargarVentas = async () => {
@@ -414,11 +360,6 @@ export default function Inventario() {
     const { data, error } = await query
     if (error) return avisar('Error cargando ventas', 'error')
     setVentas(data || [])
-  }
-
-  const cargarReparaciones = async () => {
-    const { data, error } = await supabase.from('reparaciones').select('*').order('fecha_ingreso', { ascending: false })
-    if (!error) setReparaciones(data || [])
   }
   
   const manejarFotos = async (e) => {
@@ -483,42 +424,6 @@ export default function Inventario() {
       cargarEquipos()
     } catch (e) { avisar(e.message, 'error') }
   }
-
-  const guardarReparacion = async () => {
-    if (!formReparacion.cliente_nombre || !formReparacion.marca || !formReparacion.modelo) {
-        return avisar('Nombre, Marca y Modelo son obligatorios', 'error')
-    }
-    
-    // Concatenamos para ajustar a la BD:
-    const equipoFull = `${formReparacion.marca} ${formReparacion.modelo}`.trim()
-    const fallaFull = `
-FALLA: ${formReparacion.falla_desc}
-CONTRASEÑA: ${formReparacion.contrasena}
-ACCESORIOS: ${formReparacion.accesorios}
-    `.trim()
-
-    const { error } = await supabase.from('reparaciones').insert({
-        cliente_nombre: formReparacion.cliente_nombre,
-        cliente_telefono: formReparacion.cliente_telefono,
-        equipo_modelo: equipoFull, // "Samsung A52"
-        falla: fallaFull, // Todo el detalle junto
-        costo_estimado: formReparacion.costo_estimado,
-        estado: formReparacion.estado,
-        fecha_ingreso: formReparacion.fecha_ingreso
-    })
-
-    if(error) return avisar(error.message, 'error')
-    avisar('Ticket de reparación creado')
-    setFormReparacion(estadoReparacionInicial)
-    cargarReparaciones()
-  }
-
-  const cambiarEstadoReparacion = async (id, nuevoEstado) => {
-    const { error } = await supabase.from('reparaciones').update({ estado: nuevoEstado }).eq('id', id)
-    if (error) return avisar('Error actualizando estado', 'error')
-    cargarReparaciones()
-    avisar('Estado actualizado')
-  }
   
   const confirmarVenta = async () => {
     if (!ventaCel) return
@@ -571,7 +476,6 @@ ACCESORIOS: ${formReparacion.accesorios}
           <button onClick={() => setActiveTab('register')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'register' ? '#F59E0B' : 'transparent', color: activeTab === 'register' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Registro</button>
           <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
           <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Finanzas</button>
-          <button onClick={() => setActiveTab('service')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'service' ? '#F59E0B' : 'transparent', color: activeTab === 'service' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
           <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
         </div>
         <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>Salir</button>
@@ -584,7 +488,7 @@ ACCESORIOS: ${formReparacion.accesorios}
           <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} icon={<Icons.Dollar />} />
           <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} color="#10b981" icon={<Icons.Chart />} subtext="Margen saludable" />
           <StatCard label="Inversión Activa" value={`S/ ${resumenVentas.totalCosto.toLocaleString()}`} color="#94a3b8" icon={<Icons.Box />} />
-          <StatCard label="Reparaciones" value={reparaciones.length} color="#3b82f6" icon={<Icons.Wrench />} subtext="Servicios en curso" />
+          <StatCard label="Unidades Vendidas" value={resumenVentas.count} color="#3b82f6" icon={<Icons.Check />} />
         </div>
 
         {activeTab === 'register' && (
@@ -686,35 +590,6 @@ ACCESORIOS: ${formReparacion.accesorios}
                 </table>
             </div>
           </div>
-        )}
-
-        {/* --- PESTAÑA SERVICIO TÉCNICO (NUEVO) --- */}
-        {activeTab === 'service' && (
-          <>
-            {/* Formulario Rápido de Servicio */}
-            <div style={{ ...styles.glassPanel, padding: '30px', marginBottom: '30px' }}>
-              <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white', marginBottom: '20px' }}>⚡ Ingreso Rápido de Servicio</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                <input style={styles.input} placeholder="Cliente" value={formReparacion.cliente_nombre} onChange={e=>setFormReparacion({...formReparacion, cliente_nombre:e.target.value})} />
-                <input style={styles.input} placeholder="Teléfono" value={formReparacion.cliente_telefono} onChange={e=>setFormReparacion({...formReparacion, cliente_telefono:e.target.value})} />
-                <input style={styles.input} placeholder="Marca" value={formReparacion.marca} onChange={e=>setFormReparacion({...formReparacion, marca:e.target.value})} />
-                <input style={styles.input} placeholder="Modelo" value={formReparacion.modelo} onChange={e=>setFormReparacion({...formReparacion, modelo:e.target.value})} />
-                <input style={styles.input} placeholder="Falla" value={formReparacion.falla_desc} onChange={e=>setFormReparacion({...formReparacion, falla_desc:e.target.value})} />
-                 <input style={styles.input} placeholder="Contraseña/Patrón" value={formReparacion.contrasena} onChange={e=>setFormReparacion({...formReparacion, contrasena:e.target.value})} />
-                 <input style={styles.input} placeholder="Accesorios (Cargador...)" value={formReparacion.accesorios} onChange={e=>setFormReparacion({...formReparacion, accesorios:e.target.value})} />
-                <input type="number" style={styles.input} placeholder="Costo Estimado" value={formReparacion.costo_estimado} onChange={e=>setFormReparacion({...formReparacion, costo_estimado:e.target.value})} />
-                <input type="date" style={styles.input} placeholder="Fecha Ingreso" value={formReparacion.fecha_ingreso} onChange={e=>setFormReparacion({...formReparacion, fecha_ingreso:e.target.value})} />
-                <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, height: '100%' }}>Crear Ticket</button>
-              </div>
-            </div>
-
-            {/* Listado de Reparaciones */}
-            <div style={styles.grid}>
-              {reparaciones.map(rep => (
-                <RepairCard key={rep.id} rep={rep} onCambiarEstado={cambiarEstadoReparacion} />
-              ))}
-            </div>
-          </>
         )}
       </div>
 
