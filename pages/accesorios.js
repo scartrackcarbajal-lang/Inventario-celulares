@@ -250,6 +250,7 @@ export default function Accesorios() {
           
           <div className="nav-menu" style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
             <button onClick={() => router.push('/inventario')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
+            <button onClick={() => router.push('/servicios_tecnicos')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Taller</button>
             <button style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: '#F59E0B', color: 'black', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
           </div>
         </div>
