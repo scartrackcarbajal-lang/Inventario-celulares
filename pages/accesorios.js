@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS GARANTIZADO)
 // ==========================================
 const styles = {
   container: {
@@ -30,7 +30,7 @@ const styles = {
   input: {
     width: '100%',
     padding: '14px 16px',
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    backgroundColor: 'rgba(2, 6, 23, 0.5)',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '12px',
     color: 'white',
