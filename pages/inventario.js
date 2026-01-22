@@ -285,6 +285,7 @@ function RepairCard({ rep, onCambiarEstado }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Smartphone /><span>{rep.cliente_telefono}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_estimado}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Check /><span>Abono: S/ {rep.abono}</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {rep.fecha_ingreso}</span></div>
       </div>
 
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px' }}>
@@ -348,7 +349,7 @@ export default function Inventario() {
   const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
   const [form, setForm] = useState(estadoInicial)
 
-  const estadoReparacionInicial = { cliente_nombre: '', cliente_telefono: '', equipo_modelo: '', falla: '', costo_estimado: '', abono: '', estado: 'Recibido' }
+  const estadoReparacionInicial = { cliente_nombre: '', cliente_telefono: '', equipo_modelo: '', falla: '', costo_estimado: '', abono: '', estado: 'Recibido', fecha_ingreso: new Date().toISOString().split('T')[0] }
   const [formReparacion, setFormReparacion] = useState(estadoReparacionInicial)
 
   // --- HELPERS ---
@@ -665,6 +666,7 @@ export default function Inventario() {
                 <input style={styles.input} placeholder="Falla Reportada" value={formReparacion.falla} onChange={e=>setFormReparacion({...formReparacion, falla:e.target.value})} />
                 <input type="number" style={styles.input} placeholder="Costo Estimado" value={formReparacion.costo_estimado} onChange={e=>setFormReparacion({...formReparacion, costo_estimado:e.target.value})} />
                 <input type="number" style={styles.input} placeholder="Abono" value={formReparacion.abono} onChange={e=>setFormReparacion({...formReparacion, abono:e.target.value})} />
+                <input type="date" style={styles.input} placeholder="Fecha Ingreso" value={formReparacion.fecha_ingreso} onChange={e=>setFormReparacion({...formReparacion, fecha_ingreso:e.target.value})} />
                 <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, height: '100%' }}>Crear Ticket</button>
               </div>
             </div>
