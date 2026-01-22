@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
-import { supabase } from '../lib/supabase'
 import { useRouter } from 'next/router'
+import { supabase } from '../lib/supabase'
 
 // ==========================================
 // 🎨 ESTILOS PREMIUM (CSS-IN-JS)
@@ -204,7 +204,7 @@ function PublicCard({ item, tipo }) {
           </div>
         </div>
 
-        <button style={{ ...styles.btnAction, marginTop: '20px' }}>Ver Detalles</button>
+        <button style={styles.btnAction}>Ver Detalles</button>
       </div>
     </div>
   )
@@ -246,9 +246,9 @@ export default function Catalogo() {
         `)
         .eq('publicado', true)
         .eq('tracking', 'BULK')
-        // Filtro manual de stock > 0
       
       if (accs) {
+        // Filtrar solo los que tienen stock
         const disponibles = accs.filter(a => (a.stock_bulk?.[0]?.stock || 0) > 0)
         setAccesorios(disponibles)
       }
