@@ -7,15 +7,21 @@ import { supabase } from '../lib/supabase'
 // ==========================================
 const Icons = {
   Logo: () => (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M2 17L12 22L22 17" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M2 12L12 17L22 12" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <defs>
+        <linearGradient id="gold-gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#F59E0B" />
+          <stop offset="1" stopColor="#D97706" />
+        </linearGradient>
+      </defs>
     </svg>
   ),
-  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
-  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
-  Smartphone: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg>,
+  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3" strokeLinecap="round"/></svg>,
+  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
+  Smartphone: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01" strokeWidth="2" strokeLinecap="round"/></svg>,
   Headphones: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
   Chart: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>,
   Dollar: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
@@ -28,7 +34,7 @@ const Icons = {
 }
 
 // ==========================================
-// 🎨 ESTILOS (CSS-IN-JS para garantizar el diseño)
+// 🎨 ESTILOS (CSS-IN-JS GARANTIZADO)
 // ==========================================
 const styles = {
   container: {
@@ -96,7 +102,7 @@ const styles = {
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
     gap: '24px',
   },
   statCard: {
@@ -252,10 +258,12 @@ export default function Inventario() {
 
   // --- HELPERS ---
   const normalizarSerial = (v) => String(v || '').trim().replace(/\s+/g, '').toUpperCase().slice(0, 30)
+  
   const avisar = (msg, type = 'success') => {
     setNotificacion({ mensaje: msg, visible: true, type })
     setTimeout(() => setNotificacion((prev) => ({ ...prev, visible: false })), 3000)
   }
+  
   const inicioDelDiaISO = (d) => d ? new Date(`${d}T00:00:00`).toISOString() : null
   const finDelDiaISO = (d) => d ? new Date(`${d}T23:59:59.999`).toISOString() : null
 
@@ -275,7 +283,7 @@ export default function Inventario() {
 
   useEffect(() => { if (autorizado) cargarVentas() }, [autorizado, ventasDesde, ventasHasta])
 
-  // --- LOGIC ---
+  // --- LOGIC (REAL) ---
   const login = async () => {
     if (!email || !password) return
     setCargandoLogin(true)
@@ -450,8 +458,14 @@ export default function Inventario() {
   }, { totalVentas: 0, totalCosto: 0, totalGanancia: 0, count: 0 }), [ventas])
 
   const equiposFiltrados = useMemo(() => equipos.filter(c => {
-    const q = busqueda.toLowerCase()
-    return (c.marca?.toLowerCase().includes(q) || c.modelo?.toLowerCase().includes(q) || c.imei?.toLowerCase().includes(q)) && (filtroEstado === 'TODOS' || c.estado === filtroEstado) && (filtroVendidos === 'TODOS' || (filtroVendidos === 'VENDIDOS' ? Number(c.stock) <= 0 : Number(c.stock) > 0))
+    const terminos = busqueda.toLowerCase().trim().split(/\s+/) // Dividir por espacios
+    const datosEquipo = `${c.marca} ${c.modelo} ${c.imei} ${c.color} ${c.almacenamiento} ${c.estado}`.toLowerCase()
+    
+    const matchBusqueda = terminos.every(t => datosEquipo.includes(t))
+
+    const st = filtroEstado === 'TODOS' || c.estado === filtroEstado
+    const vd = filtroVendidos === 'TODOS' || (filtroVendidos === 'VENDIDOS' ? Number(c.stock) <= 0 : Number(c.stock) > 0)
+    return matchBusqueda && st && vd
   }), [equipos, busqueda, filtroEstado, filtroVendidos])
 
   // ==========================================
@@ -593,7 +607,11 @@ export default function Inventario() {
             <div style={{ display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
               <input style={{ ...styles.input, width: 'auto', minWidth: '300px' }} placeholder="🔍 Buscar por IMEI, modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
               <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}>
-                <option value="TODOS">Todos los Estados</option><option value="Nuevo Sellado">Nuevo Sellado</option>
+                <option value="TODOS">Todos los Estados</option>
+                <option value="Nuevo Sellado">Nuevo Sellado</option>
+                <option value="Semi Nuevo">Semi Nuevo</option>
+                <option value="Usado">Usado</option>
+                <option value="Open Box">Open Box</option>
               </select>
               <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroVendidos} onChange={e=>setFiltroVendidos(e.target.value)}>
                 <option value="TODOS">Todo el Inventario</option><option value="DISPONIBLES">En Stock</option><option value="VENDIDOS">Vendidos</option>
