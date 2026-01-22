@@ -522,11 +522,8 @@ export default function Inventario() {
         .slice(0, 30)
 
     // Validación opcional (para usar en guardar())
-    const serial = normalizarSerial(form.serial)
-if (!serial || (!esImei(serial) && !esSerie(serial))) {
-  avisar('Ingresa un IMEI (15 dígitos) o una SERIE válida (6–30).', '#ff4b2b')
-  return
-}
+    const esImei = (s) => /^\d{15}$/.test(s)
+    const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
 
 
   const inicioDelDiaISO = (yyyyMmDd) => {
@@ -726,6 +723,11 @@ if (!serial || (!esImei(serial) && !esSerie(serial))) {
       const marca = String(form.marca || '').trim()
       const modelo = String(form.modelo || '').trim()
       const serial = normalizarSerial(form.serial)
+
+      if (!serial || (!esImei(serial) && !esSerie(serial))) {
+        avisar('Ingresa un IMEI (15 dígitos) o una SERIE válida (6–30).', '#ff4b2b')
+        return
+      }
 
       if (!marca || !modelo) {
         avisar('Marca y modelo son obligatorios.', '#ff4b2b')
@@ -1346,6 +1348,7 @@ if (!serial || (!esImei(serial) && !esSerie(serial))) {
               onEdit={(equipo) => {
                 setForm({ ...estadoInicial, ...equipo, serial: equipo.imei })
                 setEditandoId(equipo.id)
+                setEditandoSkuId(equipo?._raw?.skus?.id || null)
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }}
               onDelete={async (id) => {
