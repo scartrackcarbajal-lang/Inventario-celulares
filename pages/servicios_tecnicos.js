@@ -1,44 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-
-// ==============================================================================
-// ⚠️ INSTRUCCIONES PARA PRODUCCIÓN (VS CODE)
-// 1. DESCOMENTA las líneas de abajo:
-// import { useRouter } from 'next/router'
-// import { supabase } from '../lib/supabase'
-//
-// 2. BORRA la sección "ZONA DE MOCKS" de abajo.
-// ==============================================================================
-
-// ==========================================
-// 🛠️ ZONA DE MOCKS (SÓLO PARA VISTA PREVIA)
-// ==========================================
-const useRouter = () => ({
-  push: (url) => console.log('Navegando a:', url)
-})
-
-const mockReparaciones = [
-  { id: 1, cliente_nombre: 'Juan Pérez', cliente_telefono: '099123456', equipo_modelo: 'iPhone 11', falla: 'Pantalla rota, táctil no responde', estado: 'En Revisión', costo_estimado: 250, fecha_ingreso: new Date().toISOString().split('T')[0] },
-  { id: 2, cliente_nombre: 'Maria Gomez', cliente_telefono: '098765432', equipo_modelo: 'Samsung A52', falla: 'No carga, puerto sucio', estado: 'Listo', costo_estimado: 80, fecha_ingreso: new Date(Date.now() - 172800000).toISOString().split('T')[0] },
-  { id: 3, cliente_nombre: 'Carlos Ruiz', cliente_telefono: '091122334', equipo_modelo: 'Xiaomi Redmi Note 10', falla: 'Se reinicia solo', estado: 'Recibido', costo_estimado: 0, fecha_ingreso: new Date().toISOString().split('T')[0] },
-]
-
-const supabase = {
-  auth: {
-    getSession: async () => ({ data: { session: { user: { id: 'mock' } } } }),
-    onAuthStateChange: (cb) => { setTimeout(() => cb('SIGNED_IN', { user: { id: 'mock' } }), 500); return { data: { subscription: { unsubscribe: () => {} } } } },
-    signInWithPassword: async () => ({ error: null }),
-    signOut: async () => {},
-  },
-  from: (table) => ({
-    select: () => ({ order: () => ({ limit: async () => ({ data: mockReparaciones, error: null }) }) }),
-    insert: async () => ({ error: null }),
-    update: () => ({ eq: async () => ({ error: null }) }),
-    delete: () => ({ eq: async () => ({ error: null }) })
-  })
-}
-// ==========================================
-// FIN ZONA DE MOCKS
-// ==========================================
+import { useRouter } from 'next/router'
+import { supabase } from '../lib/supabase'
 
 // ==========================================
 // 🎨 ESTILOS PREMIUM (CSS-IN-JS)
@@ -68,7 +30,7 @@ const styles = {
   input: {
     width: '100%',
     padding: '14px 16px',
-    backgroundColor: 'rgba(2, 6, 23, 0.5)',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '12px',
     color: 'white',
@@ -112,6 +74,16 @@ const styles = {
     fontSize: '0.85rem',
     fontWeight: 'bold'
   },
+  iconButtonSmall: {
+    width: '36px', height: '36px',
+    borderRadius: '10px',
+    border: '1px solid rgba(255,255,255,0.1)',
+    background: 'rgba(255,255,255,0.05)',
+    color: '#cbd5e1',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
@@ -128,7 +100,7 @@ const styles = {
 }
 
 // ==========================================
-// 🎨 ICONOS SVG (COMPLETOS)
+// 🎨 ICONOS SVG
 // ==========================================
 const Icons = {
   Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
@@ -147,6 +119,7 @@ const Icons = {
   Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
   Dollar: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
   Eye: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
+  Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
 }
 
 // ==========================================
@@ -164,7 +137,7 @@ const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
   </div>
 )
 
-const RepairCard = ({ rep, onCambiarEstado, onDelete }) => {
+const RepairCard = ({ rep, onCambiarEstado, onDelete, onEdit }) => {
   const estadoColor = {
     'Recibido': '#94a3b8',
     'En Revisión': '#F59E0B',
@@ -193,7 +166,7 @@ const RepairCard = ({ rep, onCambiarEstado, onDelete }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.User /><span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{rep.cliente_nombre}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.Phone /><span>{rep.cliente_telefono}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><div style={{ color: '#ef4444' }}>Costo: S/ {rep.costo_estimado}</div></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.Clock /><span>{new Date(rep.fecha_ingreso).toLocaleDateString()}</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.Clock /><span>{rep.fecha_ingreso ? new Date(rep.fecha_ingreso).toLocaleDateString() : '-'}</span></div>
       </div>
 
       <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
@@ -211,7 +184,8 @@ const RepairCard = ({ rep, onCambiarEstado, onDelete }) => {
             <option value="Entregado">Entregado</option>
           </select>
         </div>
-        <button onClick={() => onDelete(rep.id)} style={{ ...styles.btnIcon, color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)', height: '42px', width: '42px' }} title="Eliminar"><Icons.Trash /></button>
+        <button onClick={() => onEdit(rep)} style={{ ...styles.iconButtonSmall, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }} title="Editar"><Icons.Edit /></button>
+        <button onClick={() => onDelete(rep.id)} style={{ ...styles.iconButtonSmall, color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)' }} title="Eliminar"><Icons.Trash /></button>
       </div>
     </div>
   )
@@ -222,8 +196,9 @@ export default function ServiciosTecnicos() {
   const [reparaciones, setReparaciones] = useState([])
   const [loading, setLoading] = useState(false)
   const [busqueda, setBusqueda] = useState('')
+  const [editandoId, setEditandoId] = useState(null)
   
-  // Formulario
+  // Formulario ajustado a la tabla
   const estadoInicial = { 
     cliente_nombre: '', 
     cliente_telefono: '', 
@@ -245,7 +220,7 @@ export default function ServiciosTecnicos() {
     
     setLoading(false)
     if (error) {
-      alert('Error cargando reparaciones')
+      alert('Error cargando reparaciones: ' + error.message)
       return
     }
     setReparaciones(data || [])
@@ -255,15 +230,43 @@ export default function ServiciosTecnicos() {
     cargarReparaciones()
   }, [])
 
-  // --- GUARDAR ---
+  // --- PREPARAR EDICIÓN ---
+  const prepararEdicion = (rep) => {
+    setEditandoId(rep.id)
+    setForm({
+      cliente_nombre: rep.cliente_nombre,
+      cliente_telefono: rep.cliente_telefono,
+      equipo_modelo: rep.equipo_modelo,
+      falla: rep.falla,
+      costo_estimado: rep.costo_estimado,
+      estado: rep.estado,
+      fecha_ingreso: rep.fecha_ingreso
+    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // --- GUARDAR (Crear o Actualizar) ---
   const guardarReparacion = async () => {
     if (!form.cliente_nombre || !form.equipo_modelo || !form.falla) return alert('Completa los campos obligatorios')
 
-    const { error } = await supabase.from('reparaciones').insert(form)
+    if (editandoId) {
+      // MODO EDICIÓN
+      const { error } = await supabase
+        .from('reparaciones')
+        .update(form)
+        .eq('id', editandoId)
+      
+      if (error) return alert('Error al actualizar: ' + error.message)
+      alert('Ticket Actualizado Exitosamente')
+      setEditandoId(null)
 
-    if (error) return alert('Error al guardar: ' + error.message)
+    } else {
+      // MODO CREACIÓN
+      const { error } = await supabase.from('reparaciones').insert(form)
+      if (error) return alert('Error al guardar: ' + error.message)
+      alert('Ticket Creado Exitosamente')
+    }
     
-    alert('Ticket Creado Exitosamente')
     setForm(estadoInicial)
     cargarReparaciones()
   }
@@ -343,8 +346,12 @@ export default function ServiciosTecnicos() {
         {/* FORMULARIO */}
         <div style={{ ...styles.glassPanel, padding: '40px', marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}><Icons.Plus /></div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>Nuevo Ticket de Reparación</h2>
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+              {editandoId ? <Icons.Edit /> : <Icons.Plus />}
+            </div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
+              {editandoId ? 'Editar Ticket de Reparación' : 'Nuevo Ticket de Reparación'}
+            </h2>
           </div>
 
           <div className="form-grid">
@@ -361,12 +368,24 @@ export default function ServiciosTecnicos() {
                <select style={styles.input} value={form.estado} onChange={e=>setForm({...form, estado: e.target.value})}>
                  <option value="Recibido">Recibido</option>
                  <option value="En Revisión">En Revisión</option>
+                 <option value="Esperando Repuesto">Esperando Repuesto</option>
+                 <option value="Listo">Listo</option>
+                 <option value="Entregado">Entregado</option>
                </select>
             </div>
           </div>
           <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>
-            Generar Orden de Servicio
+            {editandoId ? 'Guardar Cambios' : 'Generar Orden de Servicio'}
           </button>
+          
+          {editandoId && (
+            <button 
+              onClick={() => { setEditandoId(null); setForm(estadoInicial); }} 
+              style={{ width: '100%', background: 'transparent', color: '#94a3b8', border: '1px solid #94a3b8', padding: '12px', borderRadius: '16px', marginTop: '10px', cursor: 'pointer' }}
+            >
+              Cancelar Edición
+            </button>
+          )}
         </div>
 
         {/* LISTA DE TICKETS */}
@@ -390,7 +409,13 @@ export default function ServiciosTecnicos() {
              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '50px', color: '#64748b' }}>No hay reparaciones registradas</div>
           ) : (
              reparacionesFiltradas.map((rep) => (
-                <RepairCard key={rep.id} rep={rep} onCambiarEstado={cambiarEstado} onDelete={eliminarReparacion} />
+                <RepairCard 
+                  key={rep.id} 
+                  rep={rep} 
+                  onCambiarEstado={cambiarEstado} 
+                  onDelete={eliminarReparacion} 
+                  onEdit={prepararEdicion}
+                />
              ))
           )}
         </div>
