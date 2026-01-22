@@ -1,306 +1,360 @@
-import { useEffect, useMemo, useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
+import { supabase } from '../lib/supabase'
+import { useRouter } from 'next/router'
 
-export default function CatalogoPublico() {
+// ==========================================
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
+// ==========================================
+const styles = {
+  container: {
+    minHeight: '100vh',
+    backgroundColor: '#020617',
+    color: '#e2e8f0',
+    fontFamily: "'Inter', sans-serif",
+    backgroundImage: `radial-gradient(circle at 50% 0%, #1e293b 0%, #020617 100%)`,
+    backgroundAttachment: 'fixed',
+    overflowX: 'hidden',
+  },
+  heroSection: {
+    padding: '80px 20px 60px',
+    textAlign: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  glassHeader: {
+    backgroundColor: 'rgba(15, 23, 42, 0.8)',
+    backdropFilter: 'blur(12px)',
+    borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+    position: 'sticky',
+    top: 0,
+    zIndex: 100,
+    padding: '16px 24px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  goldText: {
+    background: 'linear-gradient(to right, #F59E0B, #D97706)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    fontWeight: '900',
+  },
+  input: {
+    width: '100%',
+    maxWidth: '500px',
+    padding: '16px 24px',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '99px',
+    color: 'white',
+    outline: 'none',
+    fontSize: '1.1rem',
+    transition: 'all 0.3s ease',
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    fontSize: '1.8rem',
+    fontWeight: '800',
+    color: 'white',
+    marginBottom: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+    gap: '30px',
+    padding: '0 20px 60px',
+    maxWidth: '1400px',
+    margin: '0 auto',
+  },
+  // Tarjetas
+  card: {
+    backgroundColor: 'rgba(30, 41, 59, 0.6)',
+    backdropFilter: 'blur(16px)',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
+    borderRadius: '24px',
+    overflow: 'hidden',
+    transition: 'transform 0.3s, box-shadow 0.3s',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    cursor: 'pointer',
+  },
+  cardImageArea: {
+    height: '260px',
+    backgroundColor: '#020617',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  badge: {
+    position: 'absolute',
+    top: '12px',
+    right: '12px',
+    padding: '6px 12px',
+    borderRadius: '8px',
+    fontSize: '0.7rem',
+    fontWeight: '900',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    zIndex: 10,
+  },
+  btnAction: {
+    background: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
+    color: 'white',
+    border: 'none',
+    padding: '12px 24px',
+    borderRadius: '14px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    width: '100%',
+    marginTop: 'auto',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    fontSize: '0.85rem',
+  },
+  adminBtn: {
+    padding: '8px 20px',
+    borderRadius: '12px',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    background: 'transparent',
+    color: '#94a3b8',
+    fontWeight: 'bold',
+    fontSize: '0.8rem',
+    cursor: 'pointer',
+    textDecoration: 'none',
+  }
+}
+
+// ==========================================
+// 🎨 ICONOS SVG
+// ==========================================
+const Icons = {
+  Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
+  Smartphone: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
+  Headphones: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="2"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
+  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+}
+
+// ==========================================
+// COMPONENTE TARJETA
+// ==========================================
+function PublicCard({ item, tipo }) {
+  const router = useRouter()
+  // Normalizar datos entre celular y accesorio
+  const titulo = tipo === 'celular' 
+    ? `${item.skus?.productos?.marca} ${item.skus?.productos?.nombre}`
+    : `${item.productos?.marca} ${item.productos?.nombre}`
+  
+  const precio = tipo === 'celular' ? item.skus?.precio_venta : item.precio_venta
+  const imagen = item.imagen_url?.[0] || 'https://via.placeholder.com/400x400/0f172a/334155?text=Sin+Foto'
+  const estado = tipo === 'celular' ? item.estado : 'Nuevo'
+  
+  // Badges colores
+  const badgeStyle = estado === 'Nuevo Sellado' || estado === 'Nuevo' 
+    ? { backgroundColor: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.2)' }
+    : { backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }
+
+  const handleClick = () => {
+    router.push(`/detalles/${item.id}?tipo=${tipo === 'celular' ? 'serial' : 'bulk'}`)
+  }
+
+  return (
+    <div 
+      style={styles.card}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-10px)'
+        e.currentTarget.style.boxShadow = '0 20px 40px -10px rgba(245, 158, 11, 0.15)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = 'none'
+      }}
+      onClick={handleClick}
+    >
+      <div style={styles.cardImageArea}>
+        <img src={imagen} style={{ width: '80%', height: '80%', objectFit: 'contain', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }} />
+        <div style={{ ...styles.badge, ...badgeStyle }}>{estado}</div>
+      </div>
+
+      <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: 'white', margin: '0 0 10px 0', lineHeight: 1.3 }}>{titulo}</h3>
+        
+        {tipo === 'celular' && (
+          <div style={{ display: 'flex', gap: '8px', fontSize: '0.8rem', color: '#94a3b8', marginBottom: '20px' }}>
+             <span style={{ background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '6px' }}>{item.almacenamiento}</span>
+             {item.salud_bateria && <span style={{ background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '6px' }}>🔋 {item.salud_bateria}%</span>}
+          </div>
+        )}
+
+        {tipo === 'accesorio' && (
+           <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: '20px' }}>
+              Stock disponible
+           </div>
+        )}
+
+        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+             <span style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#64748b' }}>PRECIO</span>
+             <div style={{ fontSize: '1.5rem', fontWeight: '900', color: 'white' }}>S/ {precio}</div>
+          </div>
+        </div>
+
+        <button style={{ ...styles.btnAction, marginTop: '20px' }}>Ver Detalles</button>
+      </div>
+    </div>
+  )
+}
+
+// ==========================================
+// PÁGINA PRINCIPAL
+// ==========================================
+export default function Catalogo() {
   const [celulares, setCelulares] = useState([])
   const [accesorios, setAccesorios] = useState([])
   const [busqueda, setBusqueda] = useState('')
-  const [cargando, setCargando] = useState(true)
-
-  // --- PALETA DE COLORES REFINADA ---
-  const theme = {
-    bg: '#050a14', // Fondo ultra oscuro
-    cardBg: 'rgba(22, 36, 71, 0.7)', // Vidrio oscuro
-    cyan: '#00f2ff', // Cyan neón más brillante
-    orange: '#ff9d00', // Naranja intenso
-    text: '#ffffff',
-    textMuted: '#94a3b8',
-    gradientText: 'linear-gradient(to right, #00f2ff, #ff9d00)',
-    gradientButton: 'linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%)',
-    shadowGlow: '0 0 25px rgba(0, 242, 255, 0.15)',
-  }
-
-  // ====== CARGA DE DATOS ======
-  const cargarEquipos = async () => {
-    setCargando(true)
-    
-    // 1) Celulares
-    const { data: celData } = await supabase
-      .from('items_serializados')
-      .select(`
-        id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, created_at,
-        skus!inner( id, precio_venta, publicado, productos(marca, nombre) )
-      `)
-      .eq('skus.publicado', true)
-      .eq('vendido', false)
-      .order('created_at', { ascending: false })
-
-    if (celData) setCelulares(celData)
-
-    // 2) Accesorios
-    const { data: accData } = await supabase
-      .from('skus')
-      .select(`
-        id, sku_codigo, precio_venta, tracking, publicado, created_at,
-        productos(marca, nombre),
-        stock_bulk(stock)
-      `)
-      .eq('publicado', true)
-      .eq('tracking', 'BULK')
-      .order('created_at', { ascending: false })
-
-    if (accData) setAccesorios(accData)
-    setCargando(false)
-  }
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    cargarEquipos()
+    const cargarTodo = async () => {
+      setLoading(true)
+      
+      // 1. Cargar Celulares
+      const { data: cels } = await supabase
+        .from('items_serializados')
+        .select(`
+          id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, 
+          skus!inner( id, precio_venta, publicado, productos(marca, nombre) )
+        `)
+        .eq('skus.publicado', true)
+        .eq('vendido', false)
+        .order('created_at', { ascending: false })
+
+      if (cels) setCelulares(cels)
+
+      // 2. Cargar Accesorios (Bulk)
+      const { data: accs } = await supabase
+        .from('skus')
+        .select(`
+          id, precio_venta, tracking, publicado,
+          productos(marca, nombre),
+          stock_bulk(stock)
+        `)
+        .eq('publicado', true)
+        .eq('tracking', 'BULK')
+        // Filtro manual de stock > 0
+      
+      if (accs) {
+        const disponibles = accs.filter(a => (a.stock_bulk?.[0]?.stock || 0) > 0)
+        setAccesorios(disponibles)
+      }
+      
+      setLoading(false)
+    }
+
+    cargarTodo()
   }, [])
 
-  // ====== FILTROS ======
-  const celularesFiltrados = useMemo(() => {
-    const q = busqueda.toLowerCase().trim()
-    if (!q) return celulares
-    return celulares.filter((item) => {
-      const txt = `${item?.skus?.productos?.marca} ${item?.skus?.productos?.nombre} ${item?.estado}`.toLowerCase()
+  // Filtrado
+  const filtrados = useMemo(() => {
+    const q = busqueda.toLowerCase()
+    
+    const celsFiltrados = celulares.filter(c => {
+      const txt = `${c.skus?.productos?.marca} ${c.skus?.productos?.nombre} ${c.color} ${c.almacenamiento}`.toLowerCase()
       return txt.includes(q)
     })
-  }, [celulares, busqueda])
 
-  const accesoriosFiltrados = useMemo(() => {
-    const q = busqueda.toLowerCase().trim()
-    if (!q) return accesorios
-    return accesorios.filter((sku) => {
-      const txt = `${sku?.productos?.marca} ${sku?.productos?.nombre}`.toLowerCase()
+    const accsFiltrados = accesorios.filter(a => {
+      const txt = `${a.productos?.marca} ${a.productos?.nombre}`.toLowerCase()
       return txt.includes(q)
     })
-  }, [accesorios, busqueda])
+
+    return { cels: celsFiltrados, accs: accsFiltrados }
+  }, [busqueda, celulares, accesorios])
 
   return (
-    <div style={{ backgroundColor: theme.bg, minHeight: '100vh', fontFamily: "'Inter', sans-serif", paddingBottom: 60 }}>
+    <div style={styles.container}>
       
-      {/* --- ESTILOS CSS GLOBALES PARA ANIMACIONES --- */}
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
-        
-        body { margin: 0; padding: 0; background: #050a14; }
+      {/* HEADER */}
+      <nav style={styles.glassHeader}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}><Icons.Logo /></div>
+          <span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span>
+        </div>
+        <Link href="/inventario" style={styles.adminBtn}>
+          🔒 Admin
+        </Link>
+      </nav>
 
-        /* Scrollbar oculta pero funcional */
-        .galeria-scroll {
-          display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch; scrollbar-width: none;
-        }
-        .galeria-scroll::-webkit-scrollbar { display: none; }
-        
-        .foto-item {
-          flex: 0 0 100%; scroll-snap-align: center; object-fit: cover; height: 320px;
-          transition: transform 0.3s;
-        }
-
-        /* Animación Hover Tarjeta */
-        .card-hover {
-          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .card-hover:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 15px 35px rgba(0, 242, 255, 0.2);
-          border-color: rgba(0, 242, 255, 0.5) !important;
-        }
-
-        /* Texto Gradiente */
-        .text-gradient {
-          background: ${theme.gradientText};
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        /* Grid Responsivo */
-        .grid-catalogo {
-          display: grid; gap: 30px; 
-          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-          max-width: 1200px; margin: 0 auto; padding: 0 20px;
-        }
-
-        /* Input Glass */
-        .input-glass:focus {
-          border-color: ${theme.cyan} !important;
-          box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
-          background: rgba(22, 36, 71, 0.9) !important;
-        }
-      `}</style>
-
-      {/* === HEADER HERO SECTION === */}
-      <div style={{ 
-        textAlign: 'center', 
-        padding: '60px 20px 40px', 
-        background: `radial-gradient(circle at center, #1a2a50 0%, #050a14 70%)` 
-      }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0, letterSpacing: '-1px' }}>
-          LOS FARRUS <span className="text-gradient">HUB</span>
+      {/* HERO SECTION */}
+      <div style={styles.heroSection}>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', color: 'white', marginBottom: '10px', letterSpacing: '-2px' }}>
+          Tecnología <span style={styles.goldText}>Premium</span>
         </h1>
-        <p style={{ color: theme.textMuted, fontSize: '0.9rem', letterSpacing: '4px', textTransform: 'uppercase', marginTop: 10, fontWeight: 600 }}>
-          Catálogo Premium
+        <p style={{ color: '#94a3b8', fontSize: '1.1rem', marginBottom: '40px', maxWidth: '600px', margin: '0 auto 40px' }}>
+          Encuentra los mejores equipos y accesorios con garantía y confianza.
         </p>
-
-        {/* BUSCADOR FLOTANTE */}
-        <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center' }}>
-          <input
-            className="input-glass"
-            placeholder="🔍 Buscar iPhone, Samsung, Accesorios..."
+        
+        <div style={{ position: 'relative', maxWidth: '500px', margin: '0 auto' }}>
+          <div style={{ position: 'absolute', top: '18px', left: '20px', color: '#94a3b8' }}><Icons.Search /></div>
+          <input 
+            style={styles.input} 
+            placeholder="¿Qué estás buscando hoy?" 
             value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-            style={{
-              width: '100%', maxWidth: '500px', padding: '18px 30px', borderRadius: '50px',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: 'white', fontSize: '1.1rem', outline: 'none',
-              backdropFilter: 'blur(10px)', transition: 'all 0.3s'
-            }}
+            onChange={e => setBusqueda(e.target.value)}
           />
         </div>
       </div>
 
-      {/* === CONTENIDO === */}
-      {cargando ? (
-        <div style={{ textAlign: 'center', color: theme.cyan, marginTop: 50, fontSize: '1.2rem' }}>Cargando inventario...</div>
+      {/* CONTENIDO */}
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '60px', color: '#F59E0B' }}>Cargando inventario...</div>
       ) : (
         <>
-          {/* SECCIÓN 1: CELULARES */}
-          {celularesFiltrados.length > 0 && (
-            <div style={{ marginTop: 20 }}>
-              <div style={{ maxWidth: 1200, margin: '0 auto 25px', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 15 }}>
-                <span style={{ fontSize: '1.5rem' }}>📱</span>
-                <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'white', margin: 0 }}>Equipos Disponibles</h2>
-                <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }}></div>
+          {/* SECCIÓN CELULARES */}
+          {filtrados.cels.length > 0 && (
+            <div style={styles.grid}>
+              <div style={{ gridColumn: '1 / -1', ...styles.sectionTitle }}>
+                <Icons.Smartphone /> Celulares Disponibles
+                <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, #F59E0B 0%, transparent 100%)', marginLeft: '20px', opacity: 0.3 }}></div>
               </div>
-
-              <div className="grid-catalogo">
-                {celularesFiltrados.map((item) => {
-                  const titulo = `${item?.skus?.productos?.marca} ${item?.skus?.productos?.nombre}`
-                  return (
-                    <div key={item.id} className="card-hover" style={{
-                      backgroundColor: theme.cardBg, borderRadius: 24, overflow: 'hidden',
-                      border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)',
-                      display: 'flex', flexDirection: 'column'
-                    }}>
-                      {/* FOTO + BADGE */}
-                      <div style={{ position: 'relative' }}>
-                        <div className="galeria-scroll">
-                          {item.imagen_url?.length > 0 ? (
-                            item.imagen_url.map((url, i) => <img key={i} src={url} className="foto-item" />)
-                          ) : (
-                            <div style={{ height: 320, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#02050a', color: '#333' }}>Sin Foto</div>
-                          )}
-                        </div>
-                        {/* Badge de Estado */}
-                        {estadoLabel[rep.estado] ?? rep.estado}
-                        <div style={{
-                          position: 'absolute', top: 15, right: 15,
-                          background: item.estado === 'Nuevo Sellado' ? theme.cyan : theme.orange,
-                          color: '#000', padding: '6px 14px', borderRadius: 20,
-                          fontWeight: 800, fontSize: '0.75rem', textTransform: 'uppercase',
-                          boxShadow: '0 4px 15px rgba(0,0,0,0.4)'
-                        }}>
-                          {item.estado}
-                        </div>
-                      </div>
-
-                      {/* INFO CARD */}
-                      <div style={{ padding: 25, flex: 1, display: 'flex', flexDirection: 'column' }}>
-                        <h3 style={{ margin: '0 0 5px', fontSize: '1.4rem', color: 'white' }}>{titulo}</h3>
-                        
-                        {/* Specs */}
-                        <div style={{ display: 'flex', gap: 10, fontSize: '0.9rem', color: theme.cyan, fontWeight: 600, marginBottom: 20 }}>
-                          <span>💾 {item.almacenamiento}</span>
-                          {item.salud_bateria && <span>• 🔋 {item.salud_bateria}%</span>}
-                        </div>
-
-                        {/* Footer Card */}
-                        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <div>
-                            <span style={{ display: 'block', fontSize: '0.7rem', color: theme.textMuted }}>PRECIO</span>
-                            <span style={{ fontSize: '1.6rem', fontWeight: 900, color: 'white' }}>S/ {item.skus.precio_venta}</span>
-                          </div>
-                          
-                          <Link href={`/detalles/${item.id}?tipo=serial`} style={{
-                            padding: '12px 24px', background: theme.text, color: '#000',
-                            borderRadius: 50, textDecoration: 'none', fontWeight: 800, fontSize: '0.9rem',
-                            boxShadow: '0 5px 15px rgba(255,255,255,0.2)', transition: 'transform 0.2s'
-                          }}>
-                            Ver →
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+              {filtrados.cels.map(item => (
+                <PublicCard key={item.id} item={item} tipo="celular" />
+              ))}
             </div>
           )}
 
-          {/* SECCIÓN 2: ACCESORIOS */}
-          {accesoriosFiltrados.length > 0 && (
-            <div style={{ marginTop: 80 }}>
-              <div style={{ maxWidth: 1200, margin: '0 auto 25px', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 15 }}>
-                <span style={{ fontSize: '1.5rem' }}>🎧</span>
-                <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'white', margin: 0 }}>Accesorios & Varios</h2>
-                <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }}></div>
+          {/* SECCIÓN ACCESORIOS */}
+          {filtrados.accs.length > 0 && (
+            <div style={styles.grid}>
+              <div style={{ gridColumn: '1 / -1', ...styles.sectionTitle, marginTop: '40px' }}>
+                <Icons.Headphones /> Accesorios & Gadgets
+                <div style={{ flex: 1, height: '1px', background: 'linear-gradient(90deg, #F59E0B 0%, transparent 100%)', marginLeft: '20px', opacity: 0.3 }}></div>
               </div>
-
-              <div className="grid-catalogo">
-                {accesoriosFiltrados.map((sku) => {
-                  const stock = sku?.stock_bulk?.[0]?.stock ?? 0
-                  if (stock <= 0) return null
-
-                  return (
-                    <div key={sku.id} className="card-hover" style={{
-                      backgroundColor: theme.cardBg, borderRadius: 24, padding: 30,
-                      border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)',
-                      display: 'flex', flexDirection: 'column', position: 'relative'
-                    }}>
-                      {/* Borde Izquierdo Decorativo */}
-                      <div style={{ position: 'absolute', left: 0, top: 20, bottom: 20, width: 4, background: theme.cyan, borderRadius: '0 5px 5px 0' }}></div>
-
-                      <div style={{ marginBottom: 15 }}>
-                        <span style={{ color: theme.textMuted, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: 1 }}>
-                          {sku.productos.marca}
-                        </span>
-                        <h3 style={{ margin: '5px 0 0', fontSize: '1.5rem', color: 'white' }}>{sku.productos.nombre}</h3>
-                      </div>
-
-                      <div style={{ display: 'inline-block', background: 'rgba(0, 242, 255, 0.1)', color: theme.cyan, padding: '5px 12px', borderRadius: 8, fontSize: '0.85rem', fontWeight: 'bold', alignSelf: 'flex-start', marginBottom: 25 }}>
-                        ✓ {stock} en Stock
-                      </div>
-
-                      <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 20 }}>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 900, color: 'white' }}>S/ {sku.precio_venta}</span>
-                        <Link href={`/detalles/${sku.id}?tipo=bulk`} style={{
-                          color: theme.cyan, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem'
-                        }}>
-                          Ver Stock →
-                        </Link>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+              {filtrados.accs.map(item => (
+                <PublicCard key={item.id} item={item} tipo="accesorio" />
+              ))}
             </div>
           )}
 
           {/* EMPTY STATE */}
-          {celularesFiltrados.length === 0 && accesoriosFiltrados.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '80px 20px', color: theme.textMuted }}>
-              <div style={{ fontSize: '3rem', marginBottom: 20, opacity: 0.5 }}>🕵️‍♂️</div>
-              <h2 style={{ color: 'white' }}>No encontramos lo que buscas</h2>
-              <p>Prueba buscando "iPhone", "Cargador" o "Samsung"</p>
+          {filtrados.cels.length === 0 && filtrados.accs.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '100px 20px', color: '#64748b' }}>
+              <div style={{ fontSize: '4rem', marginBottom: '20px', opacity: 0.5 }}>🔍</div>
+              <h2 style={{ color: 'white' }}>No encontramos resultados</h2>
+              <p>Intenta con otra búsqueda o regresa más tarde.</p>
             </div>
           )}
         </>
       )}
 
-      <footer style={{ textAlign: 'center', color: theme.textMuted, fontSize: '0.8rem', padding: '80px 20px 40px', opacity: 0.6 }}>
-        © 2026 LOS FARRUS HUB — Ecuador
+      {/* FOOTER */}
+      <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '40px 20px', textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
+        <p>© 2026 LOS FARRUS HUB. Todos los derechos reservados.</p>
       </footer>
     </div>
   )
