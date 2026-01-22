@@ -194,6 +194,7 @@ export default function CatalogoPublico() {
                           )}
                         </div>
                         {/* Badge de Estado */}
+                        {estadoLabel[rep.estado] ?? rep.estado}
                         <div style={{
                           position: 'absolute', top: 15, right: 15,
                           background: item.estado === 'Nuevo Sellado' ? theme.cyan : theme.orange,
