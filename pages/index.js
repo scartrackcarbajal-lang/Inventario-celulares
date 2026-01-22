@@ -4,44 +4,42 @@ import Link from 'next/link'
 
 export default function CatalogoPublico() {
   const [celulares, setCelulares] = useState([])
-  const [accesorios, setAccesorios] = useState([]) // Antes "perfumes", ahora genérico
+  const [accesorios, setAccesorios] = useState([])
   const [busqueda, setBusqueda] = useState('')
   const [cargando, setCargando] = useState(true)
 
+  // --- PALETA DE COLORES REFINADA ---
   const theme = {
-    navy: '#0b1426',
-    card: '#162447',
-    orange: '#f39c12',
-    cyan: '#00d2ff',
-    white: '#ffffff',
-    muted: '#94a3b8',
-    cardGlow: '0 0 20px rgba(0, 210, 255, 0.15)',
-    buttonGradient: 'linear-gradient(to right, #00d2ff, #f39c12)',
+    bg: '#050a14', // Fondo ultra oscuro
+    cardBg: 'rgba(22, 36, 71, 0.7)', // Vidrio oscuro
+    cyan: '#00f2ff', // Cyan neón más brillante
+    orange: '#ff9d00', // Naranja intenso
+    text: '#ffffff',
+    textMuted: '#94a3b8',
+    gradientText: 'linear-gradient(to right, #00f2ff, #ff9d00)',
+    gradientButton: 'linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%)',
+    shadowGlow: '0 0 25px rgba(0, 242, 255, 0.15)',
   }
 
   // ====== CARGA DE DATOS ======
   const cargarEquipos = async () => {
     setCargando(true)
     
-    // 1) Celulares (Serializados)
-    const { data: celData, error: celError } = await supabase
+    // 1) Celulares
+    const { data: celData } = await supabase
       .from('items_serializados')
       .select(`
         id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, created_at,
-        skus!inner(
-          id, precio_venta, publicado,
-          productos(marca, nombre)
-        )
+        skus!inner( id, precio_venta, publicado, productos(marca, nombre) )
       `)
       .eq('skus.publicado', true)
       .eq('vendido', false)
       .order('created_at', { ascending: false })
 
-    if (celError) console.error('Error celulares:', celError)
-    else setCelulares(celData || [])
+    if (celData) setCelulares(celData)
 
-    // 2) Accesorios (Bulk - Fundas, Cargadores, etc.)
-    const { data: accData, error: accError } = await supabase
+    // 2) Accesorios
+    const { data: accData } = await supabase
       .from('skus')
       .select(`
         id, sku_codigo, precio_venta, tracking, publicado, created_at,
@@ -52,9 +50,7 @@ export default function CatalogoPublico() {
       .eq('tracking', 'BULK')
       .order('created_at', { ascending: false })
 
-    if (accError) console.error('Error accesorios:', accError)
-    else setAccesorios(accData || [])
-
+    if (accData) setAccesorios(accData)
     setCargando(false)
   }
 
@@ -82,100 +78,156 @@ export default function CatalogoPublico() {
   }, [accesorios, busqueda])
 
   return (
-    <div
-      style={{
-        padding: '20px',
-        backgroundColor: theme.navy,
-        minHeight: '100vh',
-        color: theme.white,
-        fontFamily: "'Inter', sans-serif",
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23162447' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-      }}
-    >
+    <div style={{ backgroundColor: theme.bg, minHeight: '100vh', fontFamily: "'Inter', sans-serif", paddingBottom: 60 }}>
+      
+      {/* --- ESTILOS CSS GLOBALES PARA ANIMACIONES --- */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+        
+        body { margin: 0; padding: 0; background: #050a14; }
+
+        /* Scrollbar oculta pero funcional */
         .galeria-scroll {
           display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch; scrollbar-width: none; /* Ocultar scrollbar */
+          -webkit-overflow-scrolling: touch; scrollbar-width: none;
         }
+        .galeria-scroll::-webkit-scrollbar { display: none; }
+        
         .foto-item {
-          flex: 0 0 100%; scroll-snap-align: start; object-fit: cover; height: 280px;
+          flex: 0 0 100%; scroll-snap-align: center; object-fit: cover; height: 320px;
+          transition: transform 0.3s;
         }
+
+        /* Animación Hover Tarjeta */
+        .card-hover {
+          transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .card-hover:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 15px 35px rgba(0, 242, 255, 0.2);
+          border-color: rgba(0, 242, 255, 0.5) !important;
+        }
+
+        /* Texto Gradiente */
+        .text-gradient {
+          background: ${theme.gradientText};
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        /* Grid Responsivo */
         .grid-catalogo {
-          display: grid; gap: 30px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          max-width: 1400px; margin: auto;
+          display: grid; gap: 30px; 
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          max-width: 1200px; margin: 0 auto; padding: 0 20px;
         }
-        .seccion-titulo {
-            font-size: 1.5rem; font-weight: 800; color: ${theme.cyan}; 
-            margin: 40px auto 20px; max-width: 1400px; padding-left: 10px;
-            border-left: 5px solid ${theme.orange}; display: flex; align-items: center; gap: 10px;
+
+        /* Input Glass */
+        .input-glass:focus {
+          border-color: ${theme.cyan} !important;
+          box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+          background: rgba(22, 36, 71, 0.9) !important;
         }
       `}</style>
 
-      {/* HEADER */}
-      <div style={{ textAlign: 'center', margin: '40px 0 20px' }}>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0, lineHeight: 1 }}>
-          LOS FARRUS <span style={{ color: theme.orange }}>HUB</span>
+      {/* === HEADER HERO SECTION === */}
+      <div style={{ 
+        textAlign: 'center', 
+        padding: '60px 20px 40px', 
+        background: `radial-gradient(circle at center, #1a2a50 0%, #050a14 70%)` 
+      }}>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0, letterSpacing: '-1px' }}>
+          LOS FARRUS <span className="text-gradient">HUB</span>
         </h1>
-        <p style={{ color: theme.cyan, letterSpacing: '3px', fontWeight: 'bold', fontSize: '0.8rem', marginTop: 10 }}>
-          CATÁLOGO OFICIAL
+        <p style={{ color: theme.textMuted, fontSize: '0.9rem', letterSpacing: '4px', textTransform: 'uppercase', marginTop: 10, fontWeight: 600 }}>
+          Catálogo Premium
         </p>
+
+        {/* BUSCADOR FLOTANTE */}
+        <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center' }}>
+          <input
+            className="input-glass"
+            placeholder="🔍 Buscar iPhone, Samsung, Accesorios..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            style={{
+              width: '100%', maxWidth: '500px', padding: '18px 30px', borderRadius: '50px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)', 
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: 'white', fontSize: '1.1rem', outline: 'none',
+              backdropFilter: 'blur(10px)', transition: 'all 0.3s'
+            }}
+          />
+        </div>
       </div>
 
-      {/* BUSCADOR */}
-      <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'center' }}>
-        <input
-          placeholder="🔍 Buscar equipos o accesorios..."
-          value={busqueda}
-          onChange={(e) => setBusqueda(e.target.value)}
-          style={{
-            width: '90%', maxWidth: '600px', padding: '16px 25px', borderRadius: '50px',
-            backgroundColor: 'rgba(22, 36, 71, 0.8)', border: `1px solid ${theme.cyan}`,
-            color: theme.white, fontSize: '1.1rem', outline: 'none',
-            backdropFilter: 'blur(5px)', boxShadow: `0 0 20px ${theme.cyan}22`
-          }}
-        />
-      </div>
-
+      {/* === CONTENIDO === */}
       {cargando ? (
-        <div style={{textAlign: 'center', marginTop: 50}}>Cargando catálogo...</div>
+        <div style={{ textAlign: 'center', color: theme.cyan, marginTop: 50, fontSize: '1.2rem' }}>Cargando inventario...</div>
       ) : (
         <>
-          {/* ====== SECCIÓN 1: CELULARES ====== */}
+          {/* SECCIÓN 1: CELULARES */}
           {celularesFiltrados.length > 0 && (
-            <>
-              <div className="seccion-titulo">📱 CELULARES Y EQUIPOS</div>
+            <div style={{ marginTop: 20 }}>
+              <div style={{ maxWidth: 1200, margin: '0 auto 25px', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 15 }}>
+                <span style={{ fontSize: '1.5rem' }}>📱</span>
+                <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'white', margin: 0 }}>Equipos Disponibles</h2>
+                <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }}></div>
+              </div>
+
               <div className="grid-catalogo">
                 {celularesFiltrados.map((item) => {
                   const titulo = `${item?.skus?.productos?.marca} ${item?.skus?.productos?.nombre}`
                   return (
-                    <div key={item.id} style={{ backgroundColor: theme.card, borderRadius: '24px', overflow: 'hidden', border: `1px solid ${theme.cyan}44`, boxShadow: theme.cardGlow, display: 'flex', flexDirection: 'column' }}>
-                      
-                      {/* FOTOS */}
-                      <div className="galeria-scroll" style={{ position: 'relative' }}>
-                        {item.imagen_url?.length > 0 ? (
-                          item.imagen_url.map((url, i) => (
-                            <img key={i} src={url} className="foto-item" alt="foto" />
-                          ))
-                        ) : (
-                          <div style={{height: 280, display: 'grid', placeItems: 'center', background: '#050a14', color: '#555'}}>Sin Foto</div>
-                        )}
-                        {/* Etiqueta Estado */}
-                        <div style={{ position: 'absolute', top: 15, right: 15, background: theme.orange, color: 'white', padding: '4px 12px', borderRadius: 8, fontWeight: 'bold', fontSize: '0.75rem', boxShadow: '0 4px 10px rgba(0,0,0,0.5)' }}>
+                    <div key={item.id} className="card-hover" style={{
+                      backgroundColor: theme.cardBg, borderRadius: 24, overflow: 'hidden',
+                      border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)',
+                      display: 'flex', flexDirection: 'column'
+                    }}>
+                      {/* FOTO + BADGE */}
+                      <div style={{ position: 'relative' }}>
+                        <div className="galeria-scroll">
+                          {item.imagen_url?.length > 0 ? (
+                            item.imagen_url.map((url, i) => <img key={i} src={url} className="foto-item" />)
+                          ) : (
+                            <div style={{ height: 320, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#02050a', color: '#333' }}>Sin Foto</div>
+                          )}
+                        </div>
+                        {/* Badge de Estado */}
+                        <div style={{
+                          position: 'absolute', top: 15, right: 15,
+                          background: item.estado === 'Nuevo Sellado' ? theme.cyan : theme.orange,
+                          color: '#000', padding: '6px 14px', borderRadius: 20,
+                          fontWeight: 800, fontSize: '0.75rem', textTransform: 'uppercase',
+                          boxShadow: '0 4px 15px rgba(0,0,0,0.4)'
+                        }}>
                           {item.estado}
                         </div>
                       </div>
 
-                      <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                        <h3 style={{ margin: '0 0 5px', fontSize: '1.3rem' }}>{titulo}</h3>
-                        <div style={{ color: theme.cyan, fontSize: '0.9rem', marginBottom: 15, fontWeight: 'bold' }}>
-                          💾 {item.almacenamiento} {item.salud_bateria && `| 🔋 ${item.salud_bateria}%`}
-                        </div>
+                      {/* INFO CARD */}
+                      <div style={{ padding: 25, flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <h3 style={{ margin: '0 0 5px', fontSize: '1.4rem', color: 'white' }}>{titulo}</h3>
                         
+                        {/* Specs */}
+                        <div style={{ display: 'flex', gap: 10, fontSize: '0.9rem', color: theme.cyan, fontWeight: 600, marginBottom: 20 }}>
+                          <span>💾 {item.almacenamiento}</span>
+                          {item.salud_bateria && <span>• 🔋 {item.salud_bateria}%</span>}
+                        </div>
+
+                        {/* Footer Card */}
                         <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '1.6rem', fontWeight: '900' }}>S/ {item.skus.precio_venta}</span>
-                          <Link href={`/detalles/${item.id}?tipo=serial`} style={{ padding: '10px 20px', background: theme.buttonGradient, color: 'white', textDecoration: 'none', borderRadius: '50px', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                            Ver Detalles
+                          <div>
+                            <span style={{ display: 'block', fontSize: '0.7rem', color: theme.textMuted }}>PRECIO</span>
+                            <span style={{ fontSize: '1.6rem', fontWeight: 900, color: 'white' }}>S/ {item.skus.precio_venta}</span>
+                          </div>
+                          
+                          <Link href={`/detalles/${item.id}?tipo=serial`} style={{
+                            padding: '12px 24px', background: theme.text, color: '#000',
+                            borderRadius: 50, textDecoration: 'none', fontWeight: 800, fontSize: '0.9rem',
+                            boxShadow: '0 5px 15px rgba(255,255,255,0.2)', transition: 'transform 0.2s'
+                          }}>
+                            Ver →
                           </Link>
                         </div>
                       </div>
@@ -183,52 +235,72 @@ export default function CatalogoPublico() {
                   )
                 })}
               </div>
-            </>
+            </div>
           )}
 
-          {/* ====== SECCIÓN 2: ACCESORIOS (BULK) ====== */}
+          {/* SECCIÓN 2: ACCESORIOS */}
           {accesoriosFiltrados.length > 0 && (
-            <>
-              <div className="seccion-titulo" style={{ marginTop: 60 }}>🎧 ACCESORIOS Y OTROS</div>
+            <div style={{ marginTop: 80 }}>
+              <div style={{ maxWidth: 1200, margin: '0 auto 25px', padding: '0 20px', display: 'flex', alignItems: 'center', gap: 15 }}>
+                <span style={{ fontSize: '1.5rem' }}>🎧</span>
+                <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: 'white', margin: 0 }}>Accesorios & Varios</h2>
+                <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }}></div>
+              </div>
+
               <div className="grid-catalogo">
                 {accesoriosFiltrados.map((sku) => {
-                  const titulo = `${sku?.productos?.marca} ${sku?.productos?.nombre}`
-                  // FIX: Supabase devuelve array en join, tomamos el primero o 0
                   const stock = sku?.stock_bulk?.[0]?.stock ?? 0
-
-                  // Si no hay stock, no mostramos (opcional)
                   if (stock <= 0) return null
 
                   return (
-                    <div key={sku.id} style={{ backgroundColor: theme.card, borderRadius: '24px', padding: '25px', border: `1px solid ${theme.cyan}44`, boxShadow: theme.cardGlow, display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                      <div style={{ position: 'absolute', top: 0, left: 0, width: 6, height: '100%', background: theme.orange }}></div>
-                      
-                      <h3 style={{ margin: '0 0 10px', fontSize: '1.4rem' }}>{titulo}</h3>
-                      <p style={{ color: theme.muted, fontSize: '0.9rem', marginBottom: 20 }}>
-                        Disponibles: <span style={{ color: 'white', fontWeight: 'bold' }}>{stock} unidades</span>
-                      </p>
+                    <div key={sku.id} className="card-hover" style={{
+                      backgroundColor: theme.cardBg, borderRadius: 24, padding: 30,
+                      border: '1px solid rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)',
+                      display: 'flex', flexDirection: 'column', position: 'relative'
+                    }}>
+                      {/* Borde Izquierdo Decorativo */}
+                      <div style={{ position: 'absolute', left: 0, top: 20, bottom: 20, width: 4, background: theme.cyan, borderRadius: '0 5px 5px 0' }}></div>
 
-                      <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '1.6rem', fontWeight: '900' }}>S/ {sku.precio_venta}</span>
-                        <Link href={`/detalles/${sku.id}?tipo=bulk`} style={{ padding: '10px 20px', background: theme.navy, border: `1px solid ${theme.cyan}`, color: theme.cyan, textDecoration: 'none', borderRadius: '50px', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                          Ver Stock
+                      <div style={{ marginBottom: 15 }}>
+                        <span style={{ color: theme.textMuted, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: 1 }}>
+                          {sku.productos.marca}
+                        </span>
+                        <h3 style={{ margin: '5px 0 0', fontSize: '1.5rem', color: 'white' }}>{sku.productos.nombre}</h3>
+                      </div>
+
+                      <div style={{ display: 'inline-block', background: 'rgba(0, 242, 255, 0.1)', color: theme.cyan, padding: '5px 12px', borderRadius: 8, fontSize: '0.85rem', fontWeight: 'bold', alignSelf: 'flex-start', marginBottom: 25 }}>
+                        ✓ {stock} en Stock
+                      </div>
+
+                      <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: 20 }}>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 900, color: 'white' }}>S/ {sku.precio_venta}</span>
+                        <Link href={`/detalles/${sku.id}?tipo=bulk`} style={{
+                          color: theme.cyan, textDecoration: 'none', fontWeight: 700, fontSize: '0.95rem'
+                        }}>
+                          Ver Stock →
                         </Link>
                       </div>
                     </div>
                   )
                 })}
               </div>
-            </>
+            </div>
           )}
 
+          {/* EMPTY STATE */}
           {celularesFiltrados.length === 0 && accesoriosFiltrados.length === 0 && (
-            <div style={{ textAlign: 'center', marginTop: 60, color: theme.muted }}>
-              <h2>No encontramos resultados 🕵️‍♂️</h2>
-              <p>Intenta buscar con otro nombre.</p>
+            <div style={{ textAlign: 'center', padding: '80px 20px', color: theme.textMuted }}>
+              <div style={{ fontSize: '3rem', marginBottom: 20, opacity: 0.5 }}>🕵️‍♂️</div>
+              <h2 style={{ color: 'white' }}>No encontramos lo que buscas</h2>
+              <p>Prueba buscando "iPhone", "Cargador" o "Samsung"</p>
             </div>
           )}
         </>
       )}
+
+      <footer style={{ textAlign: 'center', color: theme.textMuted, fontSize: '0.8rem', padding: '80px 20px 40px', opacity: 0.6 }}>
+        © 2026 LOS FARRUS HUB — Ecuador
+      </footer>
     </div>
   )
 }
