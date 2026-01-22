@@ -3,38 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ICONOS (SVG Inline)
-// ==========================================
-const Icons = {
-  Logo: () => (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M2 17L12 22L22 17" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M2 12L12 17L22 12" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <defs>
-        <linearGradient id="gold-gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#F59E0B" />
-          <stop offset="1" stopColor="#D97706" />
-        </linearGradient>
-      </defs>
-    </svg>
-  ),
-  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3" strokeLinecap="round"/></svg>,
-  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
-  Smartphone: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01" strokeWidth="2" strokeLinecap="round"/></svg>,
-  Headphones: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
-  Chart: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>,
-  Dollar: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
-  Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
-  Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
-  Logout: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>,
-  Upload: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>,
-  Check: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
-  Box: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>
-}
-
-// ==========================================
-// 🎨 ESTILOS (CSS-IN-JS GARANTIZADO)
+// 🎨 ESTILOS PREMIUM (CSS-IN-JS GARANTIZADO)
 // ==========================================
 const styles = {
   container: {
@@ -116,6 +85,26 @@ const styles = {
 }
 
 // ==========================================
+// 🎨 ICONOS SVG
+// ==========================================
+const Icons = {
+  Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
+  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
+  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
+  Smartphone: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
+  Chart: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>,
+  Headphones: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
+  Dollar: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+  Box: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>,
+  Check: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+  Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
+  Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+  Upload: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>,
+  Eye: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
+  Info: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+}
+
+// ==========================================
 // COMPONENTES UI
 // ==========================================
 
@@ -130,7 +119,51 @@ const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
   </div>
 )
 
-function ProductCard({ cel, onEdit, onDelete, onSell, onOpenModal }) {
+// Modal de Detalles Completos
+const DetallesModal = ({ cel, onClose }) => {
+  if (!cel) return null
+  return (
+    <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)', padding: '20px' }} onClick={onClose}>
+      <div style={{ ...styles.glassPanel, width: '100%', maxWidth: '600px', padding: '0', overflow: 'hidden', backgroundColor: '#0f172a' }} onClick={e => e.stopPropagation()}>
+        <div style={{ height: '300px', background: '#020617', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <img src={cel.imagen_url?.[0] || 'https://via.placeholder.com/400'} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} />
+          <button onClick={onClose} style={{ position: 'absolute', top: 15, right: 15, background: 'rgba(0,0,0,0.5)', border: 'none', color: 'white', width: 32, height: 32, borderRadius: '50%', cursor: 'pointer' }}>✕</button>
+        </div>
+        <div style={{ padding: '30px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '20px' }}>
+            <div>
+              <p style={{ color: '#F59E0B', fontWeight: 'bold', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>{cel.marca}</p>
+              <h2 style={{ fontSize: '2rem', fontWeight: '900', color: 'white', margin: 0 }}>{cel.modelo}</h2>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: '900', color: 'white' }}>S/ {cel.precio_venta}</div>
+              <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Costo: S/ {cel.precio_costo}</div>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '25px', background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: '16px' }}>
+            <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>IMEI / Serial</span> <span style={{color: 'white', fontFamily: 'monospace'}}>{cel.imei}</span></div>
+            <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Estado</span> <span style={{color: '#F59E0B', fontWeight: 'bold'}}>{cel.estado}</span></div>
+            <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Color</span> <span style={{color: 'white'}}>{cel.color}</span></div>
+            <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Batería</span> <span style={{color: 'white'}}>{cel.salud_bateria}%</span></div>
+            <div><span style={{color: '#64748b', fontSize: '0.8rem', display: 'block'}}>Capacidad</span> <span style={{color: 'white'}}>{cel.almacenamiento}</span></div>
+          </div>
+
+          {cel.descripcion && (
+            <div style={{ marginBottom: '20px' }}>
+              <p style={{ color: '#94a3b8', fontSize: '0.8rem', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '5px' }}>Notas / Detalles</p>
+              <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: '1.6' }}>{cel.descripcion}</p>
+            </div>
+          )}
+
+          <button onClick={onClose} style={{ width: '100%', padding: '14px', background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 'bold', cursor: 'pointer' }}>Cerrar Ficha</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProductCard({ cel, onEdit, onDelete, onSell, onVerDetalle, onOpenModal }) {
   const [fotoActiva, setFotoActiva] = useState(cel.imagen_url?.[0] || 'https://via.placeholder.com/400x300/0f172a/334155?text=No+Image')
   const vendido = Number(cel.stock) <= 0
 
@@ -185,26 +218,28 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onOpenModal }) {
           <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.2 }}>{cel.modelo}</h3>
         </div>
 
+        {/* INFO CLAVE VISIBLE SIEMPRE */}
+        <div style={{ marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8', marginBottom: '4px', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '4px' }}>
+            <span>IMEI</span> <span style={{ fontFamily: 'monospace', color: '#cbd5e1' }}>{cel.imei}</span>
+          </div>
+           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8' }}>
+            <span>Inversión</span> <span style={{ color: '#cbd5e1' }}>S/ {cel.precio_costo}</span>
+          </div>
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '20px' }}>
-          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
-            💾 {cel.almacenamiento}
-          </div>
-          {cel.salud_bateria && (
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
-              🔋 {cel.salud_bateria}%
-            </div>
-          )}
-          <div style={{ gridColumn: '1/-1', background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
-            🎨 {cel.color}
-          </div>
+          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>💾 {cel.almacenamiento}</div>
+          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>🎨 {cel.color}</div>
         </div>
 
         <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
           <div>
-            <span style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>PRECIO</span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>VENTA</span>
             <div style={{ fontSize: '1.3rem', fontWeight: '900', color: 'white' }}>S/ {cel.precio_venta}</div>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button onClick={() => onVerDetalle(cel)} style={{ ...styles.btnIcon, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }} title="Ver Detalles"><Icons.Eye /></button>
             <button onClick={() => onEdit(cel)} style={styles.btnIcon} title="Editar"><Icons.Edit /></button>
             <button onClick={() => !vendido && onSell(cel)} disabled={vendido} style={{ ...styles.btnIcon, backgroundColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.1)', color: vendido ? '#475569' : '#F59E0B', borderColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.3)' }} title="Vender"><Icons.Dollar /></button>
             <button onClick={() => onDelete(cel.id)} style={{ ...styles.btnIcon, color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)' }} title="Eliminar"><Icons.Trash /></button>
@@ -230,6 +265,7 @@ export default function Inventario() {
   const [editandoSkuId, setEditandoSkuId] = useState(null)
   const [notificacion, setNotificacion] = useState({ mensaje: '', visible: false, type: 'success' })
   const [modalImagen, setModalImagen] = useState(null)
+  const [detalleModalOpen, setDetalleModalOpen] = useState(null)
 
   // Auth & Ventas
   const [autorizado, setAutorizado] = useState(false)
@@ -296,46 +332,27 @@ export default function Inventario() {
   
   const cargarEquipos = async () => {
     const { data, error } = await supabase.from('items_serializados')
-      .select(`
-        id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at,
-        skus:sku_id ( id, sku_codigo, tracking, precio_venta, precio_costo, publicado, productos:producto_id ( id, marca, nombre ) )
-      `)
+      .select(`id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at, skus:sku_id ( id, sku_codigo, tracking, precio_venta, precio_costo, publicado, productos:producto_id ( id, marca, nombre, descripcion ) )`)
       .order('created_at', { ascending: false })
       
     if (error) return avisar('Error cargando inventario', 'error')
     
     setEquipos((data || []).map(row => ({
-      id: row.id, 
-      marca: row?.skus?.productos?.marca || '', 
-      modelo: row?.skus?.productos?.nombre || '', 
-      estado: row.estado, 
-      imei: row.serial, 
-      precio_venta: row?.skus?.precio_venta || 0, 
+      id: row.id, marca: row?.skus?.productos?.marca || '', modelo: row?.skus?.productos?.nombre || '', 
+      estado: row.estado, imei: row.serial, precio_venta: row?.skus?.precio_venta || 0, 
       precio_costo: row.costo_compra ? Number(row.costo_compra) : (row?.skus?.precio_costo ?? 0), 
-      almacenamiento: row.almacenamiento, 
-      salud_bateria: row.salud_bateria, 
-      color: row.color, 
-      imagen_url: row.imagen_url, 
-      publicado: row?.skus?.publicado ?? false, 
-      stock: row.vendido ? 0 : 1, 
+      almacenamiento: row.almacenamiento, salud_bateria: row.salud_bateria, color: row.color, 
+      imagen_url: row.imagen_url, publicado: row?.skus?.publicado ?? false, stock: row.vendido ? 0 : 1, 
+      descripcion: row?.skus?.productos?.descripcion || '', // Traemos la descripción
       _raw: row
     })))
   }
   
   const cargarVentas = async () => {
     setCargandoVentas(true)
-    let query = supabase.from('ventas_v2')
-      .select(`
-        id, precio_lista, precio_final, descuento, cliente_nombre, cliente_telefono, cantidad, tipo_venta,
-        vendido_en, vendido_por, item_serializado_id, sku_id,
-        items_serializados:item_serializado_id ( serial, costo_compra ),
-        skus:sku_id ( id, precio_costo, productos:producto_id ( marca, nombre ) )
-      `)
-      .order('vendido_en', { ascending: false }).limit(300)
-      
+    let query = supabase.from('ventas_v2').select(`id, precio_lista, precio_final, descuento, cliente_nombre, cliente_telefono, cantidad, tipo_venta, vendido_en, vendido_por, item_serializado_id, sku_id, items_serializados:item_serializado_id ( serial, costo_compra ), skus:sku_id ( id, precio_costo, productos:producto_id ( marca, nombre ) )`).order('vendido_en', { ascending: false }).limit(300)
     if (ventasDesde) query = query.gte('vendido_en', inicioDelDiaISO(ventasDesde))
     if (ventasHasta) query = query.lte('vendido_en', finDelDiaISO(ventasHasta))
-
     const { data, error } = await query
     setCargandoVentas(false)
     if (error) return avisar('Error cargando ventas', 'error')
@@ -347,7 +364,6 @@ export default function Inventario() {
     if (!archivos.length) return
     setSubiendo(true)
     let nuevas = [...(form.imagen_url || [])]
-    
     for (const file of archivos) {
       const name = `${Date.now()}_${file.name}`
       const { error } = await supabase.storage.from('Celulares - fotos').upload(name, file)
@@ -361,7 +377,6 @@ export default function Inventario() {
     avisar('Fotos subidas con éxito')
   }
   
-  // --- GUARDADO COMPLEJO ---
   const asegurarCategoriaId = async (nombre) => {
     const { data } = await supabase.from('categorias').select('id').eq('nombre', nombre).maybeSingle()
     if (data) return data.id
@@ -377,10 +392,7 @@ export default function Inventario() {
   }
 
   const crearSku = async ({ productoId, precio_venta, precio_costo, publicado }) => {
-    const { data } = await supabase.from('skus').insert({
-      producto_id: productoId, sku_codigo: `CEL-${productoId}-${Date.now()}`, tracking: 'SERIAL',
-      precio_venta, precio_costo, publicado: !!publicado
-    }).select('id').single()
+    const { data } = await supabase.from('skus').insert({ producto_id: productoId, sku_codigo: `CEL-${productoId}-${Date.now()}`, tracking: 'SERIAL', precio_venta, precio_costo, publicado: !!publicado }).select('id').single()
     return data.id
   }
 
@@ -390,28 +402,20 @@ export default function Inventario() {
       if (!form.marca || !form.modelo || !serial) return avisar('Faltan datos obligatorios', 'error')
       
       if (editandoId) {
-        await supabase.from('items_serializados').update({
-          serial, estado: form.estado, salud_bateria: form.salud_bateria, almacenamiento: form.almacenamiento,
-          color: form.color, imagen_url: form.imagen_url, costo_compra: form.precio_costo
-        }).eq('id', editandoId)
-        
-        if (editandoSkuId) {
-          await supabase.from('skus').update({
-            precio_venta: form.precio_venta, precio_costo: form.precio_costo, publicado: form.publicado
-          }).eq('id', editandoSkuId)
+        await supabase.from('items_serializados').update({ serial, estado: form.estado, salud_bateria: form.salud_bateria, almacenamiento: form.almacenamiento, color: form.color, imagen_url: form.imagen_url, costo_compra: form.precio_costo }).eq('id', editandoId)
+        if (editandoSkuId) { 
+            const { data: skuData } = await supabase.from('skus').select('producto_id').eq('id', editandoSkuId).single()
+            if(skuData) await supabase.from('productos').update({ descripcion: form.descripcion }).eq('id', skuData.producto_id)
+            await supabase.from('skus').update({ precio_venta: form.precio_venta, precio_costo: form.precio_costo, publicado: form.publicado }).eq('id', editandoSkuId) 
         }
         avisar('Equipo actualizado')
         setEditandoId(null)
       } else {
         const catId = await asegurarCategoriaId('Celulares')
+        // Pasamos la descripción al crear el producto
         const prodId = await asegurarProductoId({ categoriaId: catId, marca: form.marca, modelo: form.modelo, descripcion: form.descripcion })
         const skuId = await crearSku({ productoId: prodId, precio_venta: form.precio_venta, precio_costo: form.precio_costo, publicado: form.publicado })
-        
-        await supabase.from('items_serializados').insert({
-          sku_id: skuId, serial, estado: form.estado, salud_bateria: form.salud_bateria,
-          almacenamiento: form.almacenamiento, color: form.color, vendido: false,
-          imagen_url: form.imagen_url, costo_compra: form.precio_costo
-        })
+        await supabase.from('items_serializados').insert({ sku_id: skuId, serial, estado: form.estado, salud_bateria: form.salud_bateria, almacenamiento: form.almacenamiento, color: form.color, vendido: false, imagen_url: form.imagen_url, costo_compra: form.precio_costo })
         avisar('Equipo registrado')
       }
       setForm(estadoInicial)
@@ -424,33 +428,15 @@ export default function Inventario() {
     const precioFinal = Number(ventaForm.precio_final)
     if (!precioFinal) return avisar('Falta precio', 'error')
     setGuardandoVenta(true)
-    
     const { data: sess } = await supabase.auth.getSession()
     const userId = sess?.session?.user?.id
     if (!userId) return
 
-    const { error } = await supabase.from('ventas_v2').insert({
-      item_serializado_id: ventaCel.id, sku_id: ventaCel._raw.skus.id, precio_lista: ventaCel.precio_venta,
-      precio_final: precioFinal, descuento: (ventaCel.precio_venta || 0) - precioFinal,
-      cliente_nombre: ventaForm.cliente_nombre, cliente_telefono: ventaForm.cliente_telefono,
-      vendido_por: userId, tipo_venta: 'SERIALIZADO', cantidad: 1
-    })
-
-    if (!error) {
-      await supabase.from('items_serializados').update({ vendido: true }).eq('id', ventaCel.id)
-      avisar('¡Venta registrada!')
-      setVentaModalAbierto(false)
-      setVentaCel(null)
-      setVentaForm({ precio_final: '', cliente_nombre: '', cliente_telefono: '' })
-      cargarEquipos()
-      cargarVentas()
-    } else {
-      avisar(error.message, 'error')
-    }
+    const { error } = await supabase.from('ventas_v2').insert({ item_serializado_id: ventaCel.id, sku_id: ventaCel._raw.skus.id, precio_lista: ventaCel.precio_venta, precio_final: precioFinal, descuento: (ventaCel.precio_venta || 0) - precioFinal, cliente_nombre: ventaForm.cliente_nombre, cliente_telefono: ventaForm.cliente_telefono, vendido_por: userId, tipo_venta: 'SERIALIZADO', cantidad: 1 })
+    if (!error) { await supabase.from('items_serializados').update({ vendido: true }).eq('id', ventaCel.id); avisar('¡Venta registrada!'); setVentaModalAbierto(false); setVentaCel(null); setVentaForm({ precio_final: '', cliente_nombre: '', cliente_telefono: '' }); cargarEquipos(); cargarVentas(); } else { avisar(error.message, 'error') }
     setGuardandoVenta(false)
   }
 
-  // --- CALCULOS ---
   const resumenVentas = useMemo(() => ventas.reduce((acc, v) => {
     const final = Number(v.precio_final || 0)
     let costo = v.items_serializados?.costo_compra ? Number(v.items_serializados.costo_compra) : (Number(v.skus?.precio_costo || 0) * (v.cantidad || 1))
@@ -461,6 +447,7 @@ export default function Inventario() {
     const terminos = busqueda.toLowerCase().trim().split(/\s+/) // Dividir por espacios
     const datosEquipo = `${c.marca} ${c.modelo} ${c.imei} ${c.color} ${c.almacenamiento} ${c.estado}`.toLowerCase()
     
+    // Todas las palabras deben coincidir
     const matchBusqueda = terminos.every(t => datosEquipo.includes(t))
 
     const st = filtroEstado === 'TODOS' || c.estado === filtroEstado
@@ -468,9 +455,6 @@ export default function Inventario() {
     return matchBusqueda && st && vd
   }), [equipos, busqueda, filtroEstado, filtroVendidos])
 
-  // ==========================================
-  // RENDER: LOGIN
-  // ==========================================
   if (!autorizado) return (
     <div style={{ ...styles.container, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ ...styles.glassPanel, padding: '40px', width: '100%', maxWidth: '380px', textAlign: 'center' }}>
@@ -480,63 +464,30 @@ export default function Inventario() {
         <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
           <input style={styles.input} placeholder="Correo" value={email} onChange={e=>setEmail(e.target.value)} />
           <input style={styles.input} type="password" placeholder="Contraseña" value={password} onChange={e=>setPassword(e.target.value)} />
-          <button onClick={login} style={{ ...styles.btnPrimary, justifyContent: 'center', marginTop: '10px' }}>
-            {cargandoLogin ? 'Verificando...' : 'Iniciar Sesión'}
-          </button>
+          <button onClick={login} style={{ ...styles.btnPrimary, justifyContent: 'center', marginTop: '10px' }}>{cargandoLogin ? 'Verificando...' : 'Iniciar Sesión'}</button>
         </div>
       </div>
     </div>
   )
 
-  // ==========================================
-  // RENDER: DASHBOARD
-  // ==========================================
   return (
     <div style={styles.container}>
-      
-      {/* 1. TOP NAVBAR */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(2, 6, 23, 0.8)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div>
-          <span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span>
-        </div>
-
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}><div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div><span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span></div>
         <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>
-            Inventario
-          </button>
-          <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>
-            Finanzas
-          </button>
-          <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>
-            Accesorios
-          </button>
+          <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Inventario</button>
+          <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Finanzas</button>
+          <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>Accesorios</button>
         </div>
-
-        <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>
-          Salir
-        </button>
+        <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>Salir</button>
       </nav>
 
       <div style={{ padding: '30px', maxWidth: '1400px', margin: '0 auto' }}>
-        
-        {/* HEADER & ACTIONS */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
-          <div>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'white', margin: '0 0 5px 0' }}>{activeTab === 'inventory' ? 'Control de Inventario' : 'Reporte Financiero'}</h1>
-            <p style={{ color: '#64748b' }}>Vista general de tu negocio</p>
-          </div>
-          {activeTab === 'inventory' && (
-            <button 
-              onClick={() => { setEditandoId(null); setForm(estadoInicial); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}); }}
-              style={styles.btnPrimary}
-            >
-              <Icons.Plus /> Nuevo Ingreso
-            </button>
-          )}
+          <div><h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'white', margin: '0 0 5px 0' }}>{activeTab === 'inventory' ? 'Control de Inventario' : 'Reporte Financiero'}</h1><p style={{ color: '#64748b' }}>Vista general de tu negocio</p></div>
+          {activeTab === 'inventory' && <button onClick={() => { setEditandoId(null); setForm(estadoInicial); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}); }} style={styles.btnPrimary}><Icons.Plus /> Nuevo Ingreso</button>}
         </div>
 
-        {/* METRICS WIDGETS */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' }}>
           <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} icon={<Icons.Dollar />} />
           <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} color="#10b981" icon={<Icons.Chart />} subtext="Margen saludable" />
@@ -546,27 +497,12 @@ export default function Inventario() {
 
         {activeTab === 'inventory' ? (
           <>
-            {/* FORMULARIO */}
             <div id="form-area" style={{ ...styles.glassPanel, padding: '40px', marginBottom: '50px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
-                    {editandoId ? <Icons.Edit /> : <Icons.Box />}
-                  </div>
-                  <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>{editandoId ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}</h2>
-                </div>
-                
-                {/* Toggle Visibilidad */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>{editandoId ? <Icons.Edit /> : <Icons.Box />}</div><h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>{editandoId ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}</h2></div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 16px', background: 'rgba(0,0,0,0.3)', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: form.publicado ? '#10b981' : '#64748b' }}>
-                    {form.publicado ? 'Público' : 'Borrador'}
-                  </span>
-                  <div 
-                    onClick={() => setForm({...form, publicado: !form.publicado})}
-                    style={{ width: '40px', height: '22px', background: form.publicado ? '#10b981' : '#334155', borderRadius: '99px', position: 'relative', cursor: 'pointer', transition: 'all 0.3s' }}
-                  >
-                    <div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', top: '2px', left: form.publicado ? '20px' : '2px', transition: 'all 0.3s', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }} />
-                  </div>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: form.publicado ? '#10b981' : '#64748b' }}>{form.publicado ? 'Público' : 'Borrador'}</span>
+                  <div onClick={() => setForm({...form, publicado: !form.publicado})} style={{ width: '40px', height: '22px', background: form.publicado ? '#10b981' : '#334155', borderRadius: '99px', position: 'relative', cursor: 'pointer', transition: 'all 0.3s' }}><div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', top: '2px', left: form.publicado ? '20px' : '2px', transition: 'all 0.3s', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }} /></div>
                 </div>
               </div>
 
@@ -580,32 +516,21 @@ export default function Inventario() {
                   </select>
                 </div>
                 <div><label style={styles.label}>Serial / IMEI</label><input style={{...styles.input, fontFamily: 'monospace'}} placeholder="Escanea..." value={form.serial} onChange={e=>setForm({...form, serial:normalizarSerial(e.target.value)})} /></div>
-
-                {/* Nuevos Campos */}
                 <div><label style={styles.label}>Color</label><input style={styles.input} placeholder="Ej. Azul" value={form.color} onChange={e=>setForm({...form, color:e.target.value})} /></div>
                 <div><label style={styles.label}>Almacenamiento</label><input style={styles.input} placeholder="Ej. 128GB" value={form.almacenamiento} onChange={e=>setForm({...form, almacenamiento:e.target.value})} /></div>
                 <div><label style={styles.label}>Batería %</label><input style={styles.input} type="number" placeholder="100" value={form.salud_bateria} onChange={e=>setForm({...form, salud_bateria:e.target.value})} /></div>
-
                 <div><label style={{...styles.label, color: '#F59E0B'}}>Precio Venta</label><input style={{...styles.input, borderColor: 'rgba(245, 158, 11, 0.4)', color: '#F59E0B', fontWeight: 'bold'}} type="number" placeholder="0.00" value={form.precio_venta} onChange={e=>setForm({...form, precio_venta:e.target.value})} /></div>
                 <div><label style={styles.label}>Costo Compra</label><input style={styles.input} type="number" placeholder="0.00" value={form.precio_costo} onChange={e=>setForm({...form, precio_costo:e.target.value})} /></div>
-
-                <div style={{ gridColumn: '1/-1', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'rgba(0,0,0,0.2)' }} onClick={()=>document.getElementById('file-input').click()}>
-                  <div style={{ color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', fontWeight: 'bold' }}>
-                    <Icons.Upload /> {subiendo ? 'Subiendo...' : 'Click para subir fotos'}
-                  </div>
-                  <input id="file-input" type="file" hidden multiple onChange={manejarFotos} />
-                  {form.imagen_url.length > 0 && <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>{form.imagen_url.map((u, i) => <img key={i} src={u} style={{ width: '50px', height: '50px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.2)' }} />)}</div>}
-                </div>
+                <div style={{ gridColumn: '1/-1' }}><label style={styles.label}>Detalles / Descripción</label><textarea style={{...styles.input, height: '100px', resize: 'vertical'}} placeholder="Detalles adicionales..." value={form.descripcion} onChange={e=>setForm({...form, descripcion:e.target.value})} /></div>
+                <div style={{ gridColumn: '1/-1', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'rgba(0,0,0,0.2)' }} onClick={()=>document.getElementById('file-input').click()}><div style={{ color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', fontWeight: 'bold' }}><Icons.Upload /> {subiendo ? 'Subiendo...' : 'Click para subir fotos'}</div><input id="file-input" type="file" hidden multiple onChange={manejarFotos} />{form.imagen_url.length > 0 && <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>{form.imagen_url.map((u, i) => <img key={i} src={u} style={{ width: '50px', height: '50px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.2)' }} />)}</div>}</div>
               </div>
-
-              <button onClick={guardar} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>
-                {editandoId ? 'Guardar Cambios' : 'Registrar en Inventario'}
-              </button>
+              <button onClick={guardar} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>{editandoId ? 'Guardar Cambios' : 'Registrar en Inventario'}</button>
             </div>
 
-            {/* FILTROS Y GRID */}
             <div style={{ display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
               <input style={{ ...styles.input, width: 'auto', minWidth: '300px' }} placeholder="🔍 Buscar por IMEI, modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
+              
+              {/* FILTRO DE ESTADO COMPLETO */}
               <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}>
                 <option value="TODOS">Todos los Estados</option>
                 <option value="Nuevo Sellado">Nuevo Sellado</option>
@@ -613,30 +538,20 @@ export default function Inventario() {
                 <option value="Usado">Usado</option>
                 <option value="Open Box">Open Box</option>
               </select>
-              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroVendidos} onChange={e=>setFiltroVendidos(e.target.value)}>
-                <option value="TODOS">Todo el Inventario</option><option value="DISPONIBLES">En Stock</option><option value="VENDIDOS">Vendidos</option>
-              </select>
+
+              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroVendidos} onChange={e=>setFiltroVendidos(e.target.value)}><option value="TODOS">Todo el Inventario</option><option value="DISPONIBLES">En Stock</option><option value="VENDIDOS">Vendidos</option></select>
             </div>
 
             <div style={styles.grid}>
               {equiposFiltrados.map(cel => (
-                <ProductCard 
-                  key={cel.id} cel={cel} onEdit={(c) => { setForm({...estadoInicial, ...c, serial: c.imei}); setEditandoId(c.id); setEditandoSkuId(c._raw.skus.id); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}) }} onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} onOpenModal={setModalImagen}
-                />
+                <ProductCard key={cel.id} cel={cel} onEdit={(c) => { setForm({...estadoInicial, ...c, serial: c.imei}); setEditandoId(c.id); setEditandoSkuId(c._raw.skus.id); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}) }} onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} onOpenModal={setModalImagen} onVerDetalle={setDetalleModalOpen} />
               ))}
             </div>
           </>
         ) : (
-          /* TABLA VENTAS */
           <div style={{ ...styles.glassPanel, padding: '0', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', color: '#cbd5e1' }}>
-              <thead>
-                <tr style={{ background: 'rgba(0,0,0,0.3)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  {['Fecha', 'Producto', 'Detalle', 'Venta', 'Costo', 'Ganancia'].map(h => (
-                    <th key={h} style={{ padding: '16px', textAlign: h === 'Producto' || h === 'Fecha' ? 'left' : 'right', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
+              <thead><tr style={{ background: 'rgba(0,0,0,0.3)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>{['Fecha', 'Producto', 'Detalle', 'Venta', 'Costo', 'Ganancia'].map(h => (<th key={h} style={{ padding: '16px', textAlign: h === 'Producto' || h === 'Fecha' ? 'left' : 'right', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>{h}</th>))}</tr></thead>
               <tbody>
                 {ventas.map(v => {
                   const final = Number(v.precio_final); const costo = v.items_serializados?.costo_compra ? Number(v.items_serializados.costo_compra) : (Number(v.skus?.precio_costo) * (v.cantidad || 1)); const ganancia = final - costo
@@ -655,32 +570,23 @@ export default function Inventario() {
             </table>
           </div>
         )}
-
       </div>
 
-      {/* MODALES */}
       {modalImagen && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)' }} onClick={() => setModalImagen(null)}>
           <img src={modalImagen} style={{ maxHeight: '90vh', maxWidth: '90vw', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 0 50px rgba(0,0,0,0.5)' }} />
         </div>
       )}
 
+      {detalleModalOpen && <DetallesModal cel={detalleModalOpen} onClose={() => setDetalleModalOpen(null)} />}
+
       {ventaModalAbierto && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}>
           <div style={{ ...styles.glassPanel, width: '100%', maxWidth: '450px', padding: '30px', backgroundColor: '#0f172a' }}>
             <h2 style={{ margin: '0 0 10px 0', fontSize: '1.8rem', color: 'white' }}>Confirmar Venta</h2>
             <p style={{ color: '#94a3b8', marginBottom: '25px' }}>Vendiendo: <b style={{ color: '#F59E0B' }}>{ventaCel?.marca} {ventaCel?.modelo}</b></p>
-            
-            <div style={{ marginBottom: '20px' }}>
-              <label style={styles.label}>Precio Final Real</label>
-              <input type="number" autoFocus style={{ ...styles.input, fontSize: '1.5rem', fontWeight: 'bold', color: '#F59E0B', borderColor: '#F59E0B' }} value={ventaForm.precio_final} onChange={e=>setVentaForm({...ventaForm, precio_final:e.target.value})} />
-            </div>
-            
-            <div style={{ marginBottom: '30px' }}>
-              <label style={styles.label}>Cliente (Opcional)</label>
-              <input style={styles.input} placeholder="Nombre del cliente" value={ventaForm.cliente_nombre} onChange={e=>setVentaForm({...ventaForm, cliente_nombre:e.target.value})} />
-            </div>
-
+            <div style={{ marginBottom: '20px' }}><label style={styles.label}>Precio Final Real</label><input type="number" autoFocus style={{ ...styles.input, fontSize: '1.5rem', fontWeight: 'bold', color: '#F59E0B', borderColor: '#F59E0B' }} value={ventaForm.precio_final} onChange={e=>setVentaForm({...ventaForm, precio_final:e.target.value})} /></div>
+            <div style={{ marginBottom: '30px' }}><label style={styles.label}>Cliente (Opcional)</label><input style={styles.input} placeholder="Nombre del cliente" value={ventaForm.cliente_nombre} onChange={e=>setVentaForm({...ventaForm, cliente_nombre:e.target.value})} /></div>
             <div style={{ display: 'flex', gap: '15px' }}>
               <button onClick={()=>setVentaModalAbierto(false)} style={{ flex: 1, padding: '14px', borderRadius: '14px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8', cursor: 'pointer', fontWeight: 'bold' }}>Cancelar</button>
               <button onClick={confirmarVenta} disabled={guardandoVenta} style={{ ...styles.btnPrimary, flex: 1, justifyContent: 'center' }}>{guardandoVenta ? '...' : 'Confirmar'}</button>
@@ -689,14 +595,7 @@ export default function Inventario() {
         </div>
       )}
 
-      {/* NOTIFICACIÓN */}
-      {notificacion.visible && (
-        <div style={{ position: 'fixed', top: '24px', right: '24px', padding: '16px 24px', borderRadius: '16px', background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderLeft: `6px solid ${notificacion.type === 'error' ? '#ef4444' : '#10b981'}`, color: 'white', fontWeight: 'bold', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', zIndex: 300, display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span>{notificacion.type === 'error' ? '⚠️' : '🎉'}</span>
-          {notificacion.mensaje}
-        </div>
-      )}
-
+      {notificacion.visible && <div style={{ position: 'fixed', top: '24px', right: '24px', padding: '16px 24px', borderRadius: '16px', background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderLeft: `6px solid ${notificacion.type === 'error' ? '#ef4444' : '#10b981'}`, color: 'white', fontWeight: 'bold', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', zIndex: 300 }}>{notificacion.mensaje}</div>}
     </div>
   )
 }
