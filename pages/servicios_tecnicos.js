@@ -140,11 +140,15 @@ const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
 const RepairCard = ({ rep, onCambiarEstado, onDelete, onEdit }) => {
   const estadoColor = {
     'Recibido': '#94a3b8',
-    'En Revisión': '#F59E0B',
-    'Esperando Repuesto': '#f43f5e',
+    'Diagnóstico': '#f59e0b',
+    'En reparación': '#3b82f6',
     'Listo': '#10b981',
-    'Entregado': '#3b82f6'
+    'Entregado': '#8b5cf6',
+    'Cancelado': '#ef4444'
   }
+
+  // Mapeo seguro de colores
+  const colorEstado = estadoColor[rep.estado] || '#94a3b8'
 
   return (
     <div style={{ ...styles.glassPanel, padding: '24px', position: 'relative', transition: 'transform 0.3s' }}
@@ -154,10 +158,10 @@ const RepairCard = ({ rep, onCambiarEstado, onDelete, onEdit }) => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '20px' }}>
         <div>
           <p style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>ORDEN #{rep.id}</p>
-          <h3 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 'bold', margin: '4px 0' }}>{rep.equipo_modelo}</h3>
-          <p style={{ color: '#F59E0B', fontSize: '0.95rem', fontWeight: '500' }}>{rep.falla}</p>
+          <h3 style={{ fontSize: '1.4rem', color: 'white', fontWeight: 'bold', margin: '4px 0' }}>{rep.equipo_marca} {rep.equipo_modelo}</h3>
+          <p style={{ color: '#F59E0B', fontSize: '0.95rem', fontWeight: '500' }}>{rep.falla_reportada}</p>
         </div>
-        <div style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: `${estadoColor[rep.estado]}22`, color: estadoColor[rep.estado], border: `1px solid ${estadoColor[rep.estado]}44` }}>
+        <div style={{ padding: '6px 12px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: `${colorEstado}22`, color: colorEstado, border: `1px solid ${colorEstado}44` }}>
           {rep.estado}
         </div>
       </div>
@@ -165,27 +169,29 @@ const RepairCard = ({ rep, onCambiarEstado, onDelete, onEdit }) => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '25px', backgroundColor: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.User /><span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{rep.cliente_nombre}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.Phone /><span>{rep.cliente_telefono}</span></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><div style={{ color: '#ef4444' }}>Costo: S/ {rep.costo_estimado}</div></div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.Clock /><span>{rep.fecha_ingreso ? new Date(rep.fecha_ingreso).toLocaleDateString() : '-'}</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><div style={{ color: '#ef4444' }}>Total: S/ {rep.total || 0}</div></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Icons.Clock /><span>{rep.created_at ? new Date(rep.created_at).toLocaleDateString() : '-'}</span></div>
+        {rep.diagnostico && <div style={{ gridColumn: '1/-1', color: '#94a3b8', fontStyle: 'italic' }}>Dx: {rep.diagnostico}</div>}
       </div>
 
       <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
         <div style={{ flex: 1 }}>
-          <label style={{ ...styles.label, marginBottom: '6px' }}>Estado Actual:</label>
+          <label style={{ ...styles.label, marginBottom: '6px' }}>Estado:</label>
           <select 
             style={{ ...styles.input, padding: '10px', cursor: 'pointer', fontSize: '0.85rem' }} 
             value={rep.estado} 
             onChange={(e) => onCambiarEstado(rep.id, e.target.value)}
           >
             <option value="Recibido">Recibido</option>
-            <option value="En Revisión">En Revisión</option>
-            <option value="Esperando Repuesto">Esperando Repuesto</option>
+            <option value="Diagnóstico">Diagnóstico</option>
+            <option value="En reparación">En reparación</option>
             <option value="Listo">Listo</option>
             <option value="Entregado">Entregado</option>
+            <option value="Cancelado">Cancelado</option>
           </select>
         </div>
         <button onClick={() => onEdit(rep)} style={{ ...styles.iconButtonSmall, color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)' }} title="Editar"><Icons.Edit /></button>
-        <button onClick={() => onDelete(rep.id)} style={{ ...styles.iconButtonSmall, color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)' }} title="Eliminar"><Icons.Trash /></button>
+        <button onClick={() => onDelete(rep.id)} style={{ ...styles.iconButtonSmall, color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)', height: '42px', width: '42px' }} title="Eliminar"><Icons.Trash /></button>
       </div>
     </div>
   )
@@ -198,15 +204,18 @@ export default function ServiciosTecnicos() {
   const [busqueda, setBusqueda] = useState('')
   const [editandoId, setEditandoId] = useState(null)
   
-  // Formulario ajustado a la tabla
+  // Formulario ajustado EXACTAMENTE a las columnas de Supabase
   const estadoInicial = { 
     cliente_nombre: '', 
     cliente_telefono: '', 
+    equipo_marca: '',
     equipo_modelo: '', 
-    falla: '', 
-    costo_estimado: '', 
-    estado: 'Recibido', 
-    fecha_ingreso: new Date().toISOString().split('T')[0] 
+    imei: '',
+    falla_reportada: '', 
+    diagnostico: '',
+    costo_mano_obra: '', 
+    costo_repuestos: '',
+    estado: 'Recibido'
   }
   const [form, setForm] = useState(estadoInicial)
 
@@ -216,7 +225,7 @@ export default function ServiciosTecnicos() {
     const { data, error } = await supabase
       .from('reparaciones')
       .select('*')
-      .order('fecha_ingreso', { ascending: false })
+      .order('created_at', { ascending: false })
     
     setLoading(false)
     if (error) {
@@ -236,38 +245,64 @@ export default function ServiciosTecnicos() {
     setForm({
       cliente_nombre: rep.cliente_nombre,
       cliente_telefono: rep.cliente_telefono,
+      equipo_marca: rep.equipo_marca,
       equipo_modelo: rep.equipo_modelo,
-      falla: rep.falla,
-      costo_estimado: rep.costo_estimado,
-      estado: rep.estado,
-      fecha_ingreso: rep.fecha_ingreso
+      imei: rep.imei,
+      falla_reportada: rep.falla_reportada,
+      diagnostico: rep.diagnostico || '',
+      costo_mano_obra: rep.costo_mano_obra,
+      costo_repuestos: rep.costo_repuestos,
+      estado: rep.estado
     })
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   // --- GUARDAR (Crear o Actualizar) ---
   const guardarReparacion = async () => {
-    if (!form.cliente_nombre || !form.equipo_modelo || !form.falla) return alert('Completa los campos obligatorios')
+    if (!form.cliente_nombre || !form.equipo_modelo || !form.falla_reportada) return alert('Completa los campos obligatorios (*)')
+
+    // Calcular el total automáticamente
+    const manoObra = Number(form.costo_mano_obra) || 0
+    const repuestos = Number(form.costo_repuestos) || 0
+    const totalCalculado = manoObra + repuestos
+
+    // Objeto para enviar a Supabase
+    const datosEnviar = {
+      ...form,
+      costo_mano_obra: manoObra,
+      costo_repuestos: repuestos,
+      total: totalCalculado
+      // created_at lo genera Supabase automáticamente al insertar
+    }
+
+    // Agregar el usuario creador (si hay sesión)
+    const { data: sess } = await supabase.auth.getSession()
+    if (sess?.session?.user) {
+        datosEnviar.creado_por = sess.session.user.id
+    }
+
+    let error = null
 
     if (editandoId) {
       // MODO EDICIÓN
-      const { error } = await supabase
+      const { error: errUpdate } = await supabase
         .from('reparaciones')
-        .update(form)
+        .update(datosEnviar)
         .eq('id', editandoId)
-      
-      if (error) return alert('Error al actualizar: ' + error.message)
-      alert('Ticket Actualizado Exitosamente')
-      setEditandoId(null)
-
+      error = errUpdate
     } else {
       // MODO CREACIÓN
-      const { error } = await supabase.from('reparaciones').insert(form)
-      if (error) return alert('Error al guardar: ' + error.message)
-      alert('Ticket Creado Exitosamente')
+      const { error: errInsert } = await supabase
+        .from('reparaciones')
+        .insert(datosEnviar)
+      error = errInsert
     }
+
+    if (error) return alert('Error al guardar: ' + error.message)
     
+    alert(editandoId ? 'Ticket Actualizado' : 'Ticket Creado Exitosamente')
     setForm(estadoInicial)
+    setEditandoId(null)
     cargarReparaciones()
   }
 
@@ -291,16 +326,17 @@ export default function ServiciosTecnicos() {
     const q = busqueda.toLowerCase()
     return reparaciones.filter(rep => 
       rep.cliente_nombre?.toLowerCase().includes(q) || 
-      rep.equipo_modelo?.toLowerCase().includes(q)
+      rep.equipo_modelo?.toLowerCase().includes(q) ||
+      rep.imei?.toLowerCase().includes(q)
     )
   }, [reparaciones, busqueda])
 
   // --- MÉTRICAS ---
   const metricas = useMemo(() => {
     const total = reparaciones.length
-    const activos = reparaciones.filter(r => r.estado !== 'Entregado').length
+    const activos = reparaciones.filter(r => r.estado !== 'Entregado' && r.estado !== 'Cancelado').length
     const listos = reparaciones.filter(r => r.estado === 'Listo').length
-    const ingresos = reparaciones.reduce((acc, r) => acc + (Number(r.costo_estimado) || 0), 0)
+    const ingresos = reparaciones.reduce((acc, r) => acc + (Number(r.total) || 0), 0)
     return { total, activos, listos, ingresos }
   }, [reparaciones])
 
@@ -339,7 +375,7 @@ export default function ServiciosTecnicos() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '40px' }}>
           <StatCard label="Tickets Totales" value={metricas.total} icon={<Icons.Box />} />
           <StatCard label="En Proceso" value={metricas.activos} color="#3b82f6" icon={<Icons.Wrench />} subtext="Equipos en taller" />
-          <StatCard label="Listos para entrega" value={metricas.listos} color="#10b981" icon={<Icons.Check />} />
+          <StatCard label="Listos" value={metricas.listos} color="#10b981" icon={<Icons.Check />} />
           <StatCard label="Ingresos Estimados" value={`S/ ${metricas.ingresos}`} color="#94a3b8" icon={<Icons.Dollar />} />
         </div>
 
@@ -350,42 +386,55 @@ export default function ServiciosTecnicos() {
               {editandoId ? <Icons.Edit /> : <Icons.Plus />}
             </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>
-              {editandoId ? 'Editar Ticket de Reparación' : 'Nuevo Ticket de Reparación'}
+              {editandoId ? 'Editar Ticket' : 'Nuevo Ingreso a Taller'}
             </h2>
           </div>
 
           <div className="form-grid">
-            <div><label style={styles.label}>Cliente</label><input style={styles.input} placeholder="Nombre Cliente" value={form.cliente_nombre} onChange={e=>setForm({...form, cliente_nombre: e.target.value})} /></div>
+            {/* Datos del Cliente */}
+            <div><label style={styles.label}>Cliente *</label><input style={styles.input} placeholder="Nombre Cliente" value={form.cliente_nombre} onChange={e=>setForm({...form, cliente_nombre: e.target.value})} /></div>
             <div><label style={styles.label}>Teléfono</label><input style={styles.input} placeholder="099..." value={form.cliente_telefono} onChange={e=>setForm({...form, cliente_telefono: e.target.value})} /></div>
-            <div><label style={styles.label}>Fecha Ingreso</label><input type="date" style={styles.input} value={form.fecha_ingreso} onChange={e=>setForm({...form, fecha_ingreso: e.target.value})} /></div>
             
-            <div><label style={styles.label}>Equipo / Modelo</label><input style={styles.input} placeholder="Ej. iPhone 11" value={form.equipo_modelo} onChange={e=>setForm({...form, equipo_modelo: e.target.value})} /></div>
-            <div style={{ gridColumn: 'span 2' }}><label style={styles.label}>Falla Reportada</label><input style={styles.input} placeholder="Ej. Pantalla rota, no da imagen" value={form.falla} onChange={e=>setForm({...form, falla: e.target.value})} /></div>
+            {/* Datos del Equipo */}
+            <div><label style={styles.label}>Marca</label><input style={styles.input} placeholder="Ej. Samsung" value={form.equipo_marca} onChange={e=>setForm({...form, equipo_marca: e.target.value})} /></div>
+            <div><label style={styles.label}>Modelo *</label><input style={styles.input} placeholder="Ej. A52" value={form.equipo_modelo} onChange={e=>setForm({...form, equipo_modelo: e.target.value})} /></div>
+            <div><label style={styles.label}>IMEI / Serial</label><input style={{...styles.input, fontFamily: 'monospace'}} placeholder="Opcional" value={form.imei} onChange={e=>setForm({...form, imei: e.target.value})} /></div>
+
+            {/* Detalles Técnicos */}
+            <div style={{ gridColumn: 'span 3' }}><label style={styles.label}>Falla Reportada *</label><input style={styles.input} placeholder="Ej. Pantalla rota, no da imagen" value={form.falla_reportada} onChange={e=>setForm({...form, falla_reportada: e.target.value})} /></div>
+            <div style={{ gridColumn: 'span 3' }}><label style={styles.label}>Diagnóstico Técnico</label><textarea style={{...styles.input, height: '80px', resize: 'vertical'}} placeholder="Diagnóstico detallado..." value={form.diagnostico} onChange={e=>setForm({...form, diagnostico: e.target.value})} /></div>
             
-            <div><label style={{...styles.label, color: '#F59E0B'}}>Costo Estimado</label><input type="number" style={{...styles.input, borderColor: '#F59E0B', color: '#F59E0B', fontWeight: 'bold'}} placeholder="0.00" value={form.costo_estimado} onChange={e=>setForm({...form, costo_estimado: e.target.value})} /></div>
+            {/* Costos y Estado */}
+            <div><label style={styles.label}>Mano de Obra</label><input type="number" style={styles.input} placeholder="0.00" value={form.costo_mano_obra} onChange={e=>setForm({...form, costo_mano_obra: e.target.value})} /></div>
+            <div><label style={styles.label}>Repuestos</label><input type="number" style={styles.input} placeholder="0.00" value={form.costo_repuestos} onChange={e=>setForm({...form, costo_repuestos: e.target.value})} /></div>
+            
             <div>
-               <label style={styles.label}>Estado Inicial</label>
+               <label style={styles.label}>Estado</label>
                <select style={styles.input} value={form.estado} onChange={e=>setForm({...form, estado: e.target.value})}>
                  <option value="Recibido">Recibido</option>
-                 <option value="En Revisión">En Revisión</option>
-                 <option value="Esperando Repuesto">Esperando Repuesto</option>
+                 <option value="Diagnóstico">Diagnóstico</option>
+                 <option value="En reparación">En reparación</option>
+                 <option value="Esperando repuestos">Esperando repuestos</option>
                  <option value="Listo">Listo</option>
                  <option value="Entregado">Entregado</option>
+                 <option value="Cancelado">Cancelado</option>
                </select>
             </div>
           </div>
-          <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>
-            {editandoId ? 'Guardar Cambios' : 'Generar Orden de Servicio'}
-          </button>
-          
-          {editandoId && (
-            <button 
-              onClick={() => { setEditandoId(null); setForm(estadoInicial); }} 
-              style={{ width: '100%', background: 'transparent', color: '#94a3b8', border: '1px solid #94a3b8', padding: '12px', borderRadius: '16px', marginTop: '10px', cursor: 'pointer' }}
-            >
-              Cancelar Edición
+
+          <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
+            <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, flex: 2, fontSize: '1.1rem', padding: '16px' }}>
+              {editandoId ? 'Guardar Cambios' : 'Generar Orden de Servicio'}
             </button>
-          )}
+            {editandoId && (
+                <button 
+                  onClick={() => { setEditandoId(null); setForm(estadoInicial); }} 
+                  style={{ ...styles.btnPrimary, flex: 1, background: 'transparent', border: '1px solid #94a3b8', color: '#94a3b8' }}
+                >
+                  Cancelar
+                </button>
+            )}
+          </div>
         </div>
 
         {/* LISTA DE TICKETS */}
