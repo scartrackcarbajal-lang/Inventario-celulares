@@ -1,11 +1,11 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
     "/": [
-      "static/chunks/21744d922daf6b44.js",
+      "static/chunks/ffb24878d06cd902.js",
       "static/chunks/6a2907599ada1e26.js",
       "static/chunks/d5e78d726d4b6e2f.js",
-      "static/chunks/ec1303786f1474be.js",
-      "static/chunks/turbopack-44415ae85b006d2a.js"
+      "static/chunks/54000e31e38c4361.js",
+      "static/chunks/turbopack-31f710924d7d6084.js"
     ],
     "/_app": [
       "static/chunks/968fd756d65ef96d.js",
@@ -20,25 +20,25 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/turbopack-319c6ed578947d91.js"
     ],
     "/accesorios": [
-      "static/chunks/d4e6f964777e6e57.js",
+      "static/chunks/f821f55e4fb8252c.js",
       "static/chunks/6a2907599ada1e26.js",
       "static/chunks/d5e78d726d4b6e2f.js",
-      "static/chunks/765756b68e1f4986.js",
-      "static/chunks/turbopack-a0388785b6940832.js"
+      "static/chunks/54000e31e38c4361.js",
+      "static/chunks/turbopack-1e368429432864bc.js"
     ],
     "/detalles/[id]": [
       "static/chunks/b26350ba4742a630.js",
       "static/chunks/6a2907599ada1e26.js",
-      "static/chunks/765756b68e1f4986.js",
+      "static/chunks/54000e31e38c4361.js",
       "static/chunks/d5e78d726d4b6e2f.js",
-      "static/chunks/turbopack-dfafb53a65c56555.js"
+      "static/chunks/turbopack-d4d576e361d57495.js"
     ],
     "/inventario": [
       "static/chunks/f44be54fb60d7b07.js",
       "static/chunks/6a2907599ada1e26.js",
       "static/chunks/d5e78d726d4b6e2f.js",
-      "static/chunks/765756b68e1f4986.js",
-      "static/chunks/turbopack-7a8a1ba17b8f1aca.js"
+      "static/chunks/54000e31e38c4361.js",
+      "static/chunks/turbopack-cfdb9be1a28f2f1b.js"
     ],
     "/servicios_tecnicos": [
       "static/chunks/e5cc3962eb8eafe8.js",

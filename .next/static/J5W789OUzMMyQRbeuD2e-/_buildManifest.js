@@ -1,18 +1,18 @@
 self.__BUILD_MANIFEST = {
   "/": [
-    "static/chunks/fa7494a81dcd851f.js"
+    "static/chunks/acf4172c449c1507.js"
   ],
   "/_error": [
     "static/chunks/09fda2a9d0db6044.js"
   ],
   "/accesorios": [
-    "static/chunks/d70126c579dac652.js"
+    "static/chunks/55c742dbb524b320.js"
   ],
   "/detalles/[id]": [
-    "static/chunks/e634704f1464276a.js"
+    "static/chunks/31fc99a340705c9b.js"
   ],
   "/inventario": [
-    "static/chunks/12f339b532898882.js"
+    "static/chunks/d0c177758cba856d.js"
   ],
   "/servicios_tecnicos": [
     "static/chunks/9ff314d1496fabc3.js"
