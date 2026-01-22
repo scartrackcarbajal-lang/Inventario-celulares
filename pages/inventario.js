@@ -3,25 +3,19 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ICONOS DE ALTA RESOLUCIÓN (SVG Inline)
+// 🎨 ICONOS (SVG Inline)
 // ==========================================
 const Icons = {
   Logo: () => (
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M2 17L12 22L22 17" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M2 12L12 17L22 12" stroke="url(#gold-gradient)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      <defs>
-        <linearGradient id="gold-gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#F59E0B" />
-          <stop offset="1" stopColor="#D97706" />
-        </linearGradient>
-      </defs>
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   ),
-  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3" strokeLinecap="round"/></svg>,
-  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
-  Smartphone: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01" strokeWidth="2" strokeLinecap="round"/></svg>,
+  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
+  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
+  Smartphone: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M12 18h.01"/></svg>,
   Headphones: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
   Chart: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>,
   Dollar: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
@@ -29,28 +23,104 @@ const Icons = {
   Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
   Logout: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>,
   Upload: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>,
-  Eye: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
   Check: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
   Box: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>
 }
 
 // ==========================================
-// COMPONENTES UI: "LUXURY GLASS"
+// 🎨 ESTILOS (CSS-IN-JS para garantizar el diseño)
+// ==========================================
+const styles = {
+  container: {
+    minHeight: '100vh',
+    backgroundColor: '#020617',
+    color: '#e2e8f0',
+    fontFamily: "'Inter', sans-serif",
+    backgroundImage: `radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 20%)`,
+    backgroundAttachment: 'fixed',
+  },
+  glassPanel: {
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    backdropFilter: 'blur(16px)',
+    border: '1px solid rgba(255, 255, 255, 0.08)',
+    borderRadius: '24px',
+    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+  },
+  goldText: {
+    background: 'linear-gradient(to right, #F59E0B, #D97706)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    fontWeight: '900',
+  },
+  input: {
+    width: '100%',
+    padding: '14px 16px',
+    backgroundColor: 'rgba(2, 6, 23, 0.5)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    color: 'white',
+    outline: 'none',
+    fontSize: '0.95rem',
+    transition: 'all 0.2s',
+  },
+  label: {
+    display: 'block',
+    fontSize: '0.7rem',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    fontWeight: 'bold',
+    color: '#94a3b8',
+    marginBottom: '6px',
+  },
+  btnPrimary: {
+    background: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
+    color: 'white',
+    border: 'none',
+    padding: '12px 24px',
+    borderRadius: '16px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)',
+    display: 'flex', alignItems: 'center', gap: '8px',
+    transition: 'transform 0.2s',
+  },
+  btnIcon: {
+    width: '36px', height: '36px',
+    borderRadius: '10px',
+    border: '1px solid rgba(255,255,255,0.1)',
+    background: 'rgba(255,255,255,0.05)',
+    color: '#cbd5e1',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '24px',
+  },
+  statCard: {
+    backgroundColor: 'rgba(30, 41, 59, 0.4)',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
+    borderRadius: '20px',
+    padding: '24px',
+    position: 'relative',
+    overflow: 'hidden',
+  }
+}
+
+// ==========================================
+// COMPONENTES UI
 // ==========================================
 
-const StatCard = ({ label, value, subtext, trend, icon, colorClass }) => (
-  <div className="relative group p-6 rounded-[24px] bg-[#0F172A]/40 border border-white/5 hover:border-[#F59E0B]/30 backdrop-blur-xl transition-all duration-500 overflow-hidden hover:-translate-y-1">
-    <div className="absolute inset-0 bg-gradient-to-br from-[#F59E0B]/0 to-[#F59E0B]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-    <div className="relative flex justify-between items-start">
-      <div>
-        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">{label}</p>
-        <h3 className="text-3xl font-bold text-white tracking-tight drop-shadow-md">{value}</h3>
-        {subtext && <p className={`text-xs mt-2 font-medium flex items-center gap-1 ${colorClass}`}>{trend === 'up' && '↗'} {subtext}</p>}
-      </div>
-      <div className="p-3 rounded-2xl bg-white/5 border border-white/5 text-[#F59E0B] group-hover:scale-110 transition-transform duration-500">
-        {icon}
-      </div>
+const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
+  <div style={styles.statCard}>
+    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.1, color: color }}>
+      {icon}
     </div>
+    <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{label}</p>
+    <h3 style={{ fontSize: '2rem', fontWeight: '900', color: 'white', margin: 0, lineHeight: 1 }}>{value}</h3>
+    {subtext && <p style={{ fontSize: '0.8rem', color: color, marginTop: '8px', fontWeight: '500' }}>{subtext}</p>}
   </div>
 )
 
@@ -59,75 +129,79 @@ function ProductCard({ cel, onEdit, onDelete, onSell, onOpenModal }) {
   const vendido = Number(cel.stock) <= 0
 
   return (
-    <div className={`group relative flex flex-col rounded-[28px] bg-[#0F172A]/60 border border-white/5 hover:border-[#F59E0B]/40 backdrop-blur-md overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] ${vendido ? 'opacity-60 grayscale-[0.8]' : ''}`}>
-      
+    <div style={{ 
+      ...styles.glassPanel, 
+      overflow: 'hidden', 
+      display: 'flex', 
+      flexDirection: 'column',
+      position: 'relative',
+      opacity: vendido ? 0.6 : 1,
+      transition: 'transform 0.3s',
+      cursor: 'default'
+    }}
+    onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+    onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+    >
       {/* IMAGEN HERO */}
-      <div className="relative h-72 bg-gradient-to-b from-[#1e293b]/50 to-[#0f172a]/50 p-6 flex items-center justify-center overflow-hidden cursor-pointer" onClick={() => onOpenModal(fotoActiva)}>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-        <img 
-          src={fotoActiva} 
-          alt={cel.modelo} 
-          className="w-full h-full object-contain drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-110 z-10" 
-        />
+      <div style={{ 
+        height: '240px', 
+        backgroundColor: '#020617', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        position: 'relative',
+        cursor: 'zoom-in'
+      }} onClick={() => onOpenModal(fotoActiva)}>
+        <img src={fotoActiva} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} />
         
-        {/* Badge Estado */}
-        <div className={`absolute top-4 right-4 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-lg border z-20
-          ${cel.estado === 'Nuevo Sellado' ? 'bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20' : 
-            cel.estado === 'Semi Nuevo' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-slate-700/50 text-slate-300 border-white/10'}`}>
+        {/* Badges */}
+        <div style={{ position: 'absolute', top: '12px', right: '12px', padding: '4px 10px', borderRadius: '8px', fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', backgroundColor: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
           {cel.estado}
         </div>
 
-        {/* Badge Visibilidad */}
         {!cel.publicado && (
-          <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase bg-black/40 text-slate-400 border border-white/10 backdrop-blur-md z-20">
+          <div style={{ position: 'absolute', top: '12px', left: '12px', padding: '4px 8px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', backgroundColor: 'rgba(0,0,0,0.6)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.1)' }}>
             Oculto
           </div>
         )}
 
         {vendido && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-[2px] z-30">
-            <div className="border-[3px] border-red-500 text-red-500 px-8 py-3 rounded-2xl text-2xl font-black -rotate-12 tracking-widest uppercase shadow-[0_0_30px_rgba(239,68,68,0.4)]">
-              Vendido
-            </div>
+          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(2px)' }}>
+            <span style={{ border: '3px solid #ef4444', color: '#ef4444', padding: '8px 20px', borderRadius: '12px', fontSize: '1.2rem', fontWeight: '900', transform: 'rotate(-12deg)', backgroundColor: '#020617' }}>VENDIDO</span>
           </div>
         )}
       </div>
 
       {/* CUERPO */}
-      <div className="p-6 flex flex-col flex-1 relative">
-        <div className="mb-5">
-          <p className="text-[10px] font-bold text-[#F59E0B] uppercase tracking-[0.2em] mb-1.5 opacity-80">{cel.marca}</p>
-          <h3 className="text-lg font-bold text-white leading-tight group-hover:text-[#F59E0B] transition-colors duration-300">{cel.modelo}</h3>
+      <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <p style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>{cel.marca}</p>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: 'white', margin: 0, lineHeight: 1.2 }}>{cel.modelo}</h3>
         </div>
 
-        {/* Specs Grid */}
-        <div className="grid grid-cols-2 gap-2 mb-6">
-          <div className="bg-white/5 rounded-xl p-2.5 flex items-center gap-2 border border-white/5">
-            <span className="text-xs opacity-50">💾</span>
-            <span className="text-xs font-semibold text-slate-300">{cel.almacenamiento}</span>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '20px' }}>
+          <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
+            💾 {cel.almacenamiento}
           </div>
           {cel.salud_bateria && (
-            <div className="bg-white/5 rounded-xl p-2.5 flex items-center gap-2 border border-white/5">
-              <span className="text-xs opacity-50">🔋</span>
-              <span className="text-xs font-semibold text-slate-300">{cel.salud_bateria}%</span>
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
+              🔋 {cel.salud_bateria}%
             </div>
           )}
-          <div className="bg-white/5 rounded-xl p-2.5 flex items-center gap-2 border border-white/5 col-span-2">
-            <span className="text-xs opacity-50">🎨</span>
-            <span className="text-xs font-semibold text-slate-300">{cel.color}</span>
+          <div style={{ gridColumn: '1/-1', background: 'rgba(255,255,255,0.03)', padding: '6px 10px', borderRadius: '8px', fontSize: '0.75rem', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.05)' }}>
+            🎨 {cel.color}
           </div>
         </div>
 
-        <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+        <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
           <div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Precio</p>
-            <p className="text-xl font-black text-white tracking-tight">S/ {cel.precio_venta}</p>
+            <span style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase' }}>PRECIO</span>
+            <div style={{ fontSize: '1.3rem', fontWeight: '900', color: 'white' }}>S/ {cel.precio_venta}</div>
           </div>
-          
-          <div className="flex gap-2">
-            <button onClick={() => onEdit(cel)} className="w-10 h-10 rounded-xl bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-colors flex items-center justify-center border border-white/5" title="Editar"><Icons.Edit /></button>
-            <button onClick={() => !vendido && onSell(cel)} disabled={vendido} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border border-white/5 ${vendido ? 'bg-white/5 text-slate-600 cursor-not-allowed' : 'bg-[#F59E0B]/10 text-[#F59E0B] hover:bg-[#F59E0B] hover:text-black hover:shadow-[0_0_20px_rgba(245,158,11,0.4)]'}`} title="Vender"><Icons.Dollar /></button>
-            <button onClick={() => onDelete(cel.id)} className="w-10 h-10 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center border border-white/5" title="Eliminar"><Icons.Trash /></button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button onClick={() => onEdit(cel)} style={styles.btnIcon} title="Editar"><Icons.Edit /></button>
+            <button onClick={() => !vendido && onSell(cel)} disabled={vendido} style={{ ...styles.btnIcon, backgroundColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.1)', color: vendido ? '#475569' : '#F59E0B', borderColor: vendido ? 'transparent' : 'rgba(245, 158, 11, 0.3)' }} title="Vender"><Icons.Dollar /></button>
+            <button onClick={() => onDelete(cel.id)} style={{ ...styles.btnIcon, color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)' }} title="Eliminar"><Icons.Trash /></button>
           </div>
         </div>
       </div>
@@ -178,12 +252,10 @@ export default function Inventario() {
 
   // --- HELPERS ---
   const normalizarSerial = (v) => String(v || '').trim().replace(/\s+/g, '').toUpperCase().slice(0, 30)
-  
   const avisar = (msg, type = 'success') => {
     setNotificacion({ mensaje: msg, visible: true, type })
     setTimeout(() => setNotificacion((prev) => ({ ...prev, visible: false })), 3000)
   }
-  
   const inicioDelDiaISO = (d) => d ? new Date(`${d}T00:00:00`).toISOString() : null
   const finDelDiaISO = (d) => d ? new Date(`${d}T23:59:59.999`).toISOString() : null
 
@@ -203,7 +275,7 @@ export default function Inventario() {
 
   useEffect(() => { if (autorizado) cargarVentas() }, [autorizado, ventasDesde, ventasHasta])
 
-  // --- LOGIC (REAL) ---
+  // --- LOGIC ---
   const login = async () => {
     if (!email || !password) return
     setCargandoLogin(true)
@@ -383,22 +455,18 @@ export default function Inventario() {
   }), [equipos, busqueda, filtroEstado, filtroVendidos])
 
   // ==========================================
-  // RENDER: LOGIN (Luxury Dark)
+  // RENDER: LOGIN
   // ==========================================
   if (!autorizado) return (
-    <div className="min-h-screen flex items-center justify-center bg-[#020617] relative overflow-hidden">
-      {/* Background FX */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-slate-800/20 via-[#020617] to-[#020617]"></div>
-      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#F59E0B]/10 rounded-full blur-[120px]"></div>
-      
-      <div className="relative z-10 w-full max-w-sm p-10 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[32px] shadow-2xl text-center">
-        <div className="mb-8 flex justify-center"><div className="p-4 bg-white/5 rounded-2xl border border-white/10"><Icons.Logo /></div></div>
-        <h1 className="text-3xl font-black text-white mb-2 tracking-tight">FARRUS<span className="text-[#F59E0B]">HUB</span></h1>
-        <p className="text-slate-400 mb-8 font-medium text-sm tracking-wide uppercase">Acceso Administrativo</p>
-        <div className="space-y-4 text-left">
-          <input className="w-full px-5 py-4 bg-black/40 border border-white/10 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:border-[#F59E0B]/50 focus:bg-black/60 transition-all" placeholder="Correo" value={email} onChange={e=>setEmail(e.target.value)} />
-          <input type="password" className="w-full px-5 py-4 bg-black/40 border border-white/10 rounded-2xl text-white placeholder-slate-500 focus:outline-none focus:border-[#F59E0B]/50 focus:bg-black/60 transition-all" placeholder="Contraseña" value={password} onChange={e=>setPassword(e.target.value)} />
-          <button onClick={login} className="w-full py-4 mt-2 bg-gradient-to-r from-[#F59E0B] to-[#D97706] hover:brightness-110 text-white font-bold rounded-2xl shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-1">
+    <div style={{ ...styles.container, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ ...styles.glassPanel, padding: '40px', width: '100%', maxWidth: '380px', textAlign: 'center' }}>
+        <div style={{ marginBottom: '20px' }}><Icons.Logo /></div>
+        <h1 style={{ fontSize: '2rem', color: 'white', margin: '0 0 10px 0', fontWeight: '900' }}>FARRUS<span style={styles.goldText}>HUB</span></h1>
+        <p style={{ color: '#94a3b8', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '30px' }}>Acceso Administrativo</p>
+        <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <input style={styles.input} placeholder="Correo" value={email} onChange={e=>setEmail(e.target.value)} />
+          <input style={styles.input} type="password" placeholder="Contraseña" value={password} onChange={e=>setPassword(e.target.value)} />
+          <button onClick={login} style={{ ...styles.btnPrimary, justifyContent: 'center', marginTop: '10px' }}>
             {cargandoLogin ? 'Verificando...' : 'Iniciar Sesión'}
           </button>
         </div>
@@ -407,164 +475,132 @@ export default function Inventario() {
   )
 
   // ==========================================
-  // RENDER: DASHBOARD (Ultra Premium)
+  // RENDER: DASHBOARD
   // ==========================================
   return (
-    <div className="min-h-screen bg-[#020617] font-sans text-slate-200 flex flex-col selection:bg-[#F59E0B]/30">
+    <div style={styles.container}>
       
-      {/* 1. TOP NAVIGATION BAR */}
-      <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex justify-between items-center shadow-lg">
-        <div className="flex items-center gap-4">
-          <div className="p-2 bg-white/5 rounded-xl border border-white/10 shadow-lg"><Icons.Logo /></div>
-          <h1 className="text-xl font-black text-white tracking-wide hidden sm:block">FARRUS<span className="text-amber-500">HUB</span></h1>
+      {/* 1. TOP NAVBAR */}
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(2, 6, 23, 0.8)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div>
+          <span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>HUB</span></span>
         </div>
 
-        <nav className="flex items-center gap-1 bg-black/20 p-1.5 rounded-2xl border border-white/5">
-          <button onClick={() => setActiveTab('inventory')} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'inventory' ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
-            <Icons.Smartphone /> <span className="hidden md:inline">Inventario</span>
+        <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '4px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <button onClick={() => setActiveTab('inventory')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'inventory' ? '#F59E0B' : 'transparent', color: activeTab === 'inventory' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>
+            Inventario
           </button>
-          <button onClick={() => setActiveTab('sales')} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm transition-all duration-300 ${activeTab === 'sales' ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
-            <Icons.Chart /> <span className="hidden md:inline">Finanzas</span>
+          <button onClick={() => setActiveTab('sales')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: activeTab === 'sales' ? '#F59E0B' : 'transparent', color: activeTab === 'sales' ? 'black' : '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>
+            Finanzas
           </button>
-          <button onClick={() => router.push('/accesorios')} className="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-300">
-            <Icons.Headphones /> <span className="hidden md:inline">Accesorios</span>
+          <button onClick={() => router.push('/accesorios')} style={{ ...styles.btnIcon, width: 'auto', padding: '0 20px', borderRadius: '12px', background: 'transparent', color: '#94a3b8', border: 'none', fontWeight: 'bold', fontSize: '0.85rem' }}>
+            Accesorios
           </button>
-        </nav>
+        </div>
 
-        <button onClick={logout} className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/5 text-slate-400 font-bold text-sm hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20 transition-all">
-          <Icons.Logout /> <span className="hidden sm:inline">Salir</span>
+        <button onClick={logout} style={{ ...styles.btnIcon, width: 'auto', padding: '0 16px', borderRadius: '12px', borderColor: 'rgba(239, 68, 68, 0.3)', color: '#ef4444' }}>
+          Salir
         </button>
-      </header>
+      </nav>
 
-      {/* 2. MAIN CONTENT */}
-      <main className="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full">
+      <div style={{ padding: '30px', maxWidth: '1400px', margin: '0 auto' }}>
         
-        {/* HEADER AREA */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+        {/* HEADER & ACTIONS */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
           <div>
-            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 drop-shadow-lg">{activeTab === 'inventory' ? 'Control de Inventario' : 'Reporte Financiero'}</h2>
-            <p className="text-slate-400 font-medium tracking-wide">Resumen general de tu negocio</p>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'white', margin: '0 0 5px 0' }}>{activeTab === 'inventory' ? 'Control de Inventario' : 'Reporte Financiero'}</h1>
+            <p style={{ color: '#64748b' }}>Vista general de tu negocio</p>
           </div>
           {activeTab === 'inventory' && (
             <button 
               onClick={() => { setEditandoId(null); setForm(estadoInicial); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}); }}
-              className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 text-white font-bold rounded-2xl shadow-lg shadow-amber-500/20 transition-all flex items-center gap-3 transform hover:-translate-y-1"
+              style={styles.btnPrimary}
             >
               <Icons.Plus /> Nuevo Ingreso
             </button>
           )}
         </div>
 
-        {/* DASHBOARD METRICS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} trend="up" subtext="Este mes" icon={<Icons.Dollar />} colorClass="text-amber-500" />
-          <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} trend="up" subtext="Margen saludable" icon={<Icons.Chart />} colorClass="text-emerald-400" />
-          <StatCard label="Inversión" value={`S/ ${resumenVentas.totalCosto.toLocaleString()}`} subtext="Capital activo" icon={<Icons.Box />} colorClass="text-slate-400" />
-          <StatCard label="Unidades" value={resumenVentas.count} subtext="Equipos vendidos" icon={<Icons.Check />} colorClass="text-blue-400" />
+        {/* METRICS WIDGETS */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '40px' }}>
+          <StatCard label="Ventas Totales" value={`S/ ${resumenVentas.totalVentas.toLocaleString()}`} icon={<Icons.Dollar />} />
+          <StatCard label="Ganancia Neta" value={`S/ ${resumenVentas.totalGanancia.toLocaleString()}`} color="#10b981" icon={<Icons.Chart />} subtext="Margen saludable" />
+          <StatCard label="Inversión Activa" value={`S/ ${resumenVentas.totalCosto.toLocaleString()}`} color="#94a3b8" icon={<Icons.Box />} />
+          <StatCard label="Unidades Vendidas" value={resumenVentas.count} color="#3b82f6" icon={<Icons.Check />} />
         </div>
 
         {activeTab === 'inventory' ? (
           <>
             {/* FORMULARIO */}
-            <div id="form-area" className="bg-slate-900/50 backdrop-blur-xl rounded-3xl p-8 md:p-10 border border-white/5 shadow-2xl mb-16 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-yellow-300 to-amber-600 opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
-              
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 pb-6 border-b border-white/5 gap-6">
-                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 text-amber-500 flex items-center justify-center border border-white/10 shadow-inner">{editandoId ? <Icons.Edit /> : <Icons.Box />}</div>
-                  <h2 className="text-2xl font-bold text-white tracking-tight">{editandoId ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}</h2>
+            <div id="form-area" style={{ ...styles.glassPanel, padding: '40px', marginBottom: '50px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
+                    {editandoId ? <Icons.Edit /> : <Icons.Box />}
+                  </div>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', margin: 0 }}>{editandoId ? 'Editar Equipo' : 'Registrar Nuevo Equipo'}</h2>
                 </div>
                 
-                {/* --- TOGGLE DE VISIBILIDAD --- */}
-                <div className="flex items-center gap-4 px-5 py-3 rounded-2xl bg-black/40 border border-white/5 shadow-inner">
-                  <span className={`text-xs font-bold uppercase tracking-widest ${form.publicado ? 'text-emerald-400' : 'text-slate-500'}`}>
+                {/* Toggle Visibilidad */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 16px', background: 'rgba(0,0,0,0.3)', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', color: form.publicado ? '#10b981' : '#64748b' }}>
                     {form.publicado ? 'Público' : 'Borrador'}
                   </span>
-                  <button 
+                  <div 
                     onClick={() => setForm({...form, publicado: !form.publicado})}
-                    className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors duration-300 focus:outline-none ${form.publicado ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]' : 'bg-slate-700'}`}
+                    style={{ width: '40px', height: '22px', background: form.publicado ? '#10b981' : '#334155', borderRadius: '99px', position: 'relative', cursor: 'pointer', transition: 'all 0.3s' }}
                   >
-                    <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${form.publicado ? 'translate-x-6' : 'translate-x-1'}`} />
-                  </button>
+                    <div style={{ width: '18px', height: '18px', background: 'white', borderRadius: '50%', position: 'absolute', top: '2px', left: form.publicado ? '20px' : '2px', transition: 'all 0.3s', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }} />
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {/* Fila 1 */}
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Marca</label>
-                  <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. Apple" value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Modelo</label>
-                  <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. iPhone 15" value={form.modelo} onChange={e=>setForm({...form, modelo:e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Estado</label>
-                  <select className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all appearance-none font-medium cursor-pointer" value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}>
+              <div style={styles.grid}>
+                <div><label style={styles.label}>Marca</label><input style={styles.input} placeholder="Ej. Apple" value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} /></div>
+                <div><label style={styles.label}>Modelo</label><input style={styles.input} placeholder="Ej. iPhone 15" value={form.modelo} onChange={e=>setForm({...form, modelo:e.target.value})} /></div>
+                <div>
+                  <label style={styles.label}>Estado</label>
+                  <select style={styles.input} value={form.estado} onChange={e=>setForm({...form, estado:e.target.value})}>
                     <option>Nuevo Sellado</option><option>Semi Nuevo</option><option>Usado</option><option>Open Box</option>
                   </select>
                 </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Serial / IMEI</label>
-                  <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-mono tracking-wide" placeholder="Escanea..." value={form.serial} onChange={e=>setForm({...form, serial:normalizarSerial(e.target.value)})} />
-                </div>
+                <div><label style={styles.label}>Serial / IMEI</label><input style={{...styles.input, fontFamily: 'monospace'}} placeholder="Escanea..." value={form.serial} onChange={e=>setForm({...form, serial:normalizarSerial(e.target.value)})} /></div>
 
-                {/* Fila 2 - Nuevos Campos Agregados */}
-                <div className="space-y-3">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Color</label>
-                    <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. Titanium Blue" value={form.color} onChange={e=>setForm({...form, color:e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Almacenamiento</label>
-                    <input className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. 256GB" value={form.almacenamiento} onChange={e=>setForm({...form, almacenamiento:e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Batería (%)</label>
-                    <input type="number" className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="Ej. 100" value={form.salud_bateria} onChange={e=>setForm({...form, salud_bateria:e.target.value})} />
-                </div>
+                {/* Nuevos Campos */}
+                <div><label style={styles.label}>Color</label><input style={styles.input} placeholder="Ej. Azul" value={form.color} onChange={e=>setForm({...form, color:e.target.value})} /></div>
+                <div><label style={styles.label}>Almacenamiento</label><input style={styles.input} placeholder="Ej. 128GB" value={form.almacenamiento} onChange={e=>setForm({...form, almacenamiento:e.target.value})} /></div>
+                <div><label style={styles.label}>Batería %</label><input style={styles.input} type="number" placeholder="100" value={form.salud_bateria} onChange={e=>setForm({...form, salud_bateria:e.target.value})} /></div>
 
-                 {/* Fila 3 - Precios */}
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-amber-500 uppercase tracking-widest pl-1">Precio Venta</label>
-                  <input type="number" className="w-full px-5 py-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-400 focus:border-amber-500 focus:bg-amber-500/20 outline-none transition-all font-black text-lg" placeholder="0.00" value={form.precio_venta} onChange={e=>setForm({...form, precio_venta:e.target.value})} />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Costo Compra</label>
-                  <input type="number" className="w-full px-5 py-4 bg-slate-950/50 border border-white/10 rounded-2xl text-white focus:border-amber-500/50 focus:bg-black/40 outline-none transition-all placeholder-slate-600 font-medium" placeholder="0.00" value={form.precio_costo} onChange={e=>setForm({...form, precio_costo:e.target.value})} />
-                </div>
+                <div><label style={{...styles.label, color: '#F59E0B'}}>Precio Venta</label><input style={{...styles.input, borderColor: 'rgba(245, 158, 11, 0.4)', color: '#F59E0B', fontWeight: 'bold'}} type="number" placeholder="0.00" value={form.precio_venta} onChange={e=>setForm({...form, precio_venta:e.target.value})} /></div>
+                <div><label style={styles.label}>Costo Compra</label><input style={styles.input} type="number" placeholder="0.00" value={form.precio_costo} onChange={e=>setForm({...form, precio_costo:e.target.value})} /></div>
 
-                {/* Subida de Fotos - Ocupa resto de espacio */}
-                <div className="col-span-1 md:col-span-2 lg:col-span-3 border-2 border-dashed border-white/10 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:bg-white/5 hover:border-white/30 transition-all group" onClick={()=>document.getElementById('file-input').click()}>
-                  <p className="font-bold text-slate-500 group-hover:text-white transition-colors flex items-center gap-3 text-sm">
-                    <span className="p-2 bg-white/5 rounded-lg text-amber-500"><Icons.Upload /></span> 
-                    {subiendo ? 'Subiendo...' : 'Click para subir fotos'}
-                  </p>
+                <div style={{ gridColumn: '1/-1', border: '2px dashed rgba(255,255,255,0.1)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'rgba(0,0,0,0.2)' }} onClick={()=>document.getElementById('file-input').click()}>
+                  <div style={{ color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                    <Icons.Upload /> {subiendo ? 'Subiendo...' : 'Click para subir fotos'}
+                  </div>
                   <input id="file-input" type="file" hidden multiple onChange={manejarFotos} />
-                  {form.imagen_url.length > 0 && <div className="flex gap-3 mt-4 flex-wrap justify-center">{form.imagen_url.map((u, i) => <img key={i} src={u} className="w-12 h-12 rounded-lg object-cover border border-white/20 shadow-md" />)}</div>}
+                  {form.imagen_url.length > 0 && <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>{form.imagen_url.map((u, i) => <img key={i} src={u} style={{ width: '50px', height: '50px', borderRadius: '8px', objectFit: 'cover', border: '1px solid rgba(255,255,255,0.2)' }} />)}</div>}
                 </div>
               </div>
-              <button onClick={guardar} className="w-full mt-10 py-4 bg-white hover:bg-slate-200 text-black font-black rounded-2xl shadow-xl shadow-white/5 transition-all text-sm uppercase tracking-widest hover:-translate-y-1">
+
+              <button onClick={guardar} style={{ ...styles.btnPrimary, width: '100%', justifyContent: 'center', marginTop: '30px', fontSize: '1.1rem', padding: '16px' }}>
                 {editandoId ? 'Guardar Cambios' : 'Registrar en Inventario'}
               </button>
             </div>
 
-            {/* BARRA FILTROS */}
-            <div className="flex flex-wrap gap-4 mb-10 bg-slate-900/70 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-white/5 w-fit mx-auto lg:mx-0">
-              <div className="relative">
-                <div className="absolute left-4 top-3.5 text-slate-500"><Icons.Search /></div>
-                <input className="pl-12 pr-6 py-3 bg-black/30 rounded-xl outline-none border border-transparent focus:border-white/10 text-white w-72 placeholder-slate-600 font-medium transition-all" placeholder="Buscar por IMEI, modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
-              </div>
-              <select className="px-6 py-3 bg-black/30 rounded-xl font-bold text-slate-400 outline-none cursor-pointer border border-transparent hover:bg-black/50 hover:text-white transition-all" value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}>
+            {/* FILTROS Y GRID */}
+            <div style={{ display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
+              <input style={{ ...styles.input, width: 'auto', minWidth: '300px' }} placeholder="🔍 Buscar por IMEI, modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
+              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroEstado} onChange={e=>setFiltroEstado(e.target.value)}>
                 <option value="TODOS">Todos los Estados</option><option value="Nuevo Sellado">Nuevo Sellado</option>
               </select>
-              <select className="px-6 py-3 bg-black/30 rounded-xl font-bold text-slate-400 outline-none cursor-pointer border border-transparent hover:bg-black/50 hover:text-white transition-all" value={filtroVendidos} onChange={e=>setFiltroVendidos(e.target.value)}>
+              <select style={{ ...styles.input, width: 'auto', cursor: 'pointer' }} value={filtroVendidos} onChange={e=>setFiltroVendidos(e.target.value)}>
                 <option value="TODOS">Todo el Inventario</option><option value="DISPONIBLES">En Stock</option><option value="VENDIDOS">Vendidos</option>
               </select>
             </div>
 
-            {/* GRID PRODUCTOS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-20">
+            <div style={styles.grid}>
               {equiposFiltrados.map(cel => (
                 <ProductCard 
                   key={cel.id} cel={cel} onEdit={(c) => { setForm({...estadoInicial, ...c, serial: c.imei}); setEditandoId(c.id); setEditandoSkuId(c._raw.skus.id); document.getElementById('form-area').scrollIntoView({behavior: 'smooth'}) }} onDelete={async (id) => { if(confirm('¿Eliminar?')) { await supabase.from('items_serializados').delete().eq('id', id); cargarEquipos(); } }} onSell={(c) => { setVentaCel(c); setVentaForm({precio_final: c.precio_venta, cliente_nombre:'', cliente_telefono:''}); setVentaModalAbierto(true); }} onOpenModal={setModalImagen}
@@ -573,30 +609,27 @@ export default function Inventario() {
             </div>
           </>
         ) : (
-          /* TABLA DE VENTAS */
-          <div className="bg-slate-900/70 backdrop-blur-xl rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
-            <table className="w-full text-left border-collapse">
+          /* TABLA VENTAS */
+          <div style={{ ...styles.glassPanel, padding: '0', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', color: '#cbd5e1' }}>
               <thead>
-                <tr className="bg-black/40 border-b border-white/5 text-[10px] uppercase text-slate-500 font-bold tracking-widest">
-                  <th className="p-6 font-extrabold">Fecha</th>
-                  <th className="p-6 font-extrabold">Producto</th>
-                  <th className="p-6 font-extrabold">Detalle</th>
-                  <th className="p-6 text-right font-extrabold">Venta</th>
-                  <th className="p-6 text-right font-extrabold">Costo</th>
-                  <th className="p-6 text-right font-extrabold">Ganancia</th>
+                <tr style={{ background: 'rgba(0,0,0,0.3)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  {['Fecha', 'Producto', 'Detalle', 'Venta', 'Costo', 'Ganancia'].map(h => (
+                    <th key={h} style={{ padding: '16px', textAlign: h === 'Producto' || h === 'Fecha' ? 'left' : 'right', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>{h}</th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="text-sm font-medium text-slate-300 divide-y divide-white/5">
+              <tbody>
                 {ventas.map(v => {
                   const final = Number(v.precio_final); const costo = v.items_serializados?.costo_compra ? Number(v.items_serializados.costo_compra) : (Number(v.skus?.precio_costo) * (v.cantidad || 1)); const ganancia = final - costo
                   return (
-                    <tr key={v.id} className="hover:bg-white/5 transition-colors group">
-                      <td className="p-6 text-slate-400 group-hover:text-white transition-colors">{new Date(v.vendido_en).toLocaleDateString()}</td>
-                      <td className="p-6"><b className="text-white text-base">{v.skus?.productos?.marca}</b> {v.skus?.productos?.nombre}</td>
-                      <td className="p-6 font-mono text-xs text-slate-500 bg-black/20 rounded-lg m-2 w-fit px-3 py-1">{v.items_serializados?.serial || 'Bulk'}</td>
-                      <td className="p-6 text-right font-bold text-white text-base">S/ {final.toFixed(2)}</td>
-                      <td className="p-6 text-right text-slate-500">S/ {costo.toFixed(2)}</td>
-                      <td className="p-6 text-right"><span className={`px-4 py-1.5 rounded-full text-xs font-bold border ${ganancia >= 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-lg' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>S/ {ganancia.toFixed(2)}</span></td>
+                    <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)' }}>
+                      <td style={{ padding: '16px' }}>{new Date(v.vendido_en).toLocaleDateString()}</td>
+                      <td style={{ padding: '16px' }}><b style={{ color: 'white' }}>{v.skus?.productos?.marca}</b> {v.skus?.productos?.nombre}</td>
+                      <td style={{ padding: '16px', textAlign: 'right', fontFamily: 'monospace', fontSize: '0.85rem' }}>{v.items_serializados?.serial || 'Bulk'}</td>
+                      <td style={{ padding: '16px', textAlign: 'right', fontWeight: 'bold', color: 'white' }}>S/ {final.toFixed(2)}</td>
+                      <td style={{ padding: '16px', textAlign: 'right', color: '#64748b' }}>S/ {costo.toFixed(2)}</td>
+                      <td style={{ padding: '16px', textAlign: 'right' }}><span style={{ color: ganancia >= 0 ? '#10b981' : '#ef4444', fontWeight: 'bold', background: ganancia >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', padding: '4px 10px', borderRadius: '50px', fontSize: '0.85rem', border: `1px solid ${ganancia >= 0 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}` }}>S/ {ganancia.toFixed(2)}</span></td>
                     </tr>
                   )
                 })}
@@ -604,46 +637,48 @@ export default function Inventario() {
             </table>
           </div>
         )}
-      </main>
+
+      </div>
 
       {/* MODALES */}
       {modalImagen && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-2xl z-[100] flex items-center justify-center p-10" onClick={() => setModalImagen(null)}>
-          <img src={modalImagen} className="max-h-full max-w-full rounded-2xl shadow-2xl border border-white/10" />
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)' }} onClick={() => setModalImagen(null)}>
+          <img src={modalImagen} style={{ maxHeight: '90vh', maxWidth: '90vw', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 0 50px rgba(0,0,0,0.5)' }} />
         </div>
       )}
 
       {ventaModalAbierto && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl z-[90] flex items-center justify-center p-4">
-          <div className="bg-[#0F172A] w-full max-w-md p-10 rounded-3xl shadow-2xl border border-white/10 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-amber-600"></div>
-            <h2 className="text-3xl font-black text-white mb-2 tracking-tight">Confirmar Venta</h2>
-            <p className="text-slate-400 mb-8 font-medium">Estás vendiendo: <b className="text-amber-500">{ventaCel?.marca} {ventaCel?.modelo}</b></p>
-            <div className="space-y-6">
-              <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Precio Final Real</label>
-                <input type="number" autoFocus className="w-full mt-2 px-6 py-5 bg-black/40 border border-amber-500/30 rounded-2xl focus:border-amber-500 focus:bg-black/60 outline-none text-3xl font-black text-white placeholder-slate-600" value={ventaForm.precio_final} onChange={e=>setVentaForm({...ventaForm, precio_final:e.target.value})} />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-1">Cliente (Opcional)</label>
-                <input className="w-full mt-2 px-6 py-4 bg-black/40 border border-white/10 rounded-2xl outline-none font-medium text-white placeholder-slate-600" placeholder="Nombre del cliente" value={ventaForm.cliente_nombre} onChange={e=>setVentaForm({...ventaForm, cliente_nombre:e.target.value})} />
-              </div>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}>
+          <div style={{ ...styles.glassPanel, width: '100%', maxWidth: '450px', padding: '30px', backgroundColor: '#0f172a' }}>
+            <h2 style={{ margin: '0 0 10px 0', fontSize: '1.8rem', color: 'white' }}>Confirmar Venta</h2>
+            <p style={{ color: '#94a3b8', marginBottom: '25px' }}>Vendiendo: <b style={{ color: '#F59E0B' }}>{ventaCel?.marca} {ventaCel?.modelo}</b></p>
+            
+            <div style={{ marginBottom: '20px' }}>
+              <label style={styles.label}>Precio Final Real</label>
+              <input type="number" autoFocus style={{ ...styles.input, fontSize: '1.5rem', fontWeight: 'bold', color: '#F59E0B', borderColor: '#F59E0B' }} value={ventaForm.precio_final} onChange={e=>setVentaForm({...ventaForm, precio_final:e.target.value})} />
             </div>
-            <div className="flex gap-4 mt-10">
-              <button onClick={()=>setVentaModalAbierto(false)} className="flex-1 py-4 bg-white/5 border border-white/10 text-slate-400 font-bold rounded-2xl hover:bg-white/10 hover:text-white transition-all">Cancelar</button>
-              <button onClick={confirmarVenta} disabled={guardandoVenta} className="flex-1 py-4 bg-amber-500 text-black font-bold rounded-2xl hover:bg-amber-600 transition-all shadow-lg transform hover:-translate-y-1">{guardandoVenta ? '...' : 'Confirmar Venta'}</button>
+            
+            <div style={{ marginBottom: '30px' }}>
+              <label style={styles.label}>Cliente (Opcional)</label>
+              <input style={styles.input} placeholder="Nombre del cliente" value={ventaForm.cliente_nombre} onChange={e=>setVentaForm({...ventaForm, cliente_nombre:e.target.value})} />
+            </div>
+
+            <div style={{ display: 'flex', gap: '15px' }}>
+              <button onClick={()=>setVentaModalAbierto(false)} style={{ flex: 1, padding: '14px', borderRadius: '14px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8', cursor: 'pointer', fontWeight: 'bold' }}>Cancelar</button>
+              <button onClick={confirmarVenta} disabled={guardandoVenta} style={{ ...styles.btnPrimary, flex: 1, justifyContent: 'center' }}>{guardandoVenta ? '...' : 'Confirmar'}</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* NOTIFICACIÓN TOAST */}
+      {/* NOTIFICACIÓN */}
       {notificacion.visible && (
-        <div className={`fixed top-6 right-6 px-8 py-5 rounded-2xl shadow-2xl border-l-4 font-bold z-[100] animate-in slide-in-from-right-10 flex items-center gap-4 bg-[#0F172A] text-white border border-white/10 backdrop-blur-md ${notificacion.type === 'error' ? 'border-l-red-500' : 'border-l-emerald-500'}`}>
-          <span className="text-xl">{notificacion.type === 'error' ? '⚠️' : '🎉'}</span>
+        <div style={{ position: 'fixed', top: '24px', right: '24px', padding: '16px 24px', borderRadius: '16px', background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderLeft: `6px solid ${notificacion.type === 'error' ? '#ef4444' : '#10b981'}`, color: 'white', fontWeight: 'bold', boxShadow: '0 20px 40px rgba(0,0,0,0.5)', zIndex: 300, display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span>{notificacion.type === 'error' ? '⚠️' : '🎉'}</span>
           {notificacion.mensaje}
         </div>
       )}
+
     </div>
   )
 }
