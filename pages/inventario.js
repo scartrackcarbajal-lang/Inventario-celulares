@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM (CSS-IN-JS)
+// 🎨 ESTILOS PREMIUM
 // ==========================================
 const styles = {
   container: {
@@ -123,6 +123,7 @@ const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
   </div>
 )
 
+// Modal de Detalles Completos
 const DetallesModal = ({ cel, onClose }) => {
   if (!cel) return null
   return (
@@ -283,8 +284,8 @@ function RepairCard({ rep, onCambiarEstado }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Eye /><span style={{overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{rep.cliente_nombre}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Smartphone /><span>{rep.cliente_telefono}</span></div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Icons.Dollar /><span>Costo: S/ {rep.costo_estimado}</span></div>
-        {/* Eliminamos ABONO si no existe en la BD */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {new Date(rep.fecha_ingreso).toLocaleDateString()}</span></div>
+        {/* Usamos fecha_ingreso que ahora es un campo real */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', gridColumn: '1 / -1' }}><Icons.Clock /><span>Ingreso: {rep.fecha_ingreso ? new Date(rep.fecha_ingreso).toLocaleDateString() : '-'}</span></div>
       </div>
 
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px' }}>
@@ -348,8 +349,20 @@ export default function Inventario() {
   const estadoInicial = { marca: '', modelo: '', estado: 'Nuevo Sellado', serial: '', color: '', almacenamiento: '', salud_bateria: '', descripcion: '', precio_venta: '', precio_costo: '', publicado: true, imagen_url: [] }
   const [form, setForm] = useState(estadoInicial)
 
-  // Reparaciones (SIN ABONO)
-  const estadoReparacionInicial = { cliente_nombre: '', cliente_telefono: '', equipo_modelo: '', falla: '', costo_estimado: '', estado: 'Recibido', fecha_ingreso: new Date().toISOString().split('T')[0] }
+  // Reparaciones Corregido (Marca, Modelo, Contraseña, Accesorios)
+  // NOTA: 'falla' agrupará la descripción completa si no hay columnas específicas.
+  const estadoReparacionInicial = { 
+    cliente_nombre: '', 
+    cliente_telefono: '', 
+    marca: '', // Nuevo campo local
+    modelo: '', // Nuevo campo local
+    falla_desc: '', // Nuevo campo local
+    contrasena: '', // Nuevo campo local
+    accesorios: '', // Nuevo campo local
+    costo_estimado: '', 
+    estado: 'Recibido', 
+    fecha_ingreso: new Date().toISOString().split('T')[0] 
+  }
   const [formReparacion, setFormReparacion] = useState(estadoReparacionInicial)
 
   // --- HELPERS ---
@@ -472,14 +485,23 @@ export default function Inventario() {
   }
 
   const guardarReparacion = async () => {
-    if (!formReparacion.cliente_nombre || !formReparacion.equipo_modelo) return avisar('Nombre y Equipo son obligatorios', 'error')
+    if (!formReparacion.cliente_nombre || !formReparacion.marca || !formReparacion.modelo) {
+        return avisar('Nombre, Marca y Modelo son obligatorios', 'error')
+    }
     
-    // Sin Abono (según tu indicación)
+    // Concatenamos para ajustar a la BD:
+    const equipoFull = `${formReparacion.marca} ${formReparacion.modelo}`.trim()
+    const fallaFull = `
+FALLA: ${formReparacion.falla_desc}
+CONTRASEÑA: ${formReparacion.contrasena}
+ACCESORIOS: ${formReparacion.accesorios}
+    `.trim()
+
     const { error } = await supabase.from('reparaciones').insert({
         cliente_nombre: formReparacion.cliente_nombre,
         cliente_telefono: formReparacion.cliente_telefono,
-        equipo_modelo: formReparacion.equipo_modelo,
-        falla: formReparacion.falla,
+        equipo_modelo: equipoFull, // "Samsung A52"
+        falla: fallaFull, // Todo el detalle junto
         costo_estimado: formReparacion.costo_estimado,
         estado: formReparacion.estado,
         fecha_ingreso: formReparacion.fecha_ingreso
@@ -675,10 +697,12 @@ export default function Inventario() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
                 <input style={styles.input} placeholder="Cliente" value={formReparacion.cliente_nombre} onChange={e=>setFormReparacion({...formReparacion, cliente_nombre:e.target.value})} />
                 <input style={styles.input} placeholder="Teléfono" value={formReparacion.cliente_telefono} onChange={e=>setFormReparacion({...formReparacion, cliente_telefono:e.target.value})} />
-                <input style={styles.input} placeholder="Equipo/Modelo" value={formReparacion.equipo_modelo} onChange={e=>setFormReparacion({...formReparacion, equipo_modelo:e.target.value})} />
-                <input style={styles.input} placeholder="Falla Reportada" value={formReparacion.falla} onChange={e=>setFormReparacion({...formReparacion, falla:e.target.value})} />
+                <input style={styles.input} placeholder="Marca" value={formReparacion.marca} onChange={e=>setFormReparacion({...formReparacion, marca:e.target.value})} />
+                <input style={styles.input} placeholder="Modelo" value={formReparacion.modelo} onChange={e=>setFormReparacion({...formReparacion, modelo:e.target.value})} />
+                <input style={styles.input} placeholder="Falla" value={formReparacion.falla_desc} onChange={e=>setFormReparacion({...formReparacion, falla_desc:e.target.value})} />
+                 <input style={styles.input} placeholder="Contraseña/Patrón" value={formReparacion.contrasena} onChange={e=>setFormReparacion({...formReparacion, contrasena:e.target.value})} />
+                 <input style={styles.input} placeholder="Accesorios (Cargador...)" value={formReparacion.accesorios} onChange={e=>setFormReparacion({...formReparacion, accesorios:e.target.value})} />
                 <input type="number" style={styles.input} placeholder="Costo Estimado" value={formReparacion.costo_estimado} onChange={e=>setFormReparacion({...formReparacion, costo_estimado:e.target.value})} />
-                {/* SIN ABONO */}
                 <input type="date" style={styles.input} placeholder="Fecha Ingreso" value={formReparacion.fecha_ingreso} onChange={e=>setFormReparacion({...formReparacion, fecha_ingreso:e.target.value})} />
                 <button onClick={guardarReparacion} style={{ ...styles.btnPrimary, height: '100%' }}>Crear Ticket</button>
               </div>
