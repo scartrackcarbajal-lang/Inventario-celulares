@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/router' // <--- NUEVO
 import { supabase } from '../lib/supabase'
 
 // --- COMPONENTE TARJETA (con VENDIDO + borde rojo + eliminar visible) ---
@@ -401,6 +402,7 @@ function TarjetaEquipo({ cel, onEdit, onDelete, onSell, theme, onOpenModal }) {
 
 // --- LOGICA PRINCIPAL ---
 export default function Inventario() {
+  const router = useRouter() // <--- HOOK PARA NAVEGAR
   const [equipos, setEquipos] = useState([])
   const [busqueda, setBusqueda] = useState('')
   const [subiendo, setSubiendo] = useState(false)
@@ -538,12 +540,13 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
     setTimeout(() => setNotificacion((prev) => ({ ...prev, visible: false })), 3000)
   }
 
-  // ====== CARGAR EQUIPOS ======
+  // ====== CARGAR EQUIPOS (MODIFICADO: trae costo_compra) ======
   const cargarEquipos = async () => {
+    // Agregamos 'costo_compra' a la consulta para saber cuánto costó exactamente este equipo
     const { data, error } = await supabase
       .from('items_serializados')
       .select(`
-        id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, created_at,
+        id, sku_id, serial, estado, salud_bateria, almacenamiento, color, imagen_url, vendido, costo_compra, created_at,
         skus:sku_id (
           id, sku_codigo, tracking, precio_venta, precio_costo, publicado,
           productos:producto_id ( id, marca, nombre )
@@ -563,7 +566,8 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
       estado: row.estado,
       imei: row.serial,
       precio_venta: row?.skus?.precio_venta ?? null,
-      precio_costo: row?.skus?.precio_costo ?? null,
+      // LÓGICA CLAVE: Si el item tiene costo individual, úsalo. Si no, usa el costo genérico del SKU.
+      precio_costo: row.costo_compra ? Number(row.costo_compra) : (row?.skus?.precio_costo ?? null),
       almacenamiento: row.almacenamiento,
       salud_bateria: row.salud_bateria,
       color: row.color,
@@ -576,15 +580,17 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
     setEquipos(adaptados)
   }
 
+  // ====== CARGAR VENTAS (MODIFICADO: soporta Accesorios y Rentabilidad) ======
   const cargarVentas = async () => {
     setCargandoVentas(true)
 
+    // Agregamos 'cantidad' y 'tipo_venta'. También traemos el 'costo_compra' del item vendido.
     let query = supabase
       .from('ventas_v2')
       .select(`
-        id, precio_lista, precio_final, descuento, cliente_nombre, cliente_telefono,
+        id, precio_lista, precio_final, descuento, cliente_nombre, cliente_telefono, cantidad, tipo_venta,
         vendido_en, vendido_por, item_serializado_id, sku_id,
-        items_serializados:item_serializado_id ( serial ),
+        items_serializados:item_serializado_id ( serial, costo_compra ),
         skus:sku_id ( id, precio_costo, productos:producto_id ( marca, nombre ) )
       `)
       .order('vendido_en', { ascending: false })
@@ -745,6 +751,7 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
             almacenamiento: form.almacenamiento || null,
             color: form.color || null,
             imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+            costo_compra: form.precio_costo ? Number(form.precio_costo) : 0 // <--- NUEVO: Guardamos el costo real de ESTE equipo
           })
           .eq('id', editandoId)
 
@@ -803,6 +810,7 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
         color: form.color || null,
         vendido: false,
         imagen_url: Array.isArray(form.imagen_url) ? form.imagen_url : [],
+        costo_compra: form.precio_costo ? Number(form.precio_costo) : 0 // <--- NUEVO: Guardamos el costo aqui
       })
 
       if (insErr) {
@@ -870,6 +878,8 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
       cliente_nombre: ventaForm.cliente_nombre?.trim() || null,
       cliente_telefono: ventaForm.cliente_telefono?.trim() || null,
       vendido_por: userId,
+      tipo_venta: 'SERIALIZADO', // <--- NUEVO
+      cantidad: 1 // <--- NUEVO
     })
 
     if (errVenta) {
@@ -919,14 +929,33 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
     })
   }, [equipos, busqueda, filtroEstado, filtroPublicado, filtroVendidos])
 
+  // --- HELPER: Cálculo de ganancia inteligente ---
+  const calcularGananciaVenta = (v) => {
+    const final = Number(v?.precio_final ?? 0)
+    let costo = 0
+
+    // CASO 1: Es un celular con costo específico registrado (Rentabilidad Real)
+    if (v.items_serializados && v.items_serializados.costo_compra) {
+      costo = Number(v.items_serializados.costo_compra)
+    }
+    // CASO 2: Es un accesorio (Bulk) o celular antiguo sin costo individual -> Usamos SKU
+    else {
+      const costoSku = Number(v?.skus?.precio_costo ?? 0)
+      const cantidad = Number(v?.cantidad ?? 1) // Si es null, asume 1
+      costo = costoSku * cantidad
+    }
+
+    return { final, costo, ganancia: final - costo }
+  }
+
+  // --- MEMO: Resumen usando la nueva lógica ---
   const resumenVentas = useMemo(() => {
     return (ventas || []).reduce(
       (acc, v) => {
-        const costo = Number(v?.skus?.precio_costo ?? 0)
-        const final = Number(v?.precio_final ?? 0)
+        const { final, costo, ganancia } = calcularGananciaVenta(v)
         acc.totalVentas += final
         acc.totalCosto += costo
-        acc.totalGanancia += final - costo
+        acc.totalGanancia += ganancia
         acc.count += 1
         return acc
       },
@@ -1074,9 +1103,9 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out',
             padding: '20px', boxSizing: 'border-box', backdropFilter: 'blur(5px)'
         }}>
-          <img 
-            src={modalImagen} 
-            style={{ maxHeight: '90vh', maxWidth: '90vw', objectFit: 'contain', borderRadius: '20px', boxShadow: '0 20px 50px rgba(0,0,0,0.8)', border: `2px solid ${theme.cyan}` }} 
+          <img
+            src={modalImagen}
+            style={{ maxHeight: '90vh', maxWidth: '90vw', objectFit: 'contain', borderRadius: '20px', boxShadow: '0 20px 50px rgba(0,0,0,0.8)', border: `2px solid ${theme.cyan}` }}
           />
         </div>
       )}
@@ -1182,6 +1211,28 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
       <div style={{ maxWidth: '1400px', margin: 'auto' }}>
         <header style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h1 style={{ fontSize: '3.5rem', fontWeight: '900', margin: 0 }}>LOS FARRUS <span style={{ color: theme.orange }}>HUB</span></h1>
+          
+          {/* --- NAVEGACIÓN --- */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '30px', marginBottom: '10px' }}>
+            <button 
+              style={{ 
+                padding: '12px 25px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer',
+                background: theme.cyan, color: '#000', boxShadow: `0 0 20px ${theme.cyan}66`
+              }}
+            >
+              📱 CELULARES (ACTIVO)
+            </button>
+            <button 
+              onClick={() => router.push('/accesorios')}
+              style={{ 
+                padding: '12px 25px', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer',
+                background: 'transparent', color: theme.cyan, border: `1px solid ${theme.cyan}`
+              }}
+            >
+              🎧 IR A ACCESORIOS
+            </button>
+          </div>
+
           <button onClick={logout} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${theme.cyan}`, color: theme.cyan, padding: '10px 25px', borderRadius: '25px', cursor: 'pointer', marginTop: '15px', fontWeight: 'bold' }}>Cerrar Sesión 🔒</button>
         </header>
 
@@ -1258,7 +1309,7 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
         </div>
 
         <div>
-          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO COSTO</label>
+          <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>PRECIO COSTO (Para Ganancia)</label>
           <input type="number" placeholder="S/." value={form.precio_costo} style={inputStyle} onChange={e => setForm({...form, precio_costo: e.target.value})} />
         </div>
 
@@ -1406,7 +1457,7 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 12 }}>
             <div>Total ventas: <b>S/ {resumenVentas.totalVentas.toFixed(2)}</b></div>
             <div>Total costo: <b>S/ {resumenVentas.totalCosto.toFixed(2)}</b></div>
-            <div>Ganancia: <b>S/ {resumenVentas.totalGanancia.toFixed(2)}</b></div>
+            <div>Ganancia: <b style={{ color: '#7CFC98' }}>S/ {resumenVentas.totalGanancia.toFixed(2)}</b></div>
             <div># ventas: <b>{resumenVentas.count}</b></div>
           </div>
           {/* === FIN BLOQUE RESUMEN === */}
@@ -1422,7 +1473,7 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
                   <tr style={{ textAlign: 'left', borderBottom: '1px solid rgba(255,255,255,0.15)' }}>
                     <th style={{ padding: 10 }}>Fecha</th>
                     <th style={{ padding: 10 }}>Equipo</th>
-                    <th style={{ padding: 10 }}>IMEI</th>
+                    <th style={{ padding: 10 }}>Detalle</th>
                     <th style={{ padding: 10 }}>Final</th>
                     <th style={{ padding: 10 }}>Costo</th>
                     <th style={{ padding: 10 }}>Ganancia</th>
@@ -1430,14 +1481,14 @@ const esSerie = (s) => /^[A-Z0-9_-]{6,30}$/.test(s)
                 </thead>
                 <tbody>
                   {ventas.map((v) => {
-                    const costo = Number(v?.skus?.precio_costo ?? 0)
-                    const final = Number(v?.precio_final ?? 0)
-                    const ganancia = final - costo
+                    const { final, costo, ganancia } = calcularGananciaVenta(v)
 
                     const fecha = v?.vendido_en ? new Date(v.vendido_en).toLocaleString() : '—'
                     const marca = v?.skus?.productos?.marca ?? '—'
                     const modelo = v?.skus?.productos?.nombre ?? '—'
-                    const serial = v?.items_serializados?.serial ?? 'NA'
+                    const serial = v?.items_serializados?.serial
+                      ? v.items_serializados.serial
+                      : `(x${v.cantidad || 1}) Bulk`
 
                     return (
                       <tr key={v.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
