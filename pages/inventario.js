@@ -200,7 +200,7 @@ const DetallesModal = ({ cel, onClose }) => {
 // ==========================================
 // PÁGINA PRINCIPAL
 // ==========================================
-export default function Inventario() {
+export default function App() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('inventory')
   const [equipos, setEquipos] = useState([])
@@ -284,6 +284,7 @@ export default function Inventario() {
     let query = supabase.from('ventas_v2').select(`id, precio_lista, precio_final, descuento, cliente_nombre, cliente_telefono, cantidad, tipo_venta, vendido_en, vendido_por, item_serializado_id, sku_id, items_serializados:item_serializado_id ( serial, costo_compra ), skus:sku_id ( id, precio_costo, productos:producto_id ( marca, nombre ) )`).order('vendido_en', { ascending: false }).limit(300)
     if (ventasDesde) query = query.gte('vendido_en', inicioDelDiaISO(ventasDesde))
     if (ventasHasta) query = query.lte('vendido_en', finDelDiaISO(ventasHasta))
+    
     const { data, error } = await query
     if (error) return avisar('Error cargando ventas', 'error')
     setVentas(data || [])
@@ -344,8 +345,18 @@ export default function Inventario() {
         const catId = await asegurarCategoriaId('Celulares')
         const prodId = await asegurarProductoId({ categoriaId: catId, marca: form.marca, modelo: form.modelo, descripcion: form.descripcion })
         const skuId = await crearSku({ productoId: prodId, precio_venta: form.precio_venta, precio_costo: form.precio_costo, publicado: form.publicado })
-        // FIX: Se cambió sku.id por skuId
-        await supabase.from('items_serializados').insert({ sku_id: skuId, serial, estado: form.estado, salud_bateria: form.salud_bateria, almacenamiento: form.almacenamiento, color: form.color, vendido: false, imagen_url: form.imagen_url, costo_compra: form.precio_costo })
+        
+        await supabase.from('items_serializados').insert({ 
+          sku_id: skuId, 
+          serial, 
+          estado: form.estado, 
+          salud_bateria: form.salud_bateria, 
+          almacenamiento: form.almacenamiento, 
+          color: form.color, 
+          vendido: false, 
+          imagen_url: form.imagen_url, 
+          costo_compra: form.precio_costo 
+        })
         avisar('Equipo registrado')
       }
       setForm(estadoInicial)
