@@ -478,22 +478,22 @@ export default function Inventario() {
       const userId = sess?.session?.user?.id
       if (!userId) return avisar("Sesión no válida, vuelve a iniciar sesión", "error")
 
-      const mano = Number(formReparacion.costo_mano_obra || 0)
-      const rep = Number(formReparacion.costo_repuestos || 0)
+      const mano = Number(formReparacion.costomanoobra || 0)
+      const rep = Number(formReparacion.costorepuestos || 0)
 
       const payload = {
-        cliente_nombre: formReparacion.cliente_nombre.trim(),
-        cliente_telefono: formReparacion.cliente_telefono?.trim() || null,
-        equipo_marca: formReparacion.equipo_marca?.trim() || null,
-        equipo_modelo: formReparacion.equipo_modelo.trim(),
-        imei: formReparacion.imei?.trim() || null,
-        falla_reportada: formReparacion.falla_reportada?.trim() || null,
-        diagnostico: formReparacion.diagnostico?.trim() || null,
-        estado: formReparacion.estado, // enum repair_status
-        costo_mano_obra: mano,
-        costo_repuestos: rep,
-        total: mano + rep,
-        creado_por: userId,
+        clientenombre: formReparacion.clientenombre.trim(),
+        clientetelefono: formReparacion.clientetelefono?.trim() ?? null,
+        equipomarca: formReparacion.equipomarca?.trim() ?? null,
+        equipomodelo: formReparacion.equipomodelo.trim(),
+        imei: formReparacion.imei?.trim() ?? null,
+        fallareportada: formReparacion.fallareportada?.trim() ?? null,
+        diagnostico: formReparacion.diagnostico?.trim() ?? null,
+        estado: formReparacion.estado,
+        costomanoobra: mano,
+        costorepuestos: rep,
+        creadopor: userId,
+        // NO mandes "total"
       }
 
       const { error } = await supabase.from("reparaciones").insert(payload)
