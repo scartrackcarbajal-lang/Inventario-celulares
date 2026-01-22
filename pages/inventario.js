@@ -513,7 +513,21 @@ export default function Inventario() {
   }
   const [form, setForm] = useState(estadoInicial)
 
-  const normalizarSerial = (v) => String(v || '').replace(/\s/g, '').slice(0, 30)
+  // IMEI o SERIE: quita espacios, MAYÚSCULAS, máx 30
+    const normalizarSerial = (v) =>
+      String(v || '')
+        .trim()
+        .replace(/\s+/g, '')
+        .toUpperCase()
+        .slice(0, 30)
+
+    // Validación opcional (para usar en guardar())
+    const serial = normalizarSerial(form.serial)
+if (!serial || (!esImei(serial) && !esSerie(serial))) {
+  avisar('Ingresa un IMEI (15 dígitos) o una SERIE válida (6–30).', '#ff4b2b')
+  return
+}
+
 
   const inicioDelDiaISO = (yyyyMmDd) => {
     if (!yyyyMmDd) return null
@@ -1238,17 +1252,19 @@ export default function Inventario() {
           <label style={{marginLeft: '10px', color: '#888', fontSize: '0.8rem'}}>ALMACENAMIENTO</label>
           <input placeholder="Ej. 256Gb" value={form.almacenamiento} style={inputStyle} onChange={e => setForm({...form, almacenamiento: e.target.value})} />
         </div>
-
         <div>
+          
           <label style={{ marginLeft: 10, color: '#888', fontSize: '0.8rem' }}>
         IMEI / SERIE
+        
         </label>
         <input
-          placeholder="Escanea o escribe..."
-          value={form.serial}
-          onChange={(e) => setForm({ ...form, serial: normalizarImei(e.target.value) })}
-          style={{ ...inputStyle, fontFamily: 'monospace' }}
-        />
+        placeholder="IMEI o SERIE"
+        value={form.serial || ''}
+        onChange={(e) => setForm({ ...form, serial: normalizarSerial(e.target.value) })}
+        style={{ ...inputStyle, fontFamily: 'monospace' }}
+      />
+
         </div>
 
         <div>
