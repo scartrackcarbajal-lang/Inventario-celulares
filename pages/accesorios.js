@@ -74,7 +74,7 @@ const styles = {
     border: '1px solid rgba(255,255,255,0.1)',
     background: 'rgba(255,255,255,0.05)',
     color: '#cbd5e1',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
     cursor: 'pointer',
     transition: 'all 0.2s',
     fontSize: '0.85rem',
@@ -90,13 +90,13 @@ const styles = {
   },
   responsiveCardsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
     gap: '25px',
     paddingBottom: '60px',
   },
   formGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
     gap: '20px',
   },
   statCard: {
@@ -263,6 +263,7 @@ export default function App() {
 
   return (
     <div style={styles.container}>
+      {/* NAVBAR RESPONSIVO */}
       <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ padding: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -272,15 +273,16 @@ export default function App() {
         </div>
         <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', maxWidth: '100%', padding: '4px' }}>
           <button onClick={() => router.push('/inventario')} style={styles.btnIcon}>
-            <Icons.Smartphone /> Celulares
+            <Icons.Smartphone /> <span style={{ display: 'none', sm: 'inline' }}>Celulares</span>
           </button>
           <button onClick={() => router.push('/servicios_tecnicos')} style={styles.btnIcon}>
-            <Icons.Wrench /> Taller
+            <Icons.Wrench /> <span style={{ display: 'none', sm: 'inline' }}>Taller</span>
           </button>
         </div>
       </nav>
 
       <div style={styles.mainWrapper}>
+        {/* MÉTRICAS RESPONSIVAS */}
         <div style={styles.responsiveStatsGrid}>
           <StatCard label="Modelos" value={metricas.total} icon={<Icons.Box />} />
           <StatCard label="Unidades Stock" value={metricas.stock} color="#3b82f6" icon={<Icons.Plus />} />
@@ -288,6 +290,7 @@ export default function App() {
           <StatCard label="Capital Venta" value={`S/ ${metricas.venta}`} color="#10b981" icon={<Icons.Dollar />} />
         </div>
 
+        {/* FORMULARIO ADAPTABLE */}
         <div style={{ ...styles.glassPanel, padding: '25px', marginBottom: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '25px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '15px' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
@@ -308,28 +311,30 @@ export default function App() {
           </div>
         </div>
 
+        {/* CABECERA DE LISTADO RESPONSIVA */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px', flexWrap: 'wrap', gap: '15px' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'white', margin: 0 }}>Stock de Accesorios</h2>
           <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
               <div style={{ position: 'absolute', top: '12px', left: '14px', color: '#94a3b8' }}>
                   <Icons.Search />
               </div>
-              <input style={{ ...styles.input, paddingLeft: '45px' }} placeholder="Buscar accesorio..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
+              <input style={{ ...styles.input, paddingLeft: '45px', borderRadius: '50px' }} placeholder="Buscar accesorio..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
           </div>
         </div>
 
+        {/* REJILLA DE TARJETAS ADAPTABLE */}
         <div style={styles.responsiveCardsGrid}>
           {filtrados.length === 0 ? (
-              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#64748b' }}>No hay accesorios en lista</p>
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#64748b', padding: '40px' }}>No hay accesorios en lista</p>
           ) : (
               filtrados.map((item, i) => (
                 <div key={i} style={{ ...styles.glassPanel, padding: '24px', display: 'flex', flexDirection: 'column' }}>
                   <div style={{ marginBottom: '15px' }}>
-                    <p style={{ color: '#F59E0B', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase' }}>{item.skus.productos.marca}</p>
-                    <h3 style={{ fontSize: '1.2rem', color: 'white', fontWeight: 'bold', margin: '4px 0' }}>{item.skus.productos.nombre}</h3>
+                    <p style={{ color: '#F59E0B', fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>{item.skus.productos.marca}</p>
+                    <h3 style={{ fontSize: '1.2rem', color: 'white', fontWeight: 'bold', margin: '4px 0', lineHeight: 1.2 }}>{item.skus.productos.nombre}</h3>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(2, 6, 23, 0.4)', padding: '12px', borderRadius: '12px', marginBottom: '15px' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>STOCK</span>
+                    <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 'bold' }}>STOCK</span>
                     <span style={{ fontSize: '1.2rem', fontWeight: '900', color: item.stock < 5 ? '#ef4444' : 'white' }}>{item.stock}</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '10px' }}>
@@ -338,8 +343,8 @@ export default function App() {
                   </div>
                   <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
                     <button onClick={() => { setModalVenta(item); setCantidadVenta(1); }} style={{ ...styles.btnPrimary, flex: 2, padding: '10px' }}>VENDER</button>
-                    <button onClick={() => prepararEdicion(item)} style={{ ...styles.btnIcon, width: '40px', padding: 0 }}><Icons.Edit /></button>
-                    <button onClick={() => eliminarAccesorio(item.skus.id)} style={{ ...styles.btnIcon, width: '40px', padding: 0, color: '#ef4444' }}><Icons.Trash /></button>
+                    <button onClick={() => prepararEdicion(item)} style={{ ...styles.btnIcon, width: '40px', padding: 0 }} title="Editar"><Icons.Edit /></button>
+                    <button onClick={() => eliminarAccesorio(item.skus.id)} style={{ ...styles.btnIcon, width: '40px', padding: 0, color: '#ef4444' }} title="Eliminar"><Icons.Trash /></button>
                   </div>
                 </div>
               ))
@@ -347,17 +352,18 @@ export default function App() {
         </div>
       </div>
 
+      {/* MODAL DE VENTA RESPONSIVO */}
       {modalVenta && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
           <div style={{ ...styles.glassPanel, width: '100%', maxWidth: '400px', padding: '25px', backgroundColor: '#0f172a' }}>
-            <h2 style={{ margin: '0 0 5px 0', fontSize: '1.4rem', color: 'white' }}>Vender Accesorio</h2>
+            <h2 style={{ margin: '0 0 10px 0', fontSize: '1.4rem', color: 'white' }}>Vender Accesorio</h2>
             <p style={{ color: '#94a3b8', marginBottom: '20px', fontSize: '0.9rem' }}>{modalVenta.skus.productos.nombre}</p>
             <div style={{ marginBottom: '20px' }}>
               <label style={styles.label}>Cantidad (Max: {modalVenta.stock})</label>
               <input type="number" autoFocus style={{ ...styles.input, fontSize: '1.8rem', textAlign: 'center', color: '#F59E0B' }} value={cantidadVenta} onChange={e=>setCantidadVenta(e.target.value)} />
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
-              <button onClick={()=>setModalVenta(null)} style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8', cursor: 'pointer' }}>Cerrar</button>
+              <button onClick={()=>setModalVenta(null)} style={{ flex: 1, padding: '12px', borderRadius: '12px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8', cursor: 'pointer', fontWeight: 'bold' }}>Cerrar</button>
               <button onClick={confirmarVenta} style={{ ...styles.btnPrimary, flex: 1 }}>Confirmar</button>
             </div>
           </div>
