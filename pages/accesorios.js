@@ -3,43 +3,6 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🛠️ ZONA DE MOCKS (SÓLO PARA VISTA PREVIA)
-// ==========================================
-const useRouter = () => ({
-  push: (url) => console.log('Navegando a:', url)
-})
-
-const mockChain = (data) => {
-  const chain = {
-    select: () => chain,
-    insert: () => chain,
-    update: () => chain,
-    delete: () => chain,
-    eq: () => chain,
-    order: () => chain,
-    maybeSingle: () => chain,
-    single: () => chain,
-    then: (callback) => {
-      if (typeof callback === 'function') {
-        return Promise.resolve(callback({ data, error: null }));
-      }
-      return Promise.resolve({ data, error: null });
-    }
-  }
-  return chain
-}
-
-const supabase = {
-  auth: {
-    getSession: async () => ({ data: { session: { user: { id: 'mock-user-id' } } } }),
-  },
-  from: () => mockChain([]),
-}
-// ==========================================
-// FIN ZONA DE MOCKS
-// ==========================================
-
-// ==========================================
 // 🎨 ICONOS Y ESTILOS
 // ==========================================
 const Icons = {
