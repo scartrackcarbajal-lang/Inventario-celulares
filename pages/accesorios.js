@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-// import { useRouter } from 'next/router'
-// import { supabase } from '../lib/supabase'
+import { useRouter } from 'next/router'
+import { supabase } from '../lib/supabase'
 
 // ==========================================
 // 🎨 ESTILOS PREMIUM Y RESPONSIVOS
