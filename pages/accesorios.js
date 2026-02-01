@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS PREMIUM Y RESPONSIVOS
+// 🎨 ESTILOS Y COMPONENTES AUXILIARES
 // ==========================================
 const styles = {
   container: {
@@ -16,7 +16,7 @@ const styles = {
   },
   mainWrapper: {
     padding: '20px',
-    maxWidth: '1400px',
+    maxWidth: '1300px',
     margin: '0 auto',
   },
   glassPanel: {
@@ -119,22 +119,17 @@ const Icons = {
   Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
 }
 
-// ==========================================
-// 🧱 COMPONENTES DE APOYO
-// ==========================================
-
-function StatCard({ label, value, subtext, color = '#F59E0B', icon }) {
-  return (
-    <div style={styles.statCard}>
-      <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.1, color: color }}>
-        {icon}
-      </div>
-      <p style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '8px' }}>{label}</p>
-      <h3 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0, lineHeight: 1 }}>{value}</h3>
-      {subtext && <p style={{ fontSize: '0.8rem', color: color, marginTop: '8px', fontWeight: '600' }}>{subtext}</p>}
+// Componente de tarjeta de métricas definido internamente para evitar errores de referencia
+const StatCard = ({ label, value, subtext, color = '#F59E0B', icon }) => (
+  <div style={styles.statCard}>
+    <div style={{ position: 'absolute', top: 0, right: 0, padding: '20px', opacity: 0.1, color: color }}>
+      {icon}
     </div>
-  )
-}
+    <p style={{ fontSize: '0.65rem', fontWeight: 'bold', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '8px' }}>{label}</p>
+    <h3 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0, lineHeight: 1 }}>{value}</h3>
+    {subtext && <p style={{ fontSize: '0.8rem', color: color, marginTop: '8px', fontWeight: '600' }}>{subtext}</p>}
+  </div>
+)
 
 // ==========================================
 // 🚀 COMPONENTE PRINCIPAL
@@ -159,14 +154,19 @@ export default function App() {
 
   const cargarAccesorios = async () => {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('stock_bulk')
-      .select(`sku_id, stock, skus:sku_id ( id, sku_codigo, precio_venta, precio_costo, productos:producto_id ( id, nombre, marca, descripcion ) )`)
-      .order('stock', { ascending: false })
-    
-    setLoading(false)
-    if (error) return mostrarAviso('Error cargando datos', 'error')
-    setItems(data || [])
+    try {
+      const { data, error } = await supabase
+        .from('stock_bulk')
+        .select(`sku_id, stock, skus:sku_id ( id, sku_codigo, precio_venta, precio_costo, productos:producto_id ( id, nombre, marca, descripcion ) )`)
+        .order('stock', { ascending: false })
+      
+      if (error) throw error
+      setItems(data || [])
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => { cargarAccesorios() }, [])
@@ -267,18 +267,17 @@ export default function App() {
 
   return (
     <div style={styles.container}>
-      {/* ⚠️ ESTILOS CSS RESPONSIVOS GLOBALES */}
       <style dangerouslySetInnerHTML={{ __html: `
         .form-layout {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 25px;
+          gap: 30px;
           margin-bottom: 20px;
           align-items: end;
         }
         .metrics-layout {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 20px;
           margin-bottom: 40px;
         }
@@ -311,12 +310,12 @@ export default function App() {
         }
       `}} />
 
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '12px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ padding: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div>
             <span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>ACCESORIOS</span></span>
         </div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '8px' }}>
           <button onClick={() => router.push('/inventario')} style={styles.btnIcon}><Icons.Smartphone /><span className="hide-mobile">Inventario</span></button>
           <button onClick={() => router.push('/servicios_tecnicos')} style={styles.btnIcon}><Icons.Wrench /><span className="hide-mobile">Taller</span></button>
         </div>
@@ -379,7 +378,7 @@ export default function App() {
               <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px', color: '#64748b' }}>No hay resultados disponibles.</div>
           ) : (
               filtrados.map((item, i) => (
-                <div key={i} style={{ ...styles.glassPanel, padding: '30px', display: 'flex', flexDirection: 'column' }}>
+                <div key={item.sku_id || i} style={{ ...styles.glassPanel, padding: '30px', display: 'flex', flexDirection: 'column', transition: 'all 0.3s' }}>
                   <div style={{ marginBottom: '25px' }}>
                     <p style={{ color: '#F59E0B', fontSize: '0.75rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '5px' }}>{item.skus?.productos?.marca || 'S/M'}</p>
                     <h3 style={{ fontSize: '1.4rem', color: 'white', fontWeight: '800', margin: 0, lineHeight: 1.2 }}>{item.skus?.productos?.nombre || 'Producto'}</h3>
