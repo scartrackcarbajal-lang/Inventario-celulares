@@ -3,21 +3,8 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ICONOS Y ESTILOS
+// 🎨 ESTILOS PREMIUM Y RESPONSIVOS
 // ==========================================
-const Icons = {
-  Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
-  Headphones: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M17 14v3a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-3"/><path d="M21 14V8a9 9 0 0 0-9-9 9 9 0 0 0-9 9v6"/></svg>,
-  Dollar: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
-  Box: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>,
-  Smartphone: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
-  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
-  Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
-  Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
-  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
-  Wrench: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
-}
-
 const styles = {
   container: {
     minHeight: '100vh',
@@ -45,6 +32,12 @@ const styles = {
     WebkitTextFillColor: 'transparent',
     fontWeight: '900',
   },
+  inputGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    marginBottom: '5px'
+  },
   input: {
     width: '100%',
     padding: '16px',
@@ -64,7 +57,6 @@ const styles = {
     fontWeight: '800',
     color: '#64748b',
     display: 'block',
-    marginBottom: '8px'
   },
   btnPrimary: {
     background: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
@@ -99,15 +91,36 @@ const styles = {
   statCard: {
     backgroundColor: 'rgba(30, 41, 59, 0.4)',
     border: '1px solid rgba(255, 255, 255, 0.05)',
-    borderRadius: '20px',
+    borderRadius: '24px',
     padding: '24px',
     position: 'relative',
     overflow: 'hidden',
+  },
+  specBox: {
+    padding: '12px',
+    background: 'rgba(255, 255, 255, 0.03)',
+    borderRadius: '16px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    border: '1px solid rgba(255, 255, 255, 0.05)',
   }
 }
 
+const Icons = {
+  Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
+  Smartphone: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
+  Wrench: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
+  Box: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>,
+  Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
+  Dollar: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+  Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
+  Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
+  Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+}
+
 // ==========================================
-// 🧱 COMPONENTES DE UI
+// 🧱 COMPONENTES DE APOYO
 // ==========================================
 
 function StatCard({ label, value, subtext, color = '#F59E0B', icon }) {
@@ -134,9 +147,15 @@ export default function App() {
   const [editandoItem, setEditandoItem] = useState(null)
   const [modalVenta, setModalVenta] = useState(null)
   const [cantidadVenta, setCantidadVenta] = useState(1)
+  const [notificacion, setNotificacion] = useState({ visible: false, mensaje: '', tipo: 'success' })
   
   const estadoInicial = { nombre: '', marca: '', precio_costo: '', precio_venta: '', cantidad_inicial: 0 }
   const [form, setForm] = useState(estadoInicial)
+
+  const mostrarAviso = (msg, tipo = 'success') => {
+    setNotificacion({ visible: true, mensaje: msg, tipo })
+    setTimeout(() => setNotificacion({ visible: false, mensaje: '', tipo: 'success' }), 3000)
+  }
 
   const cargarAccesorios = async () => {
     setLoading(true)
@@ -146,7 +165,8 @@ export default function App() {
       .order('stock', { ascending: false })
     
     setLoading(false)
-    if (!error) setItems(data || [])
+    if (error) return mostrarAviso('Error cargando datos', 'error')
+    setItems(data || [])
   }
 
   useEffect(() => { cargarAccesorios() }, [])
@@ -164,7 +184,7 @@ export default function App() {
   }
 
   const guardarAccesorio = async () => {
-    if (!form.nombre || !form.marca) return alert('Marca y Producto son obligatorios')
+    if (!form.nombre || !form.marca) return mostrarAviso('Faltan campos obligatorios', 'error')
     setLoading(true)
     try {
       const { data: cat } = await supabase.from('categorias').select('id').eq('nombre', 'Accesorios').maybeSingle()
@@ -184,22 +204,17 @@ export default function App() {
           await supabase.from('skus').update({ precio_costo: form.precio_costo, precio_venta: form.precio_venta }).eq('id', skuId)
           await supabase.from('stock_bulk').update({ stock: form.cantidad_inicial }).eq('sku_id', skuId)
         }
-
-        alert('Accesorio actualizado')
+        mostrarAviso('Accesorio actualizado')
         setEditandoItem(null)
       } else {
         const { data: prod } = await supabase.from('productos').insert({ categoria_id: catId, nombre: form.nombre, marca: form.marca, activo: true }).select('id').single()
         const { data: sku } = await supabase.from('skus').insert({ producto_id: prod?.id, sku_codigo: `ACC-${Date.now()}`, tracking: 'BULK', precio_costo: form.precio_costo || 0, precio_venta: form.precio_venta || 0, publicado: true }).select('id').single()
         if (sku?.id) await supabase.from('stock_bulk').insert({ sku_id: sku.id, stock: form.cantidad_inicial || 0 })
-
-        alert('Accesorio registrado')
+        mostrarAviso('Registro exitoso')
       }
-
-      setForm(estadoInicial)
-      cargarAccesorios()
+      setForm(estadoInicial); cargarAccesorios()
     } catch (e) {
-      console.error(e)
-      alert('Error en el proceso de guardado')
+      mostrarAviso('Error al procesar', 'error')
     } finally {
       setLoading(false)
     }
@@ -208,13 +223,16 @@ export default function App() {
   const eliminarAccesorio = async (skuId) => {
     if(!confirm('¿Eliminar este accesorio?')) return
     const { error } = await supabase.from('skus').delete().eq('id', skuId)
-    if (!error) cargarAccesorios()
+    if (!error) {
+      mostrarAviso('Eliminado correctamente')
+      cargarAccesorios()
+    }
   }
 
   const confirmarVenta = async () => {
     if (!modalVenta) return
     const cant = Number(cantidadVenta)
-    if (cant <= 0 || cant > modalVenta.stock) return alert('Cantidad inválida')
+    if (cant <= 0 || cant > modalVenta.stock) return mostrarAviso('Cantidad inválida', 'error')
 
     const skuId = modalVenta.skus?.id
     const precioUnit = modalVenta.skus?.precio_venta || 0
@@ -222,9 +240,8 @@ export default function App() {
     await supabase.from('ventas_v2').insert({ sku_id: skuId, item_serializado_id: null, cantidad: cant, precio_lista: precioUnit, precio_final: precioUnit * cant, tipo_venta: 'BULK' })
     await supabase.from('stock_bulk').update({ stock: modalVenta.stock - cant }).eq('sku_id', skuId)
 
-    alert('Venta realizada 💰')
-    setModalVenta(null)
-    cargarAccesorios()
+    mostrarAviso('Venta registrada 💰')
+    setModalVenta(null); cargarAccesorios()
   }
 
   const filtrados = useMemo(() => {
@@ -254,38 +271,39 @@ export default function App() {
         .form-layout {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 25px;
+          gap: 30px;
           margin-bottom: 20px;
+          align-items: end;
         }
         .metrics-layout {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
           gap: 20px;
           margin-bottom: 40px;
         }
         .items-layout {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-          gap: 25px;
+          gap: 30px;
           padding-bottom: 80px;
         }
         .specs-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 12px;
+          gap: 15px;
           margin-bottom: 25px;
         }
         .spec-item {
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          padding: 12px;
-          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 16px;
+          border-radius: 20px;
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 12px;
         }
         @media (max-width: 640px) {
-          .form-layout { grid-template-columns: 1fr; gap: 15px; }
+          .form-layout { grid-template-columns: 1fr; gap: 20px; }
           .items-layout { grid-template-columns: 1fr; }
           .specs-grid { grid-template-columns: 1fr; }
           .hide-mobile { display: none; }
@@ -312,7 +330,7 @@ export default function App() {
         </div>
 
         <div style={{ ...styles.glassPanel, padding: '35px', marginBottom: '50px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '35px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
             <div style={{ width: '45px', height: '45px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
                 {editandoItem ? <Icons.Edit /> : <Icons.Plus />}
             </div>
@@ -320,33 +338,47 @@ export default function App() {
           </div>
           
           <div className="form-layout">
-            <div><label style={styles.label}>Marca *</label><input style={styles.input} value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} placeholder="Ej. Apple" /></div>
-            <div><label style={styles.label}>Nombre Producto *</label><input style={styles.input} value={form.nombre} onChange={e=>setForm({...form, nombre:e.target.value})} placeholder="Ej. Funda Silicone" /></div>
-            <div><label style={styles.label}>Costo Unitario</label><input type="number" style={styles.input} value={form.precio_costo} onChange={e=>setForm({...form, precio_costo:e.target.value})} placeholder="0.00" /></div>
-            <div><label style={{...styles.label, color: '#F59E0B'}}>Precio Venta</label><input type="number" style={{...styles.input, borderColor: 'rgba(245, 158, 11, 0.4)', color: '#F59E0B', fontWeight: 'bold'}} value={form.precio_venta} onChange={e=>setForm({...form, precio_venta:e.target.value})} placeholder="0.00" /></div>
-            <div><label style={styles.label}>{editandoItem ? 'Stock Total' : 'Cantidad Inicial'}</label><input type="number" style={styles.input} value={form.cantidad_inicial} onChange={e=>setForm({...form, cantidad_inicial:e.target.value})} /></div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Marca *</label>
+              <input style={styles.input} value={form.marca} onChange={e=>setForm({...form, marca:e.target.value})} placeholder="Ej. Apple" />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Producto *</label>
+              <input style={styles.input} value={form.nombre} onChange={e=>setForm({...form, nombre:e.target.value})} placeholder="Ej. Funda Silicone" />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Costo Unitario</label>
+              <input type="number" style={styles.input} value={form.precio_costo} onChange={e=>setForm({...form, precio_costo:e.target.value})} placeholder="0.00" />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={{...styles.label, color: '#F59E0B'}}>Precio Venta</label>
+              <input type="number" style={{...styles.input, borderColor: 'rgba(245, 158, 11, 0.4)', color: '#F59E0B', fontWeight: 'bold'}} value={form.precio_venta} onChange={e=>setForm({...form, precio_venta:e.target.value})} placeholder="0.00" />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>{editandoItem ? 'Stock Total' : 'Cantidad Inicial'}</label>
+              <input type="number" style={styles.input} value={form.cantidad_inicial} onChange={e=>setForm({...form, cantidad_inicial:e.target.value})} />
+            </div>
+            <div>
+              <button onClick={guardarAccesorio} style={styles.btnPrimary}>{editandoItem ? 'Actualizar' : 'Registrar'}</button>
+            </div>
           </div>
-          
-          <div style={{ display: 'flex', gap: '15px', marginTop: '30px' }}>
-            <button onClick={guardarAccesorio} style={{ ...styles.btnPrimary, flex: 2 }}>{editandoItem ? 'Guardar Cambios' : 'Registrar en Inventario'}</button>
-            {editandoItem && <button onClick={() => { setEditandoItem(null); setForm(estadoInicial); }} style={{ ...styles.btnPrimary, flex: 1, background: 'transparent', border: '1px solid #475569', color: '#94a3b8', boxShadow: 'none' }}>Cancelar</button>}
-          </div>
+          {editandoItem && <button onClick={() => { setEditandoItem(null); setForm(estadoInicial); }} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', textDecoration: 'underline', marginTop: '10px' }}>Cancelar edición</button>}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px', flexWrap: 'wrap', gap: '20px' }}>
           <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>Inventario de Accesorios</h2>
           <div style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
               <div style={{ position: 'absolute', top: '15px', left: '16px', color: '#64748b' }}><Icons.Search /></div>
-              <input style={{ ...styles.input, paddingLeft: '50px', borderRadius: '99px', background: 'rgba(0,0,0,0.3)' }} placeholder="Buscar por marca o modelo..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
+              <input style={{ ...styles.input, paddingLeft: '50px', borderRadius: '99px', background: 'rgba(0,0,0,0.3)' }} placeholder="Buscar marca o producto..." value={busqueda} onChange={e=>setBusqueda(e.target.value)} />
           </div>
         </div>
 
         <div className="items-layout">
           {filtrados.length === 0 ? (
-              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px', color: '#64748b' }}>No hay resultados que coincidan con la búsqueda.</div>
+              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px', color: '#64748b' }}>No hay resultados disponibles.</div>
           ) : (
               filtrados.map((item, i) => (
-                <div key={item.sku_id || i} style={{ ...styles.glassPanel, padding: '30px', display: 'flex', flexDirection: 'column', transition: 'all 0.3s' }}>
+                <div key={i} style={{ ...styles.glassPanel, padding: '30px', display: 'flex', flexDirection: 'column' }}>
                   <div style={{ marginBottom: '25px' }}>
                     <p style={{ color: '#F59E0B', fontSize: '0.75rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '5px' }}>{item.skus?.productos?.marca || 'S/M'}</p>
                     <h3 style={{ fontSize: '1.4rem', color: 'white', fontWeight: '800', margin: 0, lineHeight: 1.2 }}>{item.skus?.productos?.nombre || 'Producto'}</h3>
@@ -363,15 +395,15 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#64748b', marginBottom: '25px', padding: '0 5px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#64748b', marginBottom: '25px' }}>
                     <span>Costo: S/ {item.skus?.precio_costo || 0}</span>
-                    <span>SKU: {item.skus?.sku_codigo ? item.skus.sku_codigo.split('-')[1] || '---' : '---'}</span>
+                    <span>SKU: {item.skus?.sku_codigo ? item.skus.sku_codigo.split('-')[1] : '---'}</span>
                   </div>
 
                   <div style={{ display: 'flex', gap: '10px', marginTop: 'auto' }}>
                     <button onClick={() => { setModalVenta(item); setCantidadVenta(1); }} style={{ ...styles.btnPrimary, flex: 2 }}>VENDER</button>
-                    <button onClick={() => prepararEdicion(item)} style={{ ...styles.btnIcon, width: '50px', padding: 0 }} title="Editar"><Icons.Edit /></button>
-                    <button onClick={() => eliminarAccesorio(item.skus?.id)} style={{ ...styles.btnIcon, width: '50px', padding: 0, color: '#ef4444' }} title="Eliminar"><Icons.Trash /></button>
+                    <button onClick={() => prepararEdicion(item)} style={{ ...styles.btnIcon, width: '50px', padding: 0 }}><Icons.Edit /></button>
+                    <button onClick={() => eliminarAccesorio(item.skus?.id)} style={{ ...styles.btnIcon, width: '50px', padding: 0, color: '#ef4444' }}><Icons.Trash /></button>
                   </div>
                 </div>
               ))
@@ -387,17 +419,21 @@ export default function App() {
               <h2 style={{ fontSize: '1.6rem', color: 'white', margin: '0 0 5px 0' }}>Registrar Venta</h2>
               <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>{modalVenta.skus?.productos?.nombre || 'Producto'}</p>
             </div>
-            
             <div style={{ marginBottom: '30px' }}>
-              <label style={{ ...styles.label, textAlign: 'center' }}>Cantidad a descontar (Max: {modalVenta.stock})</label>
+              <label style={{ ...styles.label, textAlign: 'center' }}>Cantidad (Max: {modalVenta.stock})</label>
               <input type="number" autoFocus style={{ ...styles.input, fontSize: '2.5rem', textAlign: 'center', color: '#F59E0B', fontWeight: '900', border: '2px solid #F59E0B' }} value={cantidadVenta} onChange={e=>setCantidadVenta(e.target.value)} />
             </div>
-            
             <div style={{ display: 'flex', gap: '15px' }}>
               <button onClick={()=>setModalVenta(null)} style={{ flex: 1, padding: '16px', borderRadius: '16px', background: 'transparent', border: '1px solid #475569', color: '#94a3b8', fontWeight: 'bold', cursor: 'pointer' }}>Cerrar</button>
-              <button onClick={confirmarVenta} style={{ ...styles.btnPrimary, flex: 1.5 }}>Confirmar Venta</button>
+              <button onClick={confirmarVenta} style={{ ...styles.btnPrimary, flex: 1.5 }}>Confirmar</button>
             </div>
           </div>
+        </div>
+      )}
+
+      {notificacion.visible && (
+        <div style={{ position: 'fixed', top: '20px', right: '20px', padding: '15px 25px', borderRadius: '16px', backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderLeft: `5px solid ${notificacion.tipo === 'error' ? '#ef4444' : '#10b981'}`, color: 'white', fontWeight: 'bold', zIndex: 1000, boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
+          {notificacion.mensaje}
         </div>
       )}
     </div>
