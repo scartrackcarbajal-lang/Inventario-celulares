@@ -140,23 +140,23 @@ function StatCard({ label, value, subtext, color = '#F59E0B', icon }) {
 // ==========================================
 export default function App() {
   const router = useRouter()
-  const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [busqueda, setBusqueda] = useState('')
-  const [editandoItem, setEditandoItem] = useState(null)
-  const [modalVenta, setModalVenta] = useState(null)
-  const [cantidadVenta, setCantidadVenta] = useState(1)
-  const [notificacion, setNotificacion] = useState({ visible: false, mensaje: '', tipo: 'success' })
+  const [items, setItems] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+  const [busqueda, setBusqueda] = React.useState('')
+  const [editandoItem, setEditandoItem] = React.useState(null)
+  const [modalVenta, setModalVenta] = React.useState(null)
+  const [cantidadVenta, setCantidadVenta] = React.useState(1)
+  const [notificacion, setNotificacion] = React.useState({ visible: false, mensaje: '', tipo: 'success' })
   
   const estadoInicial = { nombre: '', marca: '', precio_costo: '', precio_venta: '', cantidad_inicial: 0 }
-  const [form, setForm] = useState(estadoInicial)
+  const [form, setForm] = React.useState(estadoInicial)
 
   const mostrarAviso = (msg, tipo = 'success') => {
     setNotificacion({ visible: true, mensaje: msg, tipo })
     setTimeout(() => setNotificacion({ visible: false, mensaje: '', tipo: 'success' }), 3000)
   }
 
-  const cargarAccesorios = useCallback(async () => {
+  const cargarAccesorios = React.useCallback(async () => {
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -173,7 +173,7 @@ export default function App() {
     }
   }, [])
 
-  useEffect(() => { cargarAccesorios() }, [cargarAccesorios])
+  React.useEffect(() => { cargarAccesorios() }, [cargarAccesorios])
 
   const prepararEdicion = (item) => {
     setEditandoItem(item)
@@ -248,7 +248,7 @@ export default function App() {
     setModalVenta(null); cargarAccesorios()
   }
 
-  const filtrados = useMemo(() => {
+  const filtrados = React.useMemo(() => {
     const q = busqueda.toLowerCase().trim()
     if (!q) return items
     return items.filter(item => 
@@ -256,7 +256,7 @@ export default function App() {
     )
   }, [items, busqueda])
 
-  const metricas = useMemo(() => {
+  const metricas = React.useMemo(() => {
     const totalCount = items.length
     const stockSum = items.reduce((acc, i) => acc + (i.stock || 0), 0)
     const ventaSum = items.reduce((acc, i) => acc + ((i.stock || 0) * (i.skus?.precio_venta || 0)), 0)
