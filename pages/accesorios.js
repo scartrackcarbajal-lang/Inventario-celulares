@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabase'
 
 // ==========================================
-// 🎨 ESTILOS (JS OBJECTS)
+// 🎨 ESTILOS PREMIUM Y RESPONSIVOS
 // ==========================================
 const styles = {
   container: {
@@ -34,6 +34,12 @@ const styles = {
     WebkitTextFillColor: 'transparent',
     fontWeight: '900',
   },
+  inputGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+    marginBottom: '5px'
+  },
   input: {
     width: '100%',
     padding: '16px',
@@ -53,7 +59,6 @@ const styles = {
     fontWeight: '800',
     color: '#64748b',
     display: 'block',
-    marginBottom: '8px'
   },
   btnPrimary: {
     background: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
@@ -108,15 +113,15 @@ const Icons = {
   Logo: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 17L12 22L22 17" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/><path d="M2 12L12 17L22 12" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round"/></svg>,
   Smartphone: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>,
   Wrench: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
-  Box: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,
+  Box: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" x2="12" y1="22.08" y2="12"/></svg>,
   Plus: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>,
-  Dollar: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+  Dollar: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
   Search: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
   Edit: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>,
   Trash: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
 }
 
-// Componentes de apoyo definidos antes del principal
+// 🧱 Componente de Tarjeta de Estadísticas
 function StatCard({ label, value, subtext, color = '#F59E0B', icon }) {
   return (
     <div style={styles.statCard}>
@@ -151,7 +156,7 @@ export default function App() {
     setTimeout(() => setNotificacion({ visible: false, mensaje: '', tipo: 'success' }), 3000)
   }
 
-  const cargarAccesorios = React.useCallback(async () => {
+  const cargarAccesorios = useCallback(async () => {
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -243,8 +248,7 @@ export default function App() {
     setModalVenta(null); cargarAccesorios()
   }
 
-  // Uso de React.useMemo directamente para máxima seguridad en build
-  const filtrados = React.useMemo(() => {
+  const filtrados = useMemo(() => {
     const q = busqueda.toLowerCase().trim()
     if (!q) return items
     return items.filter(item => 
@@ -252,16 +256,16 @@ export default function App() {
     )
   }, [items, busqueda])
 
-  const metricas = React.useMemo(() => {
-    const total = items.length
-    const stock = items.reduce((acc, i) => acc + (i.stock || 0), 0)
-    const venta = items.reduce((acc, i) => acc + ((i.stock || 0) * (i.skus?.precio_venta || 0)), 0)
-    const costo = items.reduce((acc, i) => acc + ((i.stock || 0) * (i.skus?.precio_costo || 0)), 0)
+  const metricas = useMemo(() => {
+    const totalCount = items.length
+    const stockSum = items.reduce((acc, i) => acc + (i.stock || 0), 0)
+    const ventaSum = items.reduce((acc, i) => acc + ((i.stock || 0) * (i.skus?.precio_venta || 0)), 0)
+    const costoSum = items.reduce((acc, i) => acc + ((i.stock || 0) * (i.skus?.precio_costo || 0)), 0)
     return { 
-        total: String(total), 
-        stock: String(stock), 
-        venta: String(venta), 
-        costo: String(costo) 
+        total: String(totalCount), 
+        stock: String(stockSum), 
+        venta: String(ventaSum), 
+        costo: String(costoSum) 
     }
   }, [items])
 
@@ -330,7 +334,6 @@ export default function App() {
       </nav>
 
       <div style={styles.mainWrapper}>
-        {/* GRID DINÁMICO DE MÉTRICAS */}
         <div className="metrics-layout">
           <StatCard label="Modelos" value={metricas.total} icon={<Icons.Box />} />
           <StatCard label="Stock Total" value={metricas.stock} color="#3b82f6" icon={<Icons.Plus />} />
@@ -338,7 +341,6 @@ export default function App() {
           <StatCard label="Capital Venta" value={`S/ ${metricas.venta}`} color="#10b981" icon={<Icons.Dollar />} />
         </div>
 
-        {/* FORMULARIO ADAPTABLE */}
         <div style={{ ...styles.glassPanel, padding: '35px', marginBottom: '50px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '35px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px' }}>
             <div style={{ width: '45px', height: '45px', borderRadius: '14px', background: 'rgba(245, 158, 11, 0.1)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
@@ -375,7 +377,6 @@ export default function App() {
           {editandoItem && <button onClick={() => { setEditandoItem(null); setForm(estadoInicial); }} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', textDecoration: 'underline', marginTop: '10px' }}>Cancelar edición</button>}
         </div>
 
-        {/* BUSCADOR */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px', flexWrap: 'wrap', gap: '20px' }}>
           <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'white', margin: 0 }}>Inventario de Accesorios</h2>
           <div style={{ position: 'relative', width: '100%', maxWidth: '380px' }}>
@@ -384,7 +385,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* GRID DINÁMICO DE TARJETAS */}
         <div className="items-layout">
           {filtrados.length === 0 ? (
               <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px', color: '#64748b' }}>No hay resultados disponibles.</div>
@@ -423,7 +423,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* MODAL DE VENTA RESPONSIVO */}
       {modalVenta && (
         <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.9)', zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px', backdropFilter: 'blur(10px)' }}>
           <div style={{ ...styles.glassPanel, width: '100%', maxWidth: '420px', padding: '35px', backgroundColor: '#0f172a' }}>
