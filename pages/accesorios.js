@@ -16,7 +16,7 @@ const styles = {
   },
   mainWrapper: {
     padding: '20px',
-    maxWidth: '1300px',
+    maxWidth: '1400px',
     margin: '0 auto',
   },
   glassPanel: {
@@ -267,17 +267,18 @@ export default function App() {
 
   return (
     <div style={styles.container}>
+      {/* ⚠️ ESTILOS CSS RESPONSIVOS GLOBALES */}
       <style dangerouslySetInnerHTML={{ __html: `
         .form-layout {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 30px;
+          gap: 25px;
           margin-bottom: 20px;
           align-items: end;
         }
         .metrics-layout {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
           gap: 20px;
           margin-bottom: 40px;
         }
@@ -310,12 +311,12 @@ export default function App() {
         }
       `}} />
 
-      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'rgba(15, 23, 42, 0.95)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ padding: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}><Icons.Logo /></div>
             <span style={{ fontSize: '1.2rem', fontWeight: '900', color: 'white' }}>FARRUS<span style={styles.goldText}>ACCESORIOS</span></span>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button onClick={() => router.push('/inventario')} style={styles.btnIcon}><Icons.Smartphone /><span className="hide-mobile">Inventario</span></button>
           <button onClick={() => router.push('/servicios_tecnicos')} style={styles.btnIcon}><Icons.Wrench /><span className="hide-mobile">Taller</span></button>
         </div>
@@ -402,8 +403,8 @@ export default function App() {
 
                   <div style={{ display: 'flex', gap: '10px', marginTop: 'auto' }}>
                     <button onClick={() => { setModalVenta(item); setCantidadVenta(1); }} style={{ ...styles.btnPrimary, flex: 2 }}>VENDER</button>
-                    <button onClick={() => prepararEdicion(item)} style={{ ...styles.btnIcon, width: '50px', padding: 0 }}><Icons.Edit /></button>
-                    <button onClick={() => eliminarAccesorio(item.skus?.id)} style={{ ...styles.btnIcon, width: '50px', padding: 0, color: '#ef4444' }}><Icons.Trash /></button>
+                    <button onClick={() => prepararEdicion(item)} style={{ ...styles.btnIcon, width: '50px', padding: 0 }} title="Editar"><Icons.Edit /></button>
+                    <button onClick={() => eliminarAccesorio(item.skus?.id)} style={{ ...styles.btnIcon, width: '50px', padding: 0, color: '#ef4444' }} title="Eliminar"><Icons.Trash /></button>
                   </div>
                 </div>
               ))
