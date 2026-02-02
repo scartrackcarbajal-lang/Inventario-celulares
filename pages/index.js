@@ -55,7 +55,7 @@ function ProductCard({ item }) {
       <div className="img-container">
         <div className="shimmer-mask"></div>
         <img 
-          src={item.imagen || 'https://via.placeholder.com/400x400/0f172a/334155?text=Farrus+Hub'} 
+          src={item.imagen || 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?q=80&w=800&auto=format&fit=crop'} 
           alt={item.nombre} 
           loading="lazy"
         />
@@ -115,7 +115,7 @@ export default function App() {
 
       const adaptadoBulk = (bulk || []).filter(b => (b.stock_bulk?.[0]?.stock || 0) > 0).map(b => ({
         id: b.id, tipo: 'bulk', marca: b.productos?.marca || 'S/M', nombre: b.productos?.nombre || 'Producto',
-        precio: b.precio_venta || 0, imagen: null, estado: 'Nuevo', specs: 'Accesorio Élite'
+        precio: b.precio_venta || 0, imagen: null, estado: 'Nuevo', specs: 'Original Hub'
       }))
 
       setInventory([...adaptadoCels, ...adaptadoBulk])
@@ -196,8 +196,8 @@ export default function App() {
         
         /* HERO */
         .hero-section { text-align: center; padding: 100px 20px 60px; }
-        .hero-title { font-size: clamp(3.5rem, 12vw, 8rem); margin: 0; line-height: 0.8; letter-spacing: -6px; font-weight: 950; text-shadow: 0 0 30px rgba(245, 158, 11, 0.2); }
-        .hero-subtitle { color: #94a3b8; font-size: 1.3rem; max-width: 850px; margin: 35px auto; line-height: 1.6; font-weight: 500; animation: reveal-up 1s ease-out backwards; }
+        .hero-title { font-size: clamp(3rem, 10vw, 7rem); margin: 0; line-height: 0.8; letter-spacing: -5px; font-weight: 950; text-shadow: 0 0 30px rgba(245, 158, 11, 0.2); }
+        .hero-subtitle { color: #94a3b8; font-size: 1.2rem; max-width: 850px; margin: 35px auto; line-height: 1.6; font-weight: 500; }
 
         /* TABS */
         .tab-menu { display: flex; justify-content: center; gap: 15px; margin: 0 auto 60px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.05); width: fit-content; backdrop-filter: blur(15px); flex-wrap: wrap; }
@@ -222,15 +222,15 @@ export default function App() {
         .search-input:focus { border-color: #F59E0B; box-shadow: 0 0 80px rgba(245, 158, 11, 0.15); }
         .search-icon-fixed { position: absolute; top: 50%; left: 35px; transform: translateY(-50%); color: #F59E0B; }
 
-        /* PRODUCT CARDS - DISTRIBUCIÓN MEJORADA */
+        /* --- PRODUCT CARDS REDISEÑADAS --- */
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
         .product-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 40px; overflow: hidden; display: flex; flexDirection: column; height: 100%; transition: all 0.6s cubic-bezier(0.15, 1, 0.3, 1); cursor: pointer; position: relative; animation: reveal-up 0.8s ease-out backwards; }
         .product-card:hover { transform: translateY(-15px) scale(1.02); border-color: rgba(245, 158, 11, 0.6); box-shadow: 0 40px 100px -30px rgba(0,0,0,1); }
         
-        .img-container { height: 320px; background: #010409; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 30px; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .img-container { height: 350px; background: #010409; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 40px; border-bottom: 1px solid rgba(255,255,255,0.02); }
         .shimmer-mask { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); animation: shimmer 3s infinite; }
-        .img-container img { max-width: 90%; max-height: 90%; object-fit: contain; z-index: 1; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
-        .product-card:hover img { transform: scale(1.1) rotate(2deg); }
+        .img-container img { width: 100%; height: 100%; object-fit: contain; z-index: 1; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
+        .product-card:hover img { transform: scale(1.15) rotate(2deg); }
         
         .badge { position: absolute; top: 20px; right: 20px; padding: 6px 16px; border-radius: 12px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
         .badge.new { background: rgba(16, 185, 129, 0.2); color: #34d399; }
@@ -242,31 +242,35 @@ export default function App() {
         .stock-indicator-pulse .dot::after { content: ''; position: absolute; inset: -4px; background: #4ade80; border-radius: 50%; animation: pulse-dot 2.5s infinite; }
         .stock-indicator-pulse .text { font-size: 0.7rem; color: #4ade80; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
-        .content-area { padding: 30px; flex: 1; display: flex; flex-direction: column; }
+        .content-area { padding: 35px; flex: 1; display: flex; flex-direction: column; }
         .brand-tag { font-size: 0.85rem; color: #F59E0B; font-weight: 950; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; }
-        .product-name { font-size: 1.6rem; color: white; font-weight: 950; margin: 0 0 10px 0; line-height: 1.2; letter-spacing: -0.5px; }
-        .product-specs { font-size: 0.95rem; color: #64748b; margin-bottom: 25px; line-height: 1.4; font-weight: 500; }
+        .product-name { font-size: 1.8rem; color: white; font-weight: 950; margin: 0 0 10px 0; line-height: 1.1; letter-spacing: -0.5px; }
+        .product-specs { font-size: 0.95rem; color: #64748b; margin-bottom: 30px; line-height: 1.4; font-weight: 500; }
         
-        .card-footer { margin-top: auto; display: flex; justify-content: space-between; alignItems: center; border-top: 1px solid rgba(255,255,255,0.08); paddingTop: 20px; }
-        .price-value { font-size: 2rem; font-weight: 950; color: white; line-height: 1; }
+        .card-footer { margin-top: auto; display: flex; justify-content: space-between; alignItems: center; border-top: 1px solid rgba(255,255,255,0.08); paddingTop: 25px; gap: 15px; }
+        .price-container { display: flex; flex-direction: column; min-width: 0; }
+        .price-label { font-size: 0.65rem; color: #475569; font-weight: 900; letter-spacing: 2px; }
+        .price-value { font-size: 2.2rem; font-weight: 950; color: white; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
-        .action-button { background: #10b981; color: white; padding: 14px 24px; border-radius: 18px; display: flex; align-items: center; gap: 10px; transition: 0.4s; text-decoration: none; font-weight: 950; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); text-transform: uppercase; }
+        .action-button { background: #10b981; color: white; padding: 14px 24px; border-radius: 18px; display: flex; align-items: center; gap: 10px; transition: 0.4s; text-decoration: none; font-weight: 950; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); text-transform: uppercase; flex-shrink: 0; }
         .action-button:hover { background: #34d399; transform: scale(1.05); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5); }
 
-        /* PANELES LABORATORIO */
+        /* PANELES VIP */
         .elite-panel { background: rgba(15, 23, 42, 0.4); border-radius: 70px; padding: 130px 60px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.04); position: relative; overflow: hidden; box-shadow: 0 80px 160px -40px rgba(0,0,0,1); max-width: 1100px; margin: 40px auto; animation: reveal-up 1.2s ease-out; }
         .icon-halo { margin-bottom: 50px; display: inline-flex; padding: 50px; background: rgba(245, 158, 11, 0.03); border-radius: 50px; border: 1px solid rgba(245, 158, 11, 0.08); color: #F59E0B; position: relative; }
         .cta-premium { display: inline-flex; align-items: center; gap: 20px; padding: 25px 70px; background: white; color: #020617; border-radius: 99px; font-weight: 950; text-decoration: none; font-size: 1.3rem; margin-top: 50px; transition: 0.5s; text-transform: uppercase; letter-spacing: 3px; }
         .cta-premium:hover { transform: translateY(-12px); box-shadow: 0 40px 80px rgba(255,255,255,0.2); }
 
         @media (max-width: 768px) {
-          .hero-title { font-size: 3.8rem; letter-spacing: -3px; }
+          .hero-title { font-size: 3.5rem; letter-spacing: -3px; }
           .grid-layout { grid-template-columns: 1fr; gap: 25px; }
           .cat-card { width: 45%; padding: 20px 10px; border-radius: 24px; }
           .elite-panel { padding: 80px 25px; border-radius: 50px; }
           .action-button span { display: none; }
-          .action-button { padding: 16px; border-radius: 16px; }
+          .action-button { padding: 18px; border-radius: 16px; }
           .search-input { font-size: 1.1rem; padding-left: 65px; }
+          .img-container { height: 300px; }
+          .price-value { font-size: 1.8rem; }
         }
       `}} />
 
@@ -283,7 +287,7 @@ export default function App() {
         <div key={i} className="particle" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, width: `${Math.random() * 3}px`, height: `${Math.random() * 3}px`, animationDelay: `${Math.random() * 5}s` }}></div>
       ))}
 
-      {/* NAVBAR */}
+      {/* NAVBAR FLEXIBLE */}
       <nav style={styles.glassNav}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Icons.Logo />
@@ -291,7 +295,7 @@ export default function App() {
         </div>
         <div style={{ display: 'flex', gap: '15px' }}>
           <button onClick={() => router.push('/inventario')} style={{ ...styles.btnIcon, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', height: '44px', borderRadius: '15px', color: '#94a3b8', fontWeight: 'bold', padding: '0 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Icons.Lock /> <span className="hide-mobile">ACCESO SISTEMA</span>
+            <Icons.Lock /> <span className="hide-mobile">ADMINISTRAR</span>
           </button>
         </div>
       </nav>
