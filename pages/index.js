@@ -53,11 +53,12 @@ function ProductCard({ item }) {
   return (
     <div className="product-card" onClick={handleDetails}>
       <div className="img-container">
-        <div className="shimmer-mask"></div>
+        {/* Shimmer effect fixed for visibility */}
+        <div className="shimmer-glow"></div>
         <img 
-          src={item.imagen || 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?q=80&w=800&auto=format&fit=crop'} 
+          src={item.imagen || 'https://via.placeholder.com/600x600/0f172a/F59E0B?text=FARRUS+HUB'} 
           alt={item.nombre} 
-          loading="lazy"
+          className="main-product-img"
         />
         <div className="badge-wrapper">
            <span className={`badge ${item.estado === 'Nuevo Sellado' ? 'new' : 'used'}`}>
@@ -115,7 +116,7 @@ export default function App() {
 
       const adaptadoBulk = (bulk || []).filter(b => (b.stock_bulk?.[0]?.stock || 0) > 0).map(b => ({
         id: b.id, tipo: 'bulk', marca: b.productos?.marca || 'S/M', nombre: b.productos?.nombre || 'Producto',
-        precio: b.precio_venta || 0, imagen: null, estado: 'Nuevo', specs: 'Original Hub'
+        precio: b.precio_venta || 0, imagen: null, estado: 'Nuevo', specs: 'Accesorio Élite'
       }))
 
       setInventory([...adaptadoCels, ...adaptadoBulk])
@@ -176,14 +177,14 @@ export default function App() {
       <div className="mouse-spotlight" style={{ left: mousePos.x, top: mousePos.y }}></div>
       
       <style dangerouslySetInnerHTML={{ __html: `
-        /* --- ESTILOS DE ULTRA-LUJO --- */
+        /* --- ESTILOS DE ULTRA-LUJO Y CORRECCIÓN DE TARJETAS --- */
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         @keyframes reveal-up { from { opacity: 0; transform: translateY(50px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-        @keyframes shimmer { 0% { transform: translateX(-150%); } 100% { transform: translateX(150%); } }
+        @keyframes shimmer-sweep { 0% { transform: translateX(-150%) rotate(45deg); } 100% { transform: translateX(150%) rotate(45deg); } }
         @keyframes pulse-dot { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(2.5); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
         @keyframes particle-float { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh); opacity: 0; } }
 
-        .vip-ticker-wrap { background: #020617; border-bottom: 1px solid rgba(245, 158, 11, 0.2); overflow: hidden; height: 35px; display: flex; align-items: center; }
+        .vip-ticker-wrap { background: #020617; border-bottom: 1px solid rgba(245, 158, 11, 0.2); overflow: hidden; height: 35px; display: flex; align-items: center; position: relative; z-index: 101; }
         .vip-ticker { white-space: nowrap; animation: ticker 30s linear infinite; color: #F59E0B; font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
         
         .scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(to right, #F59E0B, #fbbf24); z-index: 1000; transition: width 0.1s ease-out; }
@@ -195,65 +196,116 @@ export default function App() {
         .main-content { padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; position: relative; z-index: 2; }
         
         /* HERO */
-        .hero-section { text-align: center; padding: 100px 20px 60px; }
-        .hero-title { font-size: clamp(3rem, 10vw, 7rem); margin: 0; line-height: 0.8; letter-spacing: -5px; font-weight: 950; text-shadow: 0 0 30px rgba(245, 158, 11, 0.2); }
-        .hero-subtitle { color: #94a3b8; font-size: 1.2rem; max-width: 850px; margin: 35px auto; line-height: 1.6; font-weight: 500; }
+        .hero-section { text-align: center; padding: 80px 20px 60px; }
+        .hero-title { font-size: clamp(3rem, 10vw, 8rem); margin: 0; line-height: 0.8; letter-spacing: -6px; font-weight: 950; text-shadow: 0 0 30px rgba(245, 158, 11, 0.2); }
+        .hero-subtitle { color: #94a3b8; font-size: 1.3rem; max-width: 850px; margin: 35px auto; line-height: 1.6; font-weight: 500; }
 
         /* TABS */
-        .tab-menu { display: flex; justify-content: center; gap: 15px; margin: 0 auto 60px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.05); width: fit-content; backdrop-filter: blur(15px); flex-wrap: wrap; }
-        .tab-trigger { padding: 16px 45px; border-radius: 99px; background: transparent; border: none; color: #64748b; cursor: pointer; font-weight: 900; transition: 0.5s cubic-bezier(0.2, 0, 0, 1); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; }
-        .tab-trigger.active { background: #F59E0B; color: #020617; box-shadow: 0 20px 45px -10px rgba(245, 158, 11, 0.5); transform: scale(1.08); }
+        .tab-menu { display: flex; justify-content: center; gap: 10px; margin: 0 auto 60px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.05); width: fit-content; backdrop-filter: blur(15px); flex-wrap: wrap; }
+        .tab-trigger { padding: 14px 35px; border-radius: 99px; background: transparent; border: none; color: #64748b; cursor: pointer; font-weight: 900; transition: 0.5s cubic-bezier(0.2, 0, 0, 1); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; }
+        .tab-trigger.active { background: #F59E0B; color: #020617; box-shadow: 0 20px 45px -10px rgba(245, 158, 11, 0.5); transform: scale(1.05); }
 
-        /* CATEGORÍAS ÉLITE */
+        /* CATEGORÍAS */
         .category-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 80px; flex-wrap: wrap; }
-        .cat-card { width: clamp(140px, 25vw, 240px); padding: 35px 20px; border-radius: 35px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; position: relative; overflow: hidden; }
-        .cat-card:hover { transform: translateY(-15px); background: rgba(255,255,255,0.04); border-color: rgba(245, 158, 11, 0.3); }
+        .cat-card { width: clamp(130px, 20vw, 240px); padding: 30px 15px; border-radius: 35px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; position: relative; overflow: hidden; }
+        .cat-card:hover { transform: translateY(-12px); background: rgba(255,255,255,0.04); border-color: rgba(245, 158, 11, 0.3); }
         .cat-card.active { border-color: #F59E0B; background: rgba(245, 158, 11, 0.05); box-shadow: 0 20px 60px -20px rgba(245, 158, 11, 0.4); }
         .cat-card .count-badge { position: absolute; top: 15px; right: 15px; font-size: 0.65rem; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 8px; color: #94a3b8; font-weight: 900; }
         .cat-card.active .count-badge { background: #F59E0B; color: #020617; }
         .cat-card .icon-box { color: #64748b; transition: 0.4s; }
         .cat-card.active .icon-box { color: #F59E0B; transform: scale(1.3); }
-        .cat-card span { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
+        .cat-card span { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
         .cat-card.active span { color: white; }
 
         /* SEARCHBAR */
         .search-area { position: relative; max-width: 900px; margin: 0 auto 60px; width: 100%; }
-        .search-input { width: 100%; padding: 25px 35px 25px 85px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 60px; color: white; outline: none; font-size: 1.3rem; transition: 0.4s; backdrop-filter: blur(20px); box-sizing: border-box; }
+        .search-input { width: 100%; padding: 22px 35px 22px 85px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 60px; color: white; outline: none; font-size: 1.2rem; transition: 0.4s; backdrop-filter: blur(20px); box-sizing: border-box; }
         .search-input:focus { border-color: #F59E0B; box-shadow: 0 0 80px rgba(245, 158, 11, 0.15); }
         .search-icon-fixed { position: absolute; top: 50%; left: 35px; transform: translateY(-50%); color: #F59E0B; }
 
-        /* --- PRODUCT CARDS REDISEÑADAS --- */
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-        .product-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 40px; overflow: hidden; display: flex; flexDirection: column; height: 100%; transition: all 0.6s cubic-bezier(0.15, 1, 0.3, 1); cursor: pointer; position: relative; animation: reveal-up 0.8s ease-out backwards; }
-        .product-card:hover { transform: translateY(-15px) scale(1.02); border-color: rgba(245, 158, 11, 0.6); box-shadow: 0 40px 100px -30px rgba(0,0,0,1); }
+        /* --- REDISEÑO DE TARJETAS (VERTICAL Y AMPLIO) --- */
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 35px; }
+        .product-card { 
+          background: rgba(15, 23, 42, 0.6); 
+          backdrop-filter: blur(40px); 
+          border: 1px solid rgba(255, 255, 255, 0.03); 
+          border-radius: 40px; 
+          overflow: hidden; 
+          display: flex; 
+          flex-direction: column; 
+          height: 100%; 
+          transition: all 0.6s cubic-bezier(0.15, 1, 0.3, 1); 
+          cursor: pointer; 
+          position: relative; 
+          animation: reveal-up 0.8s ease-out backwards; 
+        }
+        .product-card:hover { transform: translateY(-15px); border-color: rgba(245, 158, 11, 0.5); box-shadow: 0 40px 100px -30px rgba(0,0,0,1); }
         
-        .img-container { height: 350px; background: #010409; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 40px; border-bottom: 1px solid rgba(255,255,255,0.02); }
-        .shimmer-mask { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); animation: shimmer 3s infinite; }
-        .img-container img { width: 100%; height: 100%; object-fit: contain; z-index: 1; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
-        .product-card:hover img { transform: scale(1.15) rotate(2deg); }
+        .img-container { 
+          height: 400px; 
+          background: #010409; 
+          display: flex; 
+          align-items: center; 
+          justify-content: center; 
+          position: relative; 
+          overflow: hidden; 
+          padding: 20px; 
+        }
+        .shimmer-glow { 
+          position: absolute; 
+          top: -100%; left: -100%; width: 300%; height: 300%; 
+          background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.05) 50%, transparent 55%); 
+          animation: shimmer-sweep 4s infinite linear; 
+          pointer-events: none;
+        }
+        .main-product-img { 
+          max-width: 95%; 
+          max-height: 95%; 
+          object-fit: contain; 
+          z-index: 1; 
+          filter: drop-shadow(0 20px 50px rgba(0,0,0,0.8)); 
+          transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); 
+        }
+        .product-card:hover .main-product-img { transform: scale(1.1); }
         
-        .badge { position: absolute; top: 20px; right: 20px; padding: 6px 16px; border-radius: 12px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        .badge { position: absolute; top: 25px; right: 25px; padding: 8px 18px; border-radius: 14px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
         .badge.new { background: rgba(16, 185, 129, 0.2); color: #34d399; }
         .badge.used { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+        .content-area { padding: 30px; flex: 1; display: flex; flex-direction: column; background: linear-gradient(180deg, transparent 0%, rgba(2, 6, 23, 0.4) 100%); }
+        .brand-tag { font-size: 0.85rem; color: #F59E0B; font-weight: 950; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 8px; }
+        .product-name { font-size: 2.2rem; color: white; font-weight: 950; margin: 0 0 10px 0; line-height: 1; letter-spacing: -1px; }
+        .product-specs { font-size: 1rem; color: #64748b; margin-bottom: 30px; line-height: 1.5; font-weight: 500; }
+        
+        .card-footer { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.06); paddingTop: 25px; gap: 10px; }
+        .price-container { display: flex; flex-direction: column; min-width: 0; }
+        .price-label { font-size: 0.7rem; color: #475569; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+        .price-value { font-size: 2.6rem; font-weight: 950; color: white; line-height: 1; margin-top: 2px; }
+        
+        .action-button { 
+          background: #10b981; 
+          color: white; 
+          padding: 18px 25px; 
+          border-radius: 20px; 
+          display: flex; 
+          align-items: center; 
+          gap: 12px; 
+          transition: 0.4s; 
+          text-decoration: none; 
+          font-weight: 950; 
+          font-size: 0.9rem; 
+          box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); 
+          text-transform: uppercase; 
+          flex-shrink: 0; 
+          height: fit-content;
+        }
+        .action-button:hover { background: #34d399; transform: scale(1.05); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5); }
 
         /* STOCK PULSE */
         .stock-indicator-pulse { display: flex; align-items: center; gap: 8px; }
         .stock-indicator-pulse .dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; position: relative; }
         .stock-indicator-pulse .dot::after { content: ''; position: absolute; inset: -4px; background: #4ade80; border-radius: 50%; animation: pulse-dot 2.5s infinite; }
         .stock-indicator-pulse .text { font-size: 0.7rem; color: #4ade80; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-
-        .content-area { padding: 35px; flex: 1; display: flex; flex-direction: column; }
-        .brand-tag { font-size: 0.85rem; color: #F59E0B; font-weight: 950; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; }
-        .product-name { font-size: 1.8rem; color: white; font-weight: 950; margin: 0 0 10px 0; line-height: 1.1; letter-spacing: -0.5px; }
-        .product-specs { font-size: 0.95rem; color: #64748b; margin-bottom: 30px; line-height: 1.4; font-weight: 500; }
-        
-        .card-footer { margin-top: auto; display: flex; justify-content: space-between; alignItems: center; border-top: 1px solid rgba(255,255,255,0.08); paddingTop: 25px; gap: 15px; }
-        .price-container { display: flex; flex-direction: column; min-width: 0; }
-        .price-label { font-size: 0.65rem; color: #475569; font-weight: 900; letter-spacing: 2px; }
-        .price-value { font-size: 2.2rem; font-weight: 950; color: white; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        
-        .action-button { background: #10b981; color: white; padding: 14px 24px; border-radius: 18px; display: flex; align-items: center; gap: 10px; transition: 0.4s; text-decoration: none; font-weight: 950; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); text-transform: uppercase; flex-shrink: 0; }
-        .action-button:hover { background: #34d399; transform: scale(1.05); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5); }
 
         /* PANELES VIP */
         .elite-panel { background: rgba(15, 23, 42, 0.4); border-radius: 70px; padding: 130px 60px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.04); position: relative; overflow: hidden; box-shadow: 0 80px 160px -40px rgba(0,0,0,1); max-width: 1100px; margin: 40px auto; animation: reveal-up 1.2s ease-out; }
@@ -266,11 +318,12 @@ export default function App() {
           .grid-layout { grid-template-columns: 1fr; gap: 25px; }
           .cat-card { width: 45%; padding: 20px 10px; border-radius: 24px; }
           .elite-panel { padding: 80px 25px; border-radius: 50px; }
-          .action-button span { display: none; }
-          .action-button { padding: 18px; border-radius: 16px; }
+          .action-button .btn-text { display: none; }
+          .action-button { padding: 18px; border-radius: 18px; }
           .search-input { font-size: 1.1rem; padding-left: 65px; }
-          .img-container { height: 300px; }
-          .price-value { font-size: 1.8rem; }
+          .img-container { height: 320px; }
+          .price-value { font-size: 2.2rem; }
+          .product-name { font-size: 1.8rem; }
         }
       `}} />
 
@@ -350,7 +403,7 @@ export default function App() {
               {loading ? (
                 <div style={{ textAlign: 'center', padding: '120px' }}>
                   <div style={{ width: '80px', height: '80px', border: '8px solid rgba(245, 158, 11, 0.05)', borderTopColor: '#F59E0B', borderRadius: '50%', animation: 'reveal-up 1s linear infinite', margin: '0 auto 35px' }}></div>
-                  <p style={{ fontWeight: '950', letterSpacing: '8px', color: '#F59E0B', textTransform: 'uppercase', fontSize: '1rem' }}>Escaneando Inventario...</p>
+                  <p style={{ fontWeight: '950', letterSpacing: '8px', color: '#F59E0B', textTransform: 'uppercase', fontSize: '1rem' }}>Sincronizando Élite...</p>
                 </div>
               ) : (
                 <div className="grid-layout">
