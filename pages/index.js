@@ -68,7 +68,10 @@ function ProductCard({ item }) {
       <div className="content-area">
         <div className="brand-header">
            <span className="brand-tag">{item.marca}</span>
-           <span className="stock-indicator">En Stock</span>
+           <div className="stock-indicator-pulse">
+             <span className="dot"></span>
+             <span className="text">Disponible</span>
+           </div>
         </div>
         <h3 className="product-name">{item.nombre}</h3>
         <p className="product-specs">{item.specs}</p>
@@ -80,7 +83,7 @@ function ProductCard({ item }) {
           </div>
           <a href={whatsappLink} target="_blank" rel="noreferrer" className="action-button" onClick={e => e.stopPropagation()}>
             <Icons.Whatsapp />
-            <span>LO QUIERO</span>
+            <span className="btn-text">LO QUIERO</span>
           </a>
         </div>
       </div>
@@ -95,6 +98,8 @@ export default function App() {
   const [inventory, setInventory] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [search, setSearch] = React.useState('')
+  const [scrollProgress, setScrollProgress] = React.useState(0)
+  const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 })
 
   const cargarDatos = React.useCallback(async () => {
     setLoading(true)
@@ -110,7 +115,7 @@ export default function App() {
 
       const adaptadoBulk = (bulk || []).filter(b => (b.stock_bulk?.[0]?.stock || 0) > 0).map(b => ({
         id: b.id, tipo: 'bulk', marca: b.productos?.marca || 'S/M', nombre: b.productos?.nombre || 'Producto',
-        precio: b.precio_venta || 0, imagen: null, estado: 'Nuevo', specs: 'Original Hub'
+        precio: b.precio_venta || 0, imagen: null, estado: 'Nuevo', specs: 'Accesorio Élite'
       }))
 
       setInventory([...adaptadoCels, ...adaptadoBulk])
@@ -121,7 +126,34 @@ export default function App() {
     }
   }, [])
 
-  React.useEffect(() => { cargarDatos() }, [cargarDatos])
+  React.useEffect(() => {
+    cargarDatos()
+    
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight
+      const progress = (window.scrollY / totalScroll) * 100
+      setScrollProgress(progress)
+    }
+
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('mousemove', handleMouseMove)
+    }
+  }, [cargarDatos])
+
+  const counts = React.useMemo(() => {
+    return {
+      todos: inventory.length,
+      celular: inventory.filter(i => i.tipo === 'celular').length,
+      bulk: inventory.filter(i => i.tipo === 'bulk').length
+    }
+  }, [inventory])
 
   const filteredItems = React.useMemo(() => {
     let result = inventory
@@ -140,70 +172,88 @@ export default function App() {
 
   return (
     <div style={styles.container}>
+      <div className="scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
+      <div className="mouse-spotlight" style={{ left: mousePos.x, top: mousePos.y }}></div>
+      
       <style dangerouslySetInnerHTML={{ __html: `
-        /* --- ANIMACIONES Y ESTILOS GLOBALES --- */
-        @keyframes reveal-up { from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(10px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-        @keyframes float-luxury { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-25px) rotate(0.5deg); } }
-        @keyframes slide-shimmer { 0% { transform: translateX(-150%); } 100% { transform: translateX(150%); } }
+        /* --- ESTILOS DE ULTRA-LUJO --- */
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        @keyframes reveal-up { from { opacity: 0; transform: translateY(50px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        @keyframes shimmer { 0% { transform: translateX(-150%); } 100% { transform: translateX(150%); } }
+        @keyframes pulse-dot { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(2.5); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
         @keyframes particle-float { 0% { transform: translateY(0); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh); opacity: 0; } }
 
-        .main-content { padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+        .vip-ticker-wrap { background: #020617; border-bottom: 1px solid rgba(245, 158, 11, 0.2); overflow: hidden; height: 35px; display: flex; align-items: center; }
+        .vip-ticker { white-space: nowrap; animation: ticker 30s linear infinite; color: #F59E0B; font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
         
+        .scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(to right, #F59E0B, #fbbf24); z-index: 1000; transition: width 0.1s ease-out; }
+        .mouse-spotlight { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(245, 158, 11, 0.05) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 1; transform: translate(-50%, -50%); transition: opacity 0.5s; }
+
         .dynamic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 15% 15%, rgba(245, 158, 11, 0.12) 0%, transparent 40%), radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.1) 0%, transparent 40%); }
         .particle { position: absolute; background: white; border-radius: 50%; pointer-events: none; animation: particle-float 15s linear infinite; opacity: 0.1; }
 
+        .main-content { padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; position: relative; z-index: 2; }
+        
         /* HERO */
-        .hero-section { text-align: center; padding: 120px 20px 80px; position: relative; }
-        .hero-title { font-size: clamp(3.5rem, 12vw, 7.5rem); margin: 0; line-height: 0.8; letter-spacing: -6px; font-weight: 950; animation: float-luxury 8s infinite ease-in-out; }
-        .hero-subtitle { color: #94a3b8; font-size: 1.3rem; max-width: 800px; margin: 30px auto; line-height: 1.6; font-weight: 500; animation: reveal-up 1s ease-out backwards; }
+        .hero-section { text-align: center; padding: 100px 20px 60px; }
+        .hero-title { font-size: clamp(3.5rem, 12vw, 8rem); margin: 0; line-height: 0.8; letter-spacing: -6px; font-weight: 950; text-shadow: 0 0 30px rgba(245, 158, 11, 0.2); }
+        .hero-subtitle { color: #94a3b8; font-size: 1.3rem; max-width: 850px; margin: 35px auto; line-height: 1.6; font-weight: 500; animation: reveal-up 1s ease-out backwards; }
 
-        /* TABS (NAVBAR FLEXIBLE DE CONTENIDO) */
+        /* TABS */
         .tab-menu { display: flex; justify-content: center; gap: 15px; margin: 0 auto 60px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.05); width: fit-content; backdrop-filter: blur(15px); flex-wrap: wrap; }
-        .tab-trigger { padding: 16px 40px; border-radius: 99px; background: transparent; border: none; color: #64748b; cursor: pointer; font-weight: 900; transition: 0.5s cubic-bezier(0.2, 0, 0, 1); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; }
+        .tab-trigger { padding: 16px 45px; border-radius: 99px; background: transparent; border: none; color: #64748b; cursor: pointer; font-weight: 900; transition: 0.5s cubic-bezier(0.2, 0, 0, 1); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; }
         .tab-trigger.active { background: #F59E0B; color: #020617; box-shadow: 0 20px 45px -10px rgba(245, 158, 11, 0.5); transform: scale(1.08); }
 
-        /* CATEGORÍAS ADAPTABLES MEJORADAS */
-        .category-container { display: flex; justify-content: center; gap: 25px; margin-bottom: 80px; flex-wrap: wrap; }
-        .cat-card { width: clamp(140px, 20vw, 220px); padding: 30px 20px; border-radius: 32px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.5s cubic-bezier(0.17, 0.67, 0.83, 0.67); display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; position: relative; overflow: hidden; }
-        .cat-card:hover { transform: translateY(-12px); background: rgba(255,255,255,0.04); border-color: rgba(245, 158, 11, 0.3); }
-        .cat-card.active { border-color: #F59E0B; background: rgba(245, 158, 11, 0.05); box-shadow: 0 20px 50px -15px rgba(245, 158, 11, 0.3); }
+        /* CATEGORÍAS ÉLITE */
+        .category-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 80px; flex-wrap: wrap; }
+        .cat-card { width: clamp(140px, 25vw, 240px); padding: 35px 20px; border-radius: 35px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; position: relative; overflow: hidden; }
+        .cat-card:hover { transform: translateY(-15px); background: rgba(255,255,255,0.04); border-color: rgba(245, 158, 11, 0.3); }
+        .cat-card.active { border-color: #F59E0B; background: rgba(245, 158, 11, 0.05); box-shadow: 0 20px 60px -20px rgba(245, 158, 11, 0.4); }
+        .cat-card .count-badge { position: absolute; top: 15px; right: 15px; font-size: 0.65rem; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 8px; color: #94a3b8; font-weight: 900; }
+        .cat-card.active .count-badge { background: #F59E0B; color: #020617; }
         .cat-card .icon-box { color: #64748b; transition: 0.4s; }
-        .cat-card.active .icon-box { color: #F59E0B; transform: scale(1.25); }
-        .cat-card span { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; }
+        .cat-card.active .icon-box { color: #F59E0B; transform: scale(1.3); }
+        .cat-card span { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
         .cat-card.active span { color: white; }
 
-        /* BUSCADOR ADAPTABLE */
+        /* SEARCHBAR */
         .search-area { position: relative; max-width: 900px; margin: 0 auto 60px; width: 100%; }
         .search-input { width: 100%; padding: 25px 35px 25px 85px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 60px; color: white; outline: none; font-size: 1.3rem; transition: 0.4s; backdrop-filter: blur(20px); box-sizing: border-box; }
         .search-input:focus { border-color: #F59E0B; box-shadow: 0 0 80px rgba(245, 158, 11, 0.15); }
         .search-icon-fixed { position: absolute; top: 50%; left: 35px; transform: translateY(-50%); color: #F59E0B; }
 
-        /* GRID DINÁMICO DE PRODUCTOS */
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; }
-        .product-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 56px; overflow: hidden; display: flex; flexDirection: column; height: 100%; transition: all 0.7s cubic-bezier(0.15, 1, 0.3, 1); cursor: pointer; position: relative; animation: reveal-up 1s ease-out backwards; }
-        .product-card:hover { transform: translateY(-25px) scale(1.04); border-color: rgba(245, 158, 11, 0.6); box-shadow: 0 80px 150px -40px rgba(0,0,0,1); }
+        /* PRODUCT CARDS - DISTRIBUCIÓN MEJORADA */
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        .product-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 40px; overflow: hidden; display: flex; flexDirection: column; height: 100%; transition: all 0.6s cubic-bezier(0.15, 1, 0.3, 1); cursor: pointer; position: relative; animation: reveal-up 0.8s ease-out backwards; }
+        .product-card:hover { transform: translateY(-15px) scale(1.02); border-color: rgba(245, 158, 11, 0.6); box-shadow: 0 40px 100px -30px rgba(0,0,0,1); }
         
-        .img-container { height: 380px; background: #010409; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 45px; }
-        .shimmer-mask { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); animation: slide-shimmer 3s infinite; }
-        .img-container img { max-width: 100%; max-height: 100%; object-fit: contain; z-index: 1; filter: drop-shadow(0 40px 80px rgba(0,0,0,0.8)); transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
-        .product-card:hover img { transform: scale(1.22) rotate(6deg); }
+        .img-container { height: 320px; background: #010409; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding: 30px; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .shimmer-mask { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); animation: shimmer 3s infinite; }
+        .img-container img { max-width: 90%; max-height: 90%; object-fit: contain; z-index: 1; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); }
+        .product-card:hover img { transform: scale(1.1) rotate(2deg); }
         
-        .badge { position: absolute; top: 30px; right: 30px; padding: 8px 24px; border-radius: 20px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
+        .badge { position: absolute; top: 20px; right: 20px; padding: 6px 16px; border-radius: 12px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
         .badge.new { background: rgba(16, 185, 129, 0.2); color: #34d399; }
         .badge.used { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
 
-        .content-area { padding: 45px; flex: 1; display: flex; flex-direction: column; }
-        .brand-tag { font-size: 0.9rem; color: #F59E0B; font-weight: 950; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 12px; }
-        .product-name { font-size: 2.1rem; color: white; font-weight: 950; margin: 0 0 15px 0; line-height: 1; letter-spacing: -1px; }
-        .product-specs { font-size: 1rem; color: #64748b; margin-bottom: 40px; line-height: 1.6; font-weight: 500; }
-        
-        .card-footer { margin-top: auto; display: flex; justify-content: space-between; alignItems: center; border-top: 1px solid rgba(255,255,255,0.08); paddingTop: 35px; }
-        .price-value { font-size: 2.6rem; font-weight: 950; color: white; line-height: 1; }
-        
-        .action-button { background: #10b981; color: white; padding: 20px 30px; border-radius: 25px; display: flex; align-items: center; gap: 12px; transition: 0.5s; text-decoration: none; font-weight: 950; font-size: 1rem; box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4); text-transform: uppercase; }
-        .action-button:hover { background: #34d399; transform: scale(1.1); box-shadow: 0 25px 60px rgba(16, 185, 129, 0.6); }
+        /* STOCK PULSE */
+        .stock-indicator-pulse { display: flex; align-items: center; gap: 8px; }
+        .stock-indicator-pulse .dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; position: relative; }
+        .stock-indicator-pulse .dot::after { content: ''; position: absolute; inset: -4px; background: #4ade80; border-radius: 50%; animation: pulse-dot 2.5s infinite; }
+        .stock-indicator-pulse .text { font-size: 0.7rem; color: #4ade80; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* PANELES VIP */
+        .content-area { padding: 30px; flex: 1; display: flex; flex-direction: column; }
+        .brand-tag { font-size: 0.85rem; color: #F59E0B; font-weight: 950; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; }
+        .product-name { font-size: 1.6rem; color: white; font-weight: 950; margin: 0 0 10px 0; line-height: 1.2; letter-spacing: -0.5px; }
+        .product-specs { font-size: 0.95rem; color: #64748b; margin-bottom: 25px; line-height: 1.4; font-weight: 500; }
+        
+        .card-footer { margin-top: auto; display: flex; justify-content: space-between; alignItems: center; border-top: 1px solid rgba(255,255,255,0.08); paddingTop: 20px; }
+        .price-value { font-size: 2rem; font-weight: 950; color: white; line-height: 1; }
+        
+        .action-button { background: #10b981; color: white; padding: 14px 24px; border-radius: 18px; display: flex; align-items: center; gap: 10px; transition: 0.4s; text-decoration: none; font-weight: 950; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); text-transform: uppercase; }
+        .action-button:hover { background: #34d399; transform: scale(1.05); box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5); }
+
+        /* PANELES LABORATORIO */
         .elite-panel { background: rgba(15, 23, 42, 0.4); border-radius: 70px; padding: 130px 60px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.04); position: relative; overflow: hidden; box-shadow: 0 80px 160px -40px rgba(0,0,0,1); max-width: 1100px; margin: 40px auto; animation: reveal-up 1.2s ease-out; }
         .icon-halo { margin-bottom: 50px; display: inline-flex; padding: 50px; background: rgba(245, 158, 11, 0.03); border-radius: 50px; border: 1px solid rgba(245, 158, 11, 0.08); color: #F59E0B; position: relative; }
         .cta-premium { display: inline-flex; align-items: center; gap: 20px; padding: 25px 70px; background: white; color: #020617; border-radius: 99px; font-weight: 950; text-decoration: none; font-size: 1.3rem; margin-top: 50px; transition: 0.5s; text-transform: uppercase; letter-spacing: 3px; }
@@ -212,15 +262,19 @@ export default function App() {
         @media (max-width: 768px) {
           .hero-title { font-size: 3.8rem; letter-spacing: -3px; }
           .grid-layout { grid-template-columns: 1fr; gap: 25px; }
-          .category-container { gap: 15px; }
           .cat-card { width: 45%; padding: 20px 10px; border-radius: 24px; }
           .elite-panel { padding: 80px 25px; border-radius: 50px; }
           .action-button span { display: none; }
+          .action-button { padding: 16px; border-radius: 16px; }
           .search-input { font-size: 1.1rem; padding-left: 65px; }
-          .search-icon-fixed { left: 25px; }
-          .main-content { padding: 15px; }
         }
       `}} />
+
+      <div className="vip-ticker-wrap">
+        <div className="vip-ticker">
+          Nuevos Ingresos: iPhone 16 Pro Max • Reparaciones Técnicas: Diagnóstico sin costo • Importaciones directas de USA y Europa • Equipos Sellados con Garantía Total • Servicio VIP de microsoldadura • 
+        </div>
+      </div>
 
       <div className="dynamic-bg"></div>
       
@@ -229,7 +283,7 @@ export default function App() {
         <div key={i} className="particle" style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`, width: `${Math.random() * 3}px`, height: `${Math.random() * 3}px`, animationDelay: `${Math.random() * 5}s` }}></div>
       ))}
 
-      {/* NAVBAR FLEXIBLE */}
+      {/* NAVBAR */}
       <nav style={styles.glassNav}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <Icons.Logo />
@@ -237,7 +291,7 @@ export default function App() {
         </div>
         <div style={{ display: 'flex', gap: '15px' }}>
           <button onClick={() => router.push('/inventario')} style={{ ...styles.btnIcon, background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', height: '44px', borderRadius: '15px', color: '#94a3b8', fontWeight: 'bold', padding: '0 20px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Icons.Lock /> <span className="hide-mobile">ADMINISTRAR</span>
+            <Icons.Lock /> <span className="hide-mobile">ACCESO SISTEMA</span>
           </button>
         </div>
       </nav>
@@ -250,8 +304,8 @@ export default function App() {
           
           <div className="tab-menu">
             <button className={`tab-trigger ${activeTab === 'stock' ? 'active' : ''}`} onClick={() => setActiveTab('stock')}>Disponible</button>
-            <button className={`tab-trigger ${activeTab === 'pedido' ? 'active' : ''}`} onClick={() => setActiveTab('pedido')}>Encargos VIP</button>
-            <button className={`tab-trigger ${activeTab === 'taller' ? 'active' : ''}`} onClick={() => setActiveTab('taller')}>Servicio Hub</button>
+            <button className={`tab-trigger ${activeTab === 'pedido' ? 'active' : ''}`} onClick={() => setActiveTab('pedido')}>Encargos</button>
+            <button className={`tab-trigger ${activeTab === 'taller' ? 'active' : ''}`} onClick={() => setActiveTab('taller')}>Reparaciones</button>
           </div>
         </section>
 
@@ -263,23 +317,26 @@ export default function App() {
                  <div className="search-icon-fixed"><Icons.Search /></div>
                  <input 
                    className="search-input"
-                   placeholder="Busca el dispositivo de tus sueños..." 
+                   placeholder="Busca por marca, modelo o color..." 
                    value={search}
                    onChange={e => setSearch(e.target.value)}
                  />
               </div>
 
-              {/* SELECTOR DE CATEGORÍAS ÉLITE - ETIQUETAS ACTUALIZADAS */}
+              {/* SELECTOR DE CATEGORÍAS */}
               <div className="category-container">
                 <div className={`cat-card ${categoryFilter === 'todos' ? 'active' : ''}`} onClick={() => setCategoryFilter('todos')}>
+                  <div className="count-badge">{counts.todos}</div>
                   <div className="icon-box"><Icons.Grid /></div>
                   <span>Catálogo</span>
                 </div>
                 <div className={`cat-card ${categoryFilter === 'celular' ? 'active' : ''}`} onClick={() => setCategoryFilter('celular')}>
+                  <div className="count-badge">{counts.celular}</div>
                   <div className="icon-box"><Icons.Smartphone /></div>
                   <span>Equipos</span>
                 </div>
                 <div className={`cat-card ${categoryFilter === 'bulk' ? 'active' : ''}`} onClick={() => setCategoryFilter('bulk')}>
+                  <div className="count-badge">{counts.bulk}</div>
                   <div className="icon-box"><Icons.Gem /></div>
                   <span>Accesorios</span>
                 </div>
@@ -289,12 +346,12 @@ export default function App() {
               {loading ? (
                 <div style={{ textAlign: 'center', padding: '120px' }}>
                   <div style={{ width: '80px', height: '80px', border: '8px solid rgba(245, 158, 11, 0.05)', borderTopColor: '#F59E0B', borderRadius: '50%', animation: 'reveal-up 1s linear infinite', margin: '0 auto 35px' }}></div>
-                  <p style={{ fontWeight: '950', letterSpacing: '8px', color: '#F59E0B', textTransform: 'uppercase', fontSize: '1rem' }}>Sincronizando Élite...</p>
+                  <p style={{ fontWeight: '950', letterSpacing: '8px', color: '#F59E0B', textTransform: 'uppercase', fontSize: '1rem' }}>Escaneando Inventario...</p>
                 </div>
               ) : (
                 <div className="grid-layout">
                   {filteredItems.length === 0 ? (
-                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '140px 40px', background: 'rgba(255,255,255,0.01)', borderRadius: '80px', border: '2px dashed rgba(255,255,255,0.08)' }}>
+                    <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '140px 40px', background: 'rgba(255,255,255,0.01)', borderRadius: '80px', border: '1px dashed rgba(255,255,255,0.08)' }}>
                       <p style={{ fontSize: '1.8rem', color: '#64748b', fontWeight: '700' }}>Sin hallazgos en esta frecuencia.</p>
                     </div>
                   ) : (
@@ -312,7 +369,7 @@ export default function App() {
               <div className="icon-halo"><Icons.Plane /></div>
               <h2 style={{ fontSize: '4.5rem', fontWeight: '950', color: 'white', marginBottom: '35px', letterSpacing: '-4px' }}>Importación Directa</h2>
               <p style={{ color: '#94a3b8', fontSize: '1.6rem', lineHeight: '1.8', maxWidth: '900px', margin: '0 auto', fontStyle: 'italic' }}>
-                ¿Buscas lo inalcanzable? Importamos dispositivos exclusivos de <strong>USA y Europa</strong> bajo pedido. Gestión integral con seguridad garantizada y asesoría personalizada.
+                ¿Buscas lo inalcanzable? Importamos dispositivos exclusivos de <strong>USA y Europa</strong> bajo pedido. Gestión integral con seguridad garantizada y asesoría personalizada para clientes exigentes.
               </p>
               <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola, solicito información para una importación especial.`} target="_blank" rel="noreferrer" className="cta-premium">
                 COTIZAR EQUIPO <Icons.Whatsapp />
@@ -323,9 +380,9 @@ export default function App() {
           {activeTab === 'taller' && (
             <div className="elite-panel">
               <div className="icon-halo" style={{ color: '#3b82f6', background: 'rgba(59, 130, 246, 0.04)' }}><Icons.Wrench /></div>
-              <h2 style={{ fontSize: '4.5rem', fontWeight: '950', color: 'white', marginBottom: '35px', letterSpacing: '-4px' }}>Cirugía Técnica</h2>
+              <h2 style={{ fontSize: '4.5rem', fontWeight: '950', color: 'white', marginBottom: '35px', letterSpacing: '-4px' }}>Reparaciones Técnicas</h2>
               <p style={{ color: '#94a3b8', fontSize: '1.6rem', lineHeight: '1.8', maxWidth: '900px', margin: '0 auto' }}>
-                Laboratorio especializado en restauración de equipos de alta gama. Microsoldadura, cambios de pantalla y optimización estructural con piezas certificadas.
+                Cirugía técnica para tus dispositivos de gama alta. Especialistas en restauración de placas, cambios de pantalla y optimización estructural con piezas certificadas y garantía post-reparación.
                 <br/><br/>
                 <span style={{ color: '#F59E0B', fontWeight: '950', background: 'rgba(245,158,11,0.1)', padding: '20px 50px', borderRadius: '30px', border: '1px solid rgba(245,158,11,0.2)', display: 'inline-block', fontSize: '1.2rem' }}>DIAGNÓSTICO HUB SIN COSTO</span>
               </p>
