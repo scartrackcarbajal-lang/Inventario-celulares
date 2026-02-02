@@ -53,12 +53,12 @@ function ProductCard({ item }) {
   return (
     <div className="product-card" onClick={handleDetails}>
       <div className="img-container">
-        {/* Shimmer effect fixed for visibility */}
-        <div className="shimmer-glow"></div>
+        <div className="shimmer-mask"></div>
         <img 
           src={item.imagen || 'https://via.placeholder.com/600x600/0f172a/F59E0B?text=FARRUS+HUB'} 
           alt={item.nombre} 
           className="main-product-img"
+          loading="lazy"
         />
         <div className="badge-wrapper">
            <span className={`badge ${item.estado === 'Nuevo Sellado' ? 'new' : 'used'}`}>
@@ -96,6 +96,7 @@ export default function App() {
   const router = useRouter()
   const [activeTab, setActiveTab] = React.useState('stock')
   const [categoryFilter, setCategoryFilter] = React.useState('todos')
+  const [statusFilter, setStatusFilter] = React.useState('TODOS')
   const [inventory, setInventory] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const [search, setSearch] = React.useState('')
@@ -158,9 +159,15 @@ export default function App() {
 
   const filteredItems = React.useMemo(() => {
     let result = inventory
+    // Filtro de categoría
     if (categoryFilter !== 'todos') {
       result = result.filter(i => (categoryFilter === 'celular' ? i.tipo === 'celular' : i.tipo === 'bulk'))
     }
+    // Filtro de estado
+    if (statusFilter !== 'TODOS') {
+      result = result.filter(i => i.estado === statusFilter)
+    }
+    // Filtro de búsqueda textual
     if (search.trim()) {
       const terms = search.toLowerCase().trim().split(/\s+/)
       result = result.filter(i => {
@@ -169,7 +176,7 @@ export default function App() {
       })
     }
     return result
-  }, [inventory, categoryFilter, search])
+  }, [inventory, categoryFilter, statusFilter, search])
 
   return (
     <div style={styles.container}>
@@ -201,12 +208,12 @@ export default function App() {
         .hero-subtitle { color: #94a3b8; font-size: 1.3rem; max-width: 850px; margin: 35px auto; line-height: 1.6; font-weight: 500; }
 
         /* TABS */
-        .tab-menu { display: flex; justify-content: center; gap: 10px; margin: 0 auto 60px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.05); width: fit-content; backdrop-filter: blur(15px); flex-wrap: wrap; }
+        .tab-menu { display: flex; justify-content: center; gap: 10px; margin: 0 auto 40px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.05); width: fit-content; backdrop-filter: blur(15px); flex-wrap: wrap; }
         .tab-trigger { padding: 14px 35px; border-radius: 99px; background: transparent; border: none; color: #64748b; cursor: pointer; font-weight: 900; transition: 0.5s cubic-bezier(0.2, 0, 0, 1); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; }
         .tab-trigger.active { background: #F59E0B; color: #020617; box-shadow: 0 20px 45px -10px rgba(245, 158, 11, 0.5); transform: scale(1.05); }
 
         /* CATEGORÍAS */
-        .category-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 80px; flex-wrap: wrap; }
+        .category-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
         .cat-card { width: clamp(130px, 20vw, 240px); padding: 30px 15px; border-radius: 35px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; position: relative; overflow: hidden; }
         .cat-card:hover { transform: translateY(-12px); background: rgba(255,255,255,0.04); border-color: rgba(245, 158, 11, 0.3); }
         .cat-card.active { border-color: #F59E0B; background: rgba(245, 158, 11, 0.05); box-shadow: 0 20px 60px -20px rgba(245, 158, 11, 0.4); }
@@ -214,8 +221,14 @@ export default function App() {
         .cat-card.active .count-badge { background: #F59E0B; color: #020617; }
         .cat-card .icon-box { color: #64748b; transition: 0.4s; }
         .cat-card.active .icon-box { color: #F59E0B; transform: scale(1.3); }
-        .cat-card span { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
+        .cat-card span { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
         .cat-card.active span { color: white; }
+
+        /* FILTROS DE ESTADO (NUEVOS) */
+        .status-pills-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 80px; flex-wrap: wrap; }
+        .status-pill { padding: 10px 22px; border-radius: 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); color: #64748b; cursor: pointer; transition: 0.3s; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+        .status-pill:hover { border-color: #F59E0B; color: white; transform: translateY(-2px); }
+        .status-pill.active { border-color: #F59E0B; color: #F59E0B; background: rgba(245, 158, 11, 0.05); box-shadow: 0 0 20px rgba(245, 158, 11, 0.15); }
 
         /* SEARCHBAR */
         .search-area { position: relative; max-width: 900px; margin: 0 auto 60px; width: 100%; }
@@ -223,7 +236,7 @@ export default function App() {
         .search-input:focus { border-color: #F59E0B; box-shadow: 0 0 80px rgba(245, 158, 11, 0.15); }
         .search-icon-fixed { position: absolute; top: 50%; left: 35px; transform: translateY(-50%); color: #F59E0B; }
 
-        /* --- REDISEÑO DE TARJETAS (VERTICAL Y AMPLIO) --- */
+        /* --- PRODUCT CARDS REDISEÑADAS --- */
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 35px; }
         .product-card { 
           background: rgba(15, 23, 42, 0.6); 
@@ -399,11 +412,24 @@ export default function App() {
                 </div>
               </div>
 
+              {/* FILTROS POR ESTADO DEL CELULAR (NUEVO) */}
+              <div className="status-pills-container">
+                {['TODOS', 'Nuevo Sellado', 'Semi Nuevo', 'Usado', 'Open Box'].map(st => (
+                  <button 
+                    key={st}
+                    className={`status-pill ${statusFilter === st ? 'active' : ''}`}
+                    onClick={() => setStatusFilter(st)}
+                  >
+                    {st}
+                  </button>
+                ))}
+              </div>
+
               {/* GRID DE PRODUCTOS DINÁMICO */}
               {loading ? (
                 <div style={{ textAlign: 'center', padding: '120px' }}>
                   <div style={{ width: '80px', height: '80px', border: '8px solid rgba(245, 158, 11, 0.05)', borderTopColor: '#F59E0B', borderRadius: '50%', animation: 'reveal-up 1s linear infinite', margin: '0 auto 35px' }}></div>
-                  <p style={{ fontWeight: '950', letterSpacing: '8px', color: '#F59E0B', textTransform: 'uppercase', fontSize: '1rem' }}>Sincronizando Élite...</p>
+                  <p style={{ fontWeight: '950', letterSpacing: '8px', color: '#F59E0B', textTransform: 'uppercase', fontSize: '1rem' }}>Escaneando Inventario...</p>
                 </div>
               ) : (
                 <div className="grid-layout">
